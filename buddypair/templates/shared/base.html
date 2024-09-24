@@ -1,0 +1,152 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile View</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    
+    
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'dating/css/base.css' %}">
+</head>
+<body>
+    <!-- Sidebar Section -->
+    <div class="sidebar">
+        <button class="btn btn1" type="button" data-bs-toggle="offcanvas" data-bs-target="#staticBackdrop" aria-controls="staticBackdrop">
+            <i class="bi bi-list"></i> BUDDYPAIR
+        </button>
+        <div class="offcanvas offcanvas-start card1" data-bs-backdrop="static" tabindex="-1" id="staticBackdrop" aria-labelledby="staticBackdropLabel">
+            <div class="offcanvas-header">
+                <button type="button" class="btn" data-bs-dismiss="offcanvas" aria-label="Close">  
+                    <i class="bi bi-x-circle i1" style="color: white;"></i>
+                </button>
+            </div>
+            <div class="offcanvas-body div1">
+                <a href="#"><h4>Dating</h4></a>
+                <hr>
+                <a href="#"><h4>Matrimony</h4></a>
+                <hr>
+                <a href="#"><h4>E-commerce</h4></a>
+                <hr>
+                <a href="#"><h4>Study Abroad</h4></a>
+                <hr>
+                <a href="#"><h4>Job Portal</h4></a>
+                <hr>
+            
+            
+            </div>
+        </div>
+        
+        <!-- Vertical Navigation Panel Section -->
+        <div class="floating-nav-panel">
+            <button class="nav-btn home-btn">
+                <i class="fas fa-home"></i>
+                <span class="nav-text">Home</span>
+            </button>
+            <button class="nav-btn match-btn">
+                <i class="fas fa-star"></i>
+                <span class="nav-text">Match</span>
+            </button>
+            <button class="nav-btn increase-match-btn">
+                <i class="fas fa-heart"></i>
+                <span class="nav-text">Boost</span>
+            </button>
+            <button class="nav-btn message-btn">
+                <i class="fas fa-comment"></i>
+                <span class="nav-text">Messages</span>
+            </button>
+            <button class="nav-btn search-btn">
+                <i class="fas fa-search"></i>
+                <span class="nav-text">Search</span>
+            </button>
+            <button class="nav-btn spin-btn">
+                <img src="{% static 'dating/base/image/Gradient.png' %}" alt="Gradient" style="width: 20px; height: 20px">
+                <span class="nav-text p-2">Spin</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content Section -->
+    {% block content %}
+            
+    {% endblock content %}
+
+
+    <!-- Right Sidebar Section -->
+    <div class="right-sidebar">
+        <div class="right-container">
+            <div class="profile-section">
+                <div class="double-circle-right">
+                    <div class="double-circle-inner-right">
+                        <img class="profile-pic-right" src="anime-male-avatar_950633-895.avif" alt=" ">
+                    </div>
+                </div>
+                <div class="text-info-right">
+                    <p class="info-text-name">Profile Name</p>
+                    <p class="info-text-status"><i class="fas fa-crown"></i>Status Text</p>
+                    <p class="info-text-online">Online</p>
+                </div>
+                <!-- Bell Icon -->
+                <div class="bell-icon">
+                    <i class="fas fa-bell"></i>
+                </div>
+            </div>
+            <div class="button-container">
+                <a href="#" class="button">My Profile</a>
+                <a href="{% url 'rightmenubar:sent_request' %}" class="button">Sent Request</a>
+                <a href="{% url 'rightmenubar:viewed_profile' %}" class="button">Viewed My Profile</a>
+                <a href="{% url 'rightmenubar:accept_request' %}" class="button">Accept Request</a>
+                <a href="{% url 'rightmenubar:reject_request' %}" class="button">Reject</a>
+                <a href="{% url 'rightmenubar:recived_request' %}" class="button">Received</a>
+                <a href="{% url 'rightmenubar:shortlisted_by' %}" class="button">Shortlisted By</a>
+                <a href="{% url 'rightmenubar:shortlist' %}" class="button">Shortlisted</a>
+                <a href="{% url 'rightmenubar:contacted' %}" class="button">Contacted</a>
+                <a href="#" class="button">Message</a>
+                <a href="#" class="button">Settings</a>
+            </div>
+
+            <div class="logout-button-container">
+                <button class="logout-button">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+
+        </div>
+    </div>
+     
+
+
+    
+    
+
+    <!-- Bootstrap JS (optional, but useful for interactive components) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let menuToggle = document.querySelector('.menuToggle');
+        menuToggle.onclick = function() {
+            menuToggle.classList.toggle('active');
+        }
+        function toggleInstaFloatingScreen() {
+            const instaMenuContainer = document.querySelector('.insta-floating-screen');
+            const instaOpenIcon = document.querySelector('.insta-menu');
+            const instaCloseIcon = document.querySelector('.insta-close');
+
+            instaMenuContainer.classList.toggle('insta-show');
+            instaOpenIcon.classList.toggle('insta-hidden');
+            instaCloseIcon.classList.toggle('insta-hidden');
+        }
+    </script>
+
+    {% block scripts %}
+            
+    {% endblock scripts %}
+</body>
+</html>

@@ -1,0 +1,298 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile View</title>
+    <!-- Bootstrap CSS -->
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> -->
+    <link rel="stylesheet" href="{% static 'dating/bootstrap/css/bootstrap.min.css' %}">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'dating/base/css/base.css' %}">
+    {% block style %}
+    {% endblock %}
+    <style>
+        .card1{
+        background-color: #5C2B5C;
+        opacity: 0.8;
+        margin-bottom: 50px;
+        margin-top: 52px;
+        margin-left: 3px;
+        height: 520px;
+        border-radius: 2%;
+        
+    }
+    hr{
+        border-top: 5px solid white; 
+        border-bottom: none; 
+        margin-top: 15px; 
+        margin-bottom: 15px;
+        width: 50px;
+    }
+    .div1{
+        text-align: center;
+    }
+    .div1 button{
+        text-decoration: none;
+        color : white;
+        border: none;
+        outline: none;
+        width: 250px;
+        height: 50px;
+        background-color: transparent;
+        border-bottom: 2px solid rgb(255, 255, 255,0.6);
+        border-radius: 5px;
+        /* display: flex;
+        justify-content: center; 
+        align-items: center; */
+        text-align: center; 
+        transition: 500ms all ease-out;
+        margin-top: 8px;
+        
+        
+    }
+    /* .div1 button h4{
+        transform: translateY(20px);
+    } */
+    .div1 button:hover,
+    .div1 button:focus{
+        background-color: rgb(255, 255, 255, 0.5);
+        transform: translateY(-3px);
+    }
+    .offcanvas-body a:hover{
+        background-color: rgb(255, 255, 255, 0.6);
+    }
+    .offcanvas{
+        --bs-offcanvas-width: 300px;
+        --bs-offcanvas-padding-x: 0;
+    }
+    .offcanvas-header {
+        padding: 5px;
+    }
+    .btn i{
+        color: #fff;
+        font-size: 20px;
+    }
+    .offcanvas-body {
+        padding: 0px;
+        overflow: hidden;
+    }  
+    .floating-notification{
+        z-index: 9999;
+    }
+    .floating-notification.show {
+        z-index: 9999;
+        top:30px;
+    }
+    .news{
+    
+        background-color: rgba(67, 7, 68, 1);
+    }
+    .floating-notification .message{
+        background-color: rgba(67, 7, 68, 1);
+        
+    }
+    </style>
+</head>
+<body>
+    <!-- Sidebar Section -->
+    <div class="sidebar">
+        <button class="btn btn1" type="button" data-bs-toggle="offcanvas" data-bs-target="#staticBackdrop" aria-controls="staticBackdrop">
+            <i class="bi bi-list"></i> BUDDYPAIR
+        </button>
+        <!--Leftsidebar menu-->
+        <div class="offcanvas offcanvas-start card1" data-bs-backdrop="static" tabindex="-1" id="staticBackdrop" aria-labelledby="staticBackdropLabel">
+            <div class="offcanvas-header">
+                <button type="button" class="btn" data-bs-dismiss="offcanvas" aria-label="Close">  
+                    <i class="bi bi-x-circle i1 "></i>
+                </button>
+            </div>
+            <div class="offcanvas-body div1">
+                <button type="button"><h5>Dating</h5></button>
+                <hr>
+                <button type="button"><h5>Matrimony</h5></button>
+                <hr>
+                <button type="button"><h5>E commerce</h5></button>
+                <hr>
+                <button type="button"><h5>Study Abroad</h5></button>
+                <hr>
+                <button type="button"><h5>Job Portal</h5></button>
+                <hr>
+            </div>
+        </div>
+        <!--Leftsidebar menu-->
+
+        <!--floatin notifications-->
+        <div class="floating-notification" id="floatingnotification">
+            <div class="news" style="display: flex;justify-content: center;align-items: center;cursor: pointer;"><span class="close-btn">&times;</span></div>
+            <div class="message" style="display: flex;justify-content: center;align-items: center;cursor: pointer;"><span class="close-btn">&times;</span></div>
+            <div class="message" style="display: flex;justify-content: center;align-items: center;cursor: pointer;"><span class="close-btn">&times;</span></div>
+            <div class="message" style="display: flex;justify-content: center;align-items: center;cursor: pointer;"><span class="close-btn">&times;</span></div>
+        </div>
+        <!--floatin notifications-->
+        
+        <!-- Vertical Navigation Panel Section -->
+        <div class="floating-nav-panel">
+            <button class="nav-btn home-btn">
+                <i class="fas fa-home"></i>
+                <span class="nav-text">Home</span>
+            </button>
+            <button class="nav-btn match-btn">
+                <i class="fas fa-star"></i>
+                <span class="nav-text">Match</span>
+            </button>
+            <button class="nav-btn increase-match-btn">
+                <i class="fas fa-heart"></i>
+                <span class="nav-text">Boost</span>
+            </button>
+            <button class="nav-btn message-btn">
+                <i class="fas fa-comment"></i>
+                <span class="nav-text">Messages</span>
+            </button>
+            <button class="nav-btn search-btn">
+                <i class="fas fa-search"></i>
+                <span class="nav-text">Search</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content Section -->
+     
+    <div class="main-content">
+        {% block maincontent %}
+        <!-- <button class="back-button">
+            <i class="bi bi-chevron-left"></i>
+        </button>
+
+        <div class="profile-container">
+            <p class="info-text">1 km near you</p>
+
+            <div class="double-circle">
+                <div class="double-circle-inner">
+                    <img src=" " alt="Profile Pic" class="profile-pic">
+                </div>
+            </div>
+
+            <p class="info-text-t">Sona - 27</p>
+
+            <div class="small-rectangle">
+                <span class="double-tick">✔✔</span> Like
+            </div>
+        </div>
+        
+        <div class="navigation">
+            <div class="menuToggle"><i></i></div>
+            <div class="menu">
+                <div class="text-wrapper">
+                    <p>Spin Here</p>
+                </div>
+            </div>
+        </div>-->
+        {% endblock %}
+    </div> 
+    
+    <!-- Right Sidebar Section -->
+    <div class="right-sidebar">
+        <div class="right-container">
+            <div class="profile-section">
+                <!-- <div class="double-circle-right">
+                    <div class="double-circle-inner-right">
+                        <img class="profile-pic-right" src="{% static 'dating/base/img/anime-male-avatar_950633-895.avif' %}" alt=" ">
+                    </div>
+                </div>
+                <div class="text-info-right">
+                    <p class="info-text-name">Profile Name</p>
+                    <p class="info-text-status"><i class="fas fa-crown"></i>Status Text</p>
+                    <p class="info-text-online">Online</p>
+                </div> -->
+                <div class="double-circle-right">
+                    <div class="double-circle-inner-right">
+                        <img class="profile-pic-right" src="{% if user_details.profile_pic %}{{ user_details.profile_pic.url }}{% else %}{% static 'dating/base/img/anime-male-avatar_950633-895.avif' %}{% endif %}" alt="Profile Picture">
+                    </div>
+                </div>
+                <div class="text-info-right">
+                    <p class="info-text-name">{{ user_details.user }}</p>
+                    <!-- <p class="info-text-status"><i class="fas fa-crown"></i>{{ user_details.bio }}</p> -->
+                    <!-- <p class="info-text-online">{{ logged_in_user.is_online|yesno:"Online,Offline" }}</p> -->
+                </div>                
+                <!-- Bell Icon -->
+                <div class="bell-icon">
+                    <button type="button" onclick="toggleFloatingNotification()" style="background: transparent;border: none;outline: none;color: #fff;"><i class="fas fa-bell"></i></button>
+                </div>
+            </div>
+            <div class="button-container">
+                <a href="">
+                <button class="button">My Profile</button>
+                </a>
+                <a href="{% url 'dating_profiles:sented_request' %}">
+                <button class="button">Sent Request</button>
+                </a>
+                <a href="">
+                <button class="button">Viewed My Profile</button>
+                </a>
+                <a href="{% url 'dating_profiles:accepted_request' %}">
+                <button class="button">Accept Request</button>
+                </a>
+                <a href="{% url 'dating_profiles:rejected_request' %}">
+                <button class="button">Reject</button>
+                </a>
+                <a href="{% url 'dating_profiles:received_request' %}">
+                <button class="button">Received</button>
+                </a>
+                <a href="{% url 'dating_profiles:shortlist_by' %}">
+                <button class="button">Shortlisted By</button>
+                </a>
+                <a href="{% url 'dating_profiles:shortlist' %}">
+                <button class="button">Shortlisted</button>
+                </a>
+                <a href="">
+                <button class="button">Contacted</button>
+                </a>
+                <a href="">
+                <button class="button">Message</button>
+                </a>
+                <a href="">
+                <button class="button">Settings</button>
+                </a>
+            </div>
+            <div class="logout-button-container">
+                <button class="logout-button">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+
+        </div>
+    </div>
+     
+
+
+    
+    
+
+    <!-- Bootstrap JS (optional, but useful for interactive components) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'dating/base/js/base.js' %}"></script>
+    {% block js %}
+    {% endblock %}
+    <script>
+        let menuToggle = document.querySelector('.menuToggle');
+        menuToggle.onclick = function() {
+            menuToggle.classList.toggle('active');
+        }
+        function toggleInstaFloatingScreen() {
+            const instaMenuContainer = document.querySelector('.insta-floating-screen');
+            const instaOpenIcon = document.querySelector('.insta-menu');
+            const instaCloseIcon = document.querySelector('.insta-close');
+
+            instaMenuContainer.classList.toggle('insta-show');
+            instaOpenIcon.classList.toggle('insta-hidden');
+            instaCloseIcon.classList.toggle('insta-hidden');
+        }
+    </script>
+</body>
+</html>

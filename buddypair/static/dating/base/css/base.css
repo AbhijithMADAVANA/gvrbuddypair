@@ -1,0 +1,605 @@
+/* Import Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Aldrich&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    background-color: white;
+    color: #FFFFFF;
+    height: 100vh;
+}
+
+.sidebar {
+    width: 300px; /* Ensure sidebar is a fixed width */
+    background-color: #4B164C;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    position: fixed;
+    height: 100%;
+    overflow: hidden; /* Prevent overflow */
+}
+
+.main-content {
+    margin-left: 340px; /* Left margin adjusted for the sidebar with some extra space */
+    margin-right: 340px; /* Right margin adjusted for the right sidebar with some extra space */
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: calc(100% - 680px); /* Full width minus both sidebars and the extra margins */
+    background-color: #f5f5f5; /* Light background color for contrast */
+    border-radius: 10px; /* Rounded corners for better aesthetics */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Optional shadow for emphasis */
+}
+.back-button {
+    position: absolute;
+    top: 20px;
+    left: 350px; /* Adjusted for sidebar */
+    width: 40px;
+    height: 40px;
+    background-color: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.08);
+    border-radius: 40px;
+    color: #FFFFFF;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+}
+
+.back-button i {
+    font-size: 24px;
+    color: #FFFFFF;
+}
+
+.profile-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin-top: 50px; 
+    transform: translateY(-70px); /* Increased margin to move content upward */
+}
+
+.double-circle {
+    position: relative;
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    background-color: #DD88CF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.double-circle-inner {
+    width: 101px;
+    height: 101px;
+    border-radius: 50%;
+    background-color: #4B164C;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-pic {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.info-text {
+    margin: 5px 0;
+    font-family: 'Aldrich', sans-serif;
+    font-size: 16px;
+    transform: translateY(-10px); /* Move text slightly upward */
+}
+
+.info-text-t {
+    margin: 5px 0;
+    font-family: 'Aldrich', sans-serif;
+    font-size: 16px;
+    transform: translateY(20px);
+}
+
+.small-rectangle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #DD88CF;
+    color: #FFFFFF;
+    width: 68px;
+    height: 28px;
+    border-radius: 20px;
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.small-rectangle .double-tick {
+    margin-right: 5px;
+}
+
+:root {
+    --clr: white;
+}
+
+.navigation {
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    transform: translateY(140px);
+}
+/*--------------------------floatin notification---------------------------------------------*/
+.floating-notification{
+    /* height: 600px;
+    width: 100%; */
+    background-color: transparent;
+    /* z-index: 0; */
+    transform: scaleY(0);
+    display: none;
+    flex-direction: column;
+    transform-origin: top; 
+    transition: transform 0.5s;
+    margin-top: 80px;
+    display: flex;
+    gap:15px;
+    align-items: center;
+    position: fixed;
+    
+}
+
+/*The position: fixed; property is used to make the notification appear over the content, without affecting the
+ layout of the underlying app.z-index: 1000; ensures the notification is on top. The display: none; 
+ keeps the notification hidden by default.*/
+
+.floating-notification.show{
+    transform: scaleY(1);
+    height: 600px;
+    width: 100%;
+    z-index: 9999;
+    position: fixed;
+    top:-5px;
+}
+.news{
+    height: 170px;
+    background-color: #fff;
+    border-radius: 20px;
+    width: 500px;
+    background-color: rgba(75, 22, 76, 0.9);
+}
+.floating-notification .message{
+    height: 100px;
+    background-color: #fff;
+    border-radius: 20px;
+    width: 500px;
+    background-color: rgba(75, 22, 76, 0.9);
+}
+/*--------------------------floatin notification---------------------------------------------*/
+
+/* 
+.menuToggle {
+    position: relative;
+    width: 65px;
+    height: 65px;
+    background: conic-gradient(red, yellow, aqua, lime, fuchsia, red);
+    border: 8px solid var(--clr);
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    transform: translateY(-35px);
+    box-shadow: 0 0 0 1px #fff;
+}
+
+.menuToggle i {
+    position: absolute;
+    inset: 0;
+}
+
+.menuToggle i::before,
+.menuToggle i::after {
+    content: '';
+    position: absolute;
+    width: 27px;
+    height: 20px;
+    background: transparent;
+    border-radius: 49px;
+    box-shadow: 3px -6px var(--clr);
+    transition: 0.5s;
+} */
+/* 
+.menuToggle.active i::before {
+    transform: rotate(45deg);
+    box-shadow: 3px 6px var(--clr); 
+}
+
+.menuToggle.active i::after {
+    transform: rotate(-45deg);
+    box-shadow: 3px 6px var(--clr); 
+}
+
+.menuToggle.active {
+    transform: translateY(-10px);
+}
+
+.text-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding-bottom: 10px; 
+    transform: translateY(20px);
+    font-family: 'Aldrich', sans-serif;
+}
+
+.menu p {
+    margin: 0;
+    font-size: 18px;
+    text-align: center;
+    width: 100%;
+    color: black;
+} */
+
+.btn1 {
+    color: white;
+    font-size: 20px;
+    background: none; /* Removes any background */
+    border: none; /* Removes border */
+    padding: 0; /* Removes padding */
+}
+
+.btn1:hover, .btn1:focus, .btn1:active {
+    background: none; /* Ensures no background on hover, focus, or active */
+    outline: none; /* No outline on focus */
+    box-shadow: none; /* No shadow on click */
+    color: whitesmoke; /* Keeps text color consistent */
+}
+
+
+.card1 {
+    background-color: #5C2B5C;
+    opacity: 0.8;
+    margin-bottom: 50px;
+    margin-top: 20px; /* Adjusted for better spacing */
+    height: 513px; /* Reduced height to fit better */
+    width: 299px; /* Reduced width to fit within the sidebar */
+    border-radius: 2%;
+    overflow-y: auto; /* Allows scrolling if content overflows */
+}
+
+hr {
+    border-top: 1px solid white; 
+    margin: 20px 0;
+}
+
+.div1 {
+    text-align: center;
+}
+
+a {
+    text-decoration: none;
+    color: white;
+}
+/* Floating Navigation Panel - Vertical Alignment Below "BUDDYPAIR" Button */
+/* Floating Navigation Panel - Vertical Alignment Below "BUDDYPAIR" Button */
+.floating-nav-panel {
+    display: flex;
+    flex-direction: column; /* Align buttons vertically */
+    align-items: flex-start; /* Align items to the left */
+    margin-top: 20px; /* Adds some space between the "BUDDYPAIR" button and nav buttons */
+    width: 180px; /* Slightly reduced width for alignment */
+ }
+ 
+ .nav-btn {
+    width: 100%; /* Full width for better alignment */
+    height: 48px; /* Reduced height */
+    border-radius: 24px; /* Adjusted for smaller size */
+    background-color: #FF6B6B; /* Main button color */
+    color: white;
+    font-size: 18px; /* Slightly smaller font */
+    display: flex;
+    align-items: center;
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Deeper box shadow for floating effect */
+    margin-bottom: 10px; 
+    padding-left: 15px; /* Add padding to the left for spacing */
+    transition: all 0.3s ease; /* Smooth transition for hover and click */
+ }
+ 
+ .nav-btn i {
+    margin-right: 10px; /* Spacing between icon and text */
+ }
+ 
+ .nav-text {
+    font-family: 'Aldrich', sans-serif;
+    font-size: 16px;
+    color: white; /* Ensures text is always white */
+    text-decoration: none; /* Ensure text is not underlined */
+ }
+ 
+ .nav-btn:hover {
+     background-color: #DD88CF; /* Slightly darker background on hover */
+     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25); /* Increase shadow on hover */
+ }
+ 
+ .nav-btn:active {
+     background-color: #A83B3B; /* Darker background on click */
+     transform: scale(0.95); /* Slightly reduce size on click */
+     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Lighter shadow on click */
+ }
+ 
+ /* Different Button Background Colors */
+ .nav-btn.home-btn {
+    background-color: rgba(197, 22, 236, 0.3);
+ }
+ 
+ .nav-btn.match-btn {
+    background-color: rgba(246, 246, 7, 0.7);
+ }
+ 
+ .nav-btn.increase-match-btn {
+    background-color: #e30c25;
+ }
+ 
+ .nav-btn.message-btn {
+    background-color: #4b52bd;
+ }
+ 
+ .nav-btn.search-btn {
+    background-color: #0798e7;
+ }
+ 
+ .nav-btn:focus {
+    outline: none;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+ }
+.nav-btn:hover, .insta-button:hover {
+    background-color: #DD88CF;
+    color: white;
+}
+/* Right Sidebar Styling */
+.right-sidebar {
+    width: 300px; /* Width remains the same */
+    background-color: white;
+    padding: 0; /* No padding for full width */
+    box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+    position: fixed;
+    right: 0; /* Fixed to the right side of the viewport */
+    top: 0; /* Align to top */
+    bottom: 0; /* Align to bottom */
+    height: 100vh; /* Full viewport height */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+/* Inside Right Sidebar Container */
+.right-container {
+    background-color: #4B164C;
+    width: calc(100% - 20px); /* Adjust width to account for left spacing */
+    height: 100%; /* Full height */
+    margin-left: 20px; /* Added margin-left for spacing from the right sidebar */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 10px; /* General padding */
+    box-sizing: border-box; /* Include padding in width and height */
+}
+
+/* Profile Section */
+.profile-section {
+    display: flex;
+    align-items: center;
+    
+    margin-top: 19px;
+    margin-left: 12px; /* Reduced margin for compactness */
+    width: 100%; /* Full width */
+    padding-left: 10px; /* Added padding on the left side */
+    padding-right: 10px; /* Added padding on the right side */
+}
+
+/* Double Circle with Profile Image */
+.double-circle-right {
+    position: relative;
+    width: 56px; /* Profile image width */
+    height: 57px; /* Profile image height */
+    border-radius: 50%;
+    background-color: #DD88CF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px; /* Space between image and text */
+}
+
+/* Inner Circle and Profile Image */
+.double-circle-inner-right {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #4B164C;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-pic-right {
+    width: 52px; /* Slightly smaller than container */
+    height: 52px; /* Same aspect ratio */
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* Text Info Next to Profile Image */
+.text-info-right {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 52px; /* Same height as profile image */
+    flex-grow: 1; /* Allow it to take available space */
+}
+
+/* Individual Texts Below Profile Image */
+.info-text-name, .info-text-status, .info-text-online {
+    font-family: 'Aldrich', sans-serif;
+     /* Reduced font size */
+    color: white;
+    margin: 0;
+    height: 15px; /* Consistent height for text */
+    display: flex;
+    align-items: center;
+}
+.info-text-name {
+    font-family: 'Aldrich', sans-serif;
+    font-size: 15px;
+    color: #FA5075;
+    
+}
+
+.info-text-status i.fas.fa-crown {
+    color: #fdd835; /* Gold color for the crown icon */
+    
+}
+
+.info-text-status {
+    font-family: 'Aldrich', sans-serif;
+    font-size: 12px;
+    color: #fdd835;
+}
+
+.info-text-online {
+    font-family: 'Aldrich', sans-serif;
+    font-size: 12px;
+    color: #7FFFD4; /* Aquamarine color to indicate online status */
+}
+
+
+/* Bell Icon Styling */
+.bell-icon {
+    margin-left: 0; /* Removes any extra space to the left of the bell icon */
+    margin-right: 30px; /* Adds some space to the right of the bell icon */
+    display: flex;
+    align-items: center; /* Centers the icon vertically */
+    justify-content: flex-start; /* Aligns the bell icon to the left */
+    font-size: 20px; /* Font size for the bell icon */
+    color: white; /* Icon color */
+    cursor: pointer; /* Cursor changes on hover */
+    padding: 5px; /* Padding around the icon */
+}
+.bell-icon .fas.fa-bell {
+    font-size: inherit; /* Inherit the parent font size */
+}
+
+/* Adjust Main Content for Left and Right Sidebars */
+.main-content {
+    margin-left: 320px; /* Left sidebar width */
+    margin-right: 320px; /* Right sidebar width including margin left */
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: calc(100% - 640px); /* Full width minus sidebars and margins */
+}
+.button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.button {
+    background-color: #4B164C; /* Button background color */
+    color: #FFFFFF; /* Text color */
+    font-size: 13px; /* Font size */
+    font-family: 'Aldrich', sans-serif; /* Font family */
+    padding: 10px 20px; /* Padding for the button */
+    width: 175px; /* Set the width of the button */
+    height: 38px; /* Set the height of the button */
+    margin: 5px 0; /* Margin between buttons */
+    border: none; /* Remove border */
+    border-radius: 8px;
+    text-align: left; /* Rounded corners */
+    cursor: pointer; /* Cursor change on hover */
+    transition: transform 0.2s ease, background-color 0.2s ease;  /* Smooth transition for hover and click effects */
+}
+
+.button:hover {
+    background-color: #a83b3b; /* Slightly darker shade on hover */
+}
+
+.button:active {
+    transform: scale(0.95); /* Click effect */
+}
+/* Container for the logout button */
+/* Container for the logout button */
+.logout-button-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 178px; /* Reduced width for smaller container */
+    height: 48px; /* Reduced height for smaller container */
+    background-color: #4B164C; /* Background color */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Shadow for depth */
+    margin: 0 auto; /* Center horizontally */
+    padding: 5px; /* Padding inside the container */
+    color: #FFFFFF; /* Text color */
+}
+
+.logout-button {
+    background-color: transparent; /* No background color for the button */
+    border: none; /* No border for the button */
+    color: #FFFFFF; /* Text color */
+    font-size: 14px; /* Reduced font size for the text */
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    outline: none;
+    padding: 5px 10px; /* Reduced padding inside the button */
+}
+
+.logout-button i {
+    margin-right: 5px; /* Space between icon and text */
+    font-size: 16px; /* Reduced icon size */
+}
+
+.logout-button:hover {
+    background-color: #5C2B5C; /* Background color on hover */
+    color: #FFFFFF; /* Text color on hover */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* Shadow on hover */
+}
+
+/* Active state (when button is clicked) */
+.logout-button:active {
+    background-color: #3F1A3A; /* Darker background color when pressed */
+    color: #FFFFFF; /* Text color when pressed */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4); /* Shadow on press */
+    transform: scale(0.95); /* Slightly smaller button on press */
+} 
+
+/*----------------------------RESPONSIVE---------------------------------------*/
+@media screen and (max-width: 766px){
+    .sidebar{
+        display: none;
+    }
+    .right-sidebar{
+        display: none;
+    }
+   
+}
+
+@media screen and (min-width: 766px){
+
+}
+
+
+/*----------------------------RESPONSIVE---------------------------------------*/

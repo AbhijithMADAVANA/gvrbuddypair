@@ -1,0 +1,62 @@
+{% extends 'shared/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="main-content">
+    <div class="container-fluid ">
+    
+    <div class="row justify-content-center custom-head align-items-center">
+        <div class="col-auto">
+            <i class="fa-solid fa-magnifying-glass fs-3"></i>
+        </div>
+        <div class="col text-center">
+            <h1 class="text-white mb-0">Sent Requests</h1>
+        </div>
+    </div>
+    
+    <div class="justify-content-center custom-content">
+        {% for request in sent_requests %}
+        <div class="col mb-3">
+            <div class="d-flex align-items-center justify-content-between p-3 border rounded text-black">
+                <div class="d-flex align-items-center text-black">
+                    <img src="{{ request.receiver.profile_pic.url }}" alt="{{ request.receiver.username }}'s profile picture" class="rounded-circle" style="width: 100px; height: 100px; object-fit: cover; margin-right: 20px;">
+                    <div>
+                        <h5 class="mb-1">{{ request.receiver.username }}</h5>
+                        <p class="mb-0"><small>Sent Request on {{ request.timestamp|date:"Y-m-d" }}</small></p>
+                    </div>
+                </div>
+                <form method="post" action="{% url 'rightmenubar:send_connection_request' user_id=request.receiver.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn"><i class="fas fa-times fs-3 custom-icon"></i></button>
+                </form>
+            </div>
+        </div>
+        {% empty %}
+        <p class="text-center text-black">You have not sent any requests yet.</p>
+        {% endfor %}
+    </div>
+    
+    <div class="rounded-rectangle">
+        <div class="icon-container">
+            <div class="icon-wrapper">
+                <img src="{% static 'image/Home 1.png' %}" alt="Home">
+            </div>
+            <div class="icon-wrapper">
+                <img src="{% static 'image/Discover.png' %}" alt="Discover">
+            </div>
+            <div class="icon-wrapper">
+                <img src="{% static 'image/Gradient.png' %}" alt="Gradient">
+            </div>
+            <div class="icon-wrapper">
+                <img src="{% static 'image/Matches.png' %}" alt="Matches">
+            </div>
+            <div class="icon-wrapper">
+                <img src="{% static 'image/Message.png' %}" alt="Messages">
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+
+    
+{% endblock content %}

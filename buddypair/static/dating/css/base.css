@@ -1,0 +1,646 @@
+/* Import Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Aldrich&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    background-color: white;
+    color: #FFFFFF;
+    height: 100vh;
+}
+
+.sidebar {
+    width: 320px; /* Ensure sidebar is a fixed width */
+    background-color: #4B164C;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    position: fixed;
+    height: 100%;
+    overflow: hidden; /* Prevent overflow */
+}
+
+.offcanvas-start {
+    width: 320px !important; /* Adjust this value as per your preference */
+}
+
+.main-content {
+    margin-left: 340px; /* Left margin adjusted for the sidebar with some extra space */
+    margin-right: 340px; /* Right margin adjusted for the right sidebar with some extra space */
+    padding: 0px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: calc(100% - 680px); /* Full width minus both sidebars and the extra margins */
+    background-color: #4B164C; /* Light background color for contrast */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Optional shadow for emphasis */
+}
+.back-button {
+    position: absolute;
+    top: 20px;
+    left: 350px; /* Adjusted for sidebar */
+    width: 40px;
+    height: 40px;
+    background-color: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.08);
+    border-radius: 40px;
+    color: #FFFFFF;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+}
+
+.back-button i {
+    font-size: 24px;
+    color: #FFFFFF;
+}
+
+.profile-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin-top: 50px; 
+    transform: translateY(-70px); /* Increased margin to move content upward */
+}
+
+.double-circle {
+    position: relative;
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    background-color: #DD88CF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.double-circle-inner {
+    width: 101px;
+    height: 101px;
+    border-radius: 50%;
+    background-color: #4B164C;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-pic {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.info-text {
+    margin: 5px 0;
+    font-family: 'Aldrich', sans-serif;
+    font-size: 16px;
+    transform: translateY(-10px); /* Move text slightly upward */
+}
+
+.info-text-t {
+    margin: 5px 0;
+    font-family: 'Aldrich', sans-serif;
+    font-size: 16px;
+    transform: translateY(20px);
+}
+
+.small-rectangle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #DD88CF;
+    color: #FFFFFF;
+    width: 68px;
+    height: 28px;
+    border-radius: 20px;
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.small-rectangle .double-tick {
+    margin-right: 5px;
+}
+
+:root {
+    --clr: white;
+}
+
+.navigation {
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    transform: translateY(140px);
+}
+
+.btn1 {
+    color: white;
+    font-size: 20px;
+    background: none; /* Removes any background */
+    border: none; /* Removes border */
+    padding: 0; /* Removes padding */
+}
+
+.btn1:hover, .btn1:focus, .btn1:active {
+    background: none; /* Ensures no background on hover, focus, or active */
+    outline: none; /* No outline on focus */
+    box-shadow: none; /* No shadow on click */
+    color: whitesmoke; /* Keeps text color consistent */
+}
+
+
+.card1 {
+    background-color: #5C2B5C;
+    opacity: 0.8;
+    margin-bottom: 50px;
+    margin-top: 20px; /* Adjusted for better spacing */
+    height: 513px; /* Reduced height to fit better */
+    width: 299px; /* Reduced width to fit within the sidebar */
+    border-radius: 2%;
+    overflow-y: auto; /* Allows scrolling if content overflows */
+}
+
+hr {
+    border-top: 1px solid white; 
+    margin: 20px 0;
+}
+
+.div1 {
+    text-align: center;
+}
+
+a {
+    text-decoration: none;
+    color: white;
+}
+/* Floating Navigation Panel - Vertical Alignment Below "BUDDYPAIR" Button */
+/* Floating Navigation Panel - Vertical Alignment Below "BUDDYPAIR" Button */
+.floating-nav-panel {
+    display: flex;
+    flex-direction: column; /* Align buttons vertically */
+    align-items: flex-start; /* Align items to the left */
+    margin-top: 20px; /* Adds some space between the "BUDDYPAIR" button and nav buttons */
+    width: 180px; /* Slightly reduced width for alignment */
+ }
+ 
+ .nav-btn {
+    width: 100%; /* Full width for better alignment */
+    height: 48px; /* Reduced height */
+    border-radius: 24px; /* Adjusted for smaller size */
+    background-color: #FF6B6B; /* Main button color */
+    color: white;
+    font-size: 18px; /* Slightly smaller font */
+    display: flex;
+    align-items: center;
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Deeper box shadow for floating effect */
+    margin-bottom: 10px; 
+    padding-left: 15px; /* Add padding to the left for spacing */
+    transition: all 0.3s ease; /* Smooth transition for hover and click */
+ }
+ 
+ .nav-btn i {
+    margin-right: 10px; /* Spacing between icon and text */
+ }
+ 
+ .nav-text {
+    font-family: 'Aldrich', sans-serif;
+    font-size: 16px;
+    color: white; /* Ensures text is always white */
+    text-decoration: none; /* Ensure text is not underlined */
+ }
+ 
+ .nav-btn:hover {
+     background-color: #DD88CF; /* Slightly darker background on hover */
+     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25); /* Increase shadow on hover */
+ }
+ 
+ .nav-btn:active {
+     background-color: #A83B3B; /* Darker background on click */
+     transform: scale(0.95); /* Slightly reduce size on click */
+     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Lighter shadow on click */
+ }
+ 
+ /* Different Button Background Colors */
+ .nav-btn.home-btn {
+    background-color: rgba(197, 22, 236, 0.3);
+ }
+ 
+ .nav-btn.match-btn {
+    background-color: rgba(246, 246, 7, 0.7);
+ }
+ 
+ .nav-btn.increase-match-btn {
+    background-color: #e30c25;
+ }
+ 
+ .nav-btn.message-btn {
+    background-color: #4b52bd;
+ }
+ 
+ .nav-btn.search-btn {
+    background-color: #0798e7;
+ }
+ 
+ .nav-btn.spin-btn {
+    background-color: rgba(197, 22, 236, 0.3);
+ }
+
+ .nav-btn:focus {
+    outline: none;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+ }
+
+.nav-btn:hover, .insta-button:hover {
+    background-color: #DD88CF;
+    color: white;
+}
+/* Right Sidebar Styling */
+.right-sidebar {
+    width: 339px; /* Width remains the same */
+    background-color: white;
+    padding: 0; /* No padding for full width */
+    box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+    position: fixed;
+    right: 0; /* Fixed to the right side of the viewport */
+    top: 0; /* Align to top */
+    bottom: 0; /* Align to bottom */
+    height: 100vh; /* Full viewport height */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+/* Inside Right Sidebar Container */
+.right-container {
+    background-color: #4B164C;
+    width: calc(100% - 20px); /* Adjust width to account for left spacing */
+    height: 100%; /* Full height */
+    margin-left: 20px; /* Added margin-left for spacing from the right sidebar */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 10px; /* General padding */
+    box-sizing: border-box; /* Include padding in width and height */
+}
+
+/* Profile Section */
+.profile-section {
+    display: flex;
+    align-items: center;
+    
+    margin-top: 19px;
+    margin-left: 12px; /* Reduced margin for compactness */
+    width: 100%; /* Full width */
+    padding-left: 10px; /* Added padding on the left side */
+    padding-right: 10px; /* Added padding on the right side */
+}
+
+/* Double Circle with Profile Image */
+.double-circle-right {
+    position: relative;
+    width: 56px; /* Profile image width */
+    height: 57px; /* Profile image height */
+    border-radius: 50%;
+    background-color: #DD88CF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px; /* Space between image and text */
+}
+
+/* Inner Circle and Profile Image */
+.double-circle-inner-right {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #4B164C;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-pic-right {
+    width: 52px; /* Slightly smaller than container */
+    height: 52px; /* Same aspect ratio */
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* Text Info Next to Profile Image */
+.text-info-right {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 52px; /* Same height as profile image */
+    flex-grow: 1; /* Allow it to take available space */
+}
+
+/* Individual Texts Below Profile Image */
+.info-text-name, .info-text-status, .info-text-online {
+    font-family: 'Aldrich', sans-serif;
+     /* Reduced font size */
+    color: white;
+    margin: 0;
+    height: 15px; /* Consistent height for text */
+    display: flex;
+    align-items: center;
+}
+.info-text-name {
+    font-family: 'Aldrich', sans-serif;
+    font-size: 15px;
+    color: #FA5075;
+    
+}
+
+.info-text-status i.fas.fa-crown {
+    color: #fdd835; /* Gold color for the crown icon */
+    
+}
+
+.info-text-status {
+    font-family: 'Aldrich', sans-serif;
+    font-size: 12px;
+    color: #fdd835;
+}
+
+.info-text-online {
+    font-family: 'Aldrich', sans-serif;
+    font-size: 12px;
+    color: #7FFFD4; /* Aquamarine color to indicate online status */
+}
+
+/* Bell Icon Styling */
+.bell-icon {
+    margin-left: 0; /* Removes any extra space to the left of the bell icon */
+    margin-right: 30px; /* Adds some space to the right of the bell icon */
+    display: flex;
+    align-items: center; /* Centers the icon vertically */
+    justify-content: flex-start; /* Aligns the bell icon to the left */
+    font-size: 20px; /* Font size for the bell icon */
+    color: white; /* Icon color */
+    cursor: pointer; /* Cursor changes on hover */
+    padding: 5px; /* Padding around the icon */
+}
+.bell-icon .fas.fa-bell {
+    font-size: inherit; /* Inherit the parent font size */
+}
+
+.button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.button {
+    background-color: #4B164C; /* Button background color */
+    color: #FFFFFF; /* Text color */
+    font-size: 13px; /* Font size */
+    font-family: 'Aldrich', sans-serif; /* Font family */
+    padding: 10px 20px; /* Padding for the button */
+    width: 175px; /* Set the width of the button */
+    height: 38px; /* Set the height of the button */
+    margin: 5px 0; /* Margin between buttons */
+    border: none; /* Remove border */
+    border-radius: 8px;
+    text-align: left; /* Rounded corners */
+    cursor: pointer; /* Cursor change on hover */
+    transition: transform 0.2s ease, background-color 0.2s ease;  /* Smooth transition for hover and click effects */
+}
+
+.button:hover {
+    background-color: #a83b3b; /* Slightly darker shade on hover */
+}
+
+.button:active {
+    transform: scale(0.95); /* Click effect */
+}
+/* Container for the logout button */
+/* Container for the logout button */
+.logout-button-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 178px; /* Reduced width for smaller container */
+    height: 48px; /* Reduced height for smaller container */
+    background-color: #4B164C; /* Background color */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Shadow for depth */
+    margin: 0 auto; /* Center horizontally */
+    padding: 5px; /* Padding inside the container */
+    color: #FFFFFF; /* Text color */
+}
+
+.logout-button {
+    background-color: transparent; /* No background color for the button */
+    border: none; /* No border for the button */
+    color: #FFFFFF; /* Text color */
+    font-size: 14px; /* Reduced font size for the text */
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    outline: none;
+    padding: 5px 10px; /* Reduced padding inside the button */
+}
+
+.logout-button i {
+    margin-right: 5px; /* Space between icon and text */
+    font-size: 16px; /* Reduced icon size */
+}
+
+.logout-button:hover {
+    background-color: #5C2B5C; /* Background color on hover */
+    color: #FFFFFF; /* Text color on hover */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* Shadow on hover */
+}
+
+/* Active state (when button is clicked) */
+.logout-button:active {
+    background-color: #3F1A3A; /* Darker background color when pressed */
+    color: #FFFFFF; /* Text color when pressed */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4); /* Shadow on press */
+    transform: scale(0.95); /* Slightly smaller button on press */
+} 
+
+
+.rounded-rectangle {
+    position: fixed;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 300px;
+    height: 70px;
+    background-color: #FFFFFF;
+    border-radius: 35px;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.icon-container {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    padding-top: 15px;
+}
+
+.icon-wrapper {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.icon-wrapper::before {
+    content: '';
+    position: absolute;
+    width: 45px;
+    height: 45px;
+    background-color: #DD88CF;
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 0;
+}
+
+.icon-wrapper:hover::before {
+    opacity: 1;
+}
+
+.icon-wrapper img {
+    width: 40px;
+    height: auto;
+    z-index: 1;
+}
+
+/* ------------------------------------------------------------------------------------------------- */
+
+.container-fluid {
+    display: flex !important;
+    flex-direction: column !important;
+    font-family: 'Aldrich', sans-serif;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 0 !important;
+    margin: 0 !important;
+    
+}
+
+.custom-head {
+    height: 100px;
+    width: 100%;
+    margin-bottom: 20px;
+    position: relative;
+    text-align: center;
+    color: #f5f5f5;
+    padding: 30px;
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    /* margin-top: 0;  */
+    
+}
+
+.custom-content {
+    background-color: #f5f5f5;
+    width: 100%; 
+    position: relative;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+    padding: 20px; 
+    min-height: calc(100vh - 100px); 
+    box-sizing: border-box;  
+}
+
+/* Hide the container by default */
+.rounded-rectangle {
+    display: none;
+}
+
+/* Show the container on screens less than 720px */
+@media (max-width: 960px) {
+    .rounded-rectangle {
+        display: block;
+    }
+}
+
+@media (max-width: 1140px) {
+    .sidebar {
+        width: 260px;
+    }
+    .right-sidebar {
+        width: 269px;
+    }
+    .main-content {
+        margin-left: 280px;
+        margin-right: 270px;
+        width: calc(100% - 550px)
+    } 
+}
+
+/* For screens below 720px, hide sidebars and make content full width */
+@media (max-width: 960px) {
+    .sidebar, .right-sidebar {
+        display: none; /* Hide sidebars */
+    }
+
+    .main-content, .custom-content-message {
+        margin-left: 0;
+        margin-right: 0;
+        width: 100%; /* Make the main content take up the full width */
+    }
+}
+
+.custom-content-message {
+    background-color: whitesmoke;
+    width: 100%; 
+    position: relative;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+    padding: 20px; 
+    min-height: calc(100vh - 100px); 
+    box-sizing: border-box; 
+    margin-top: 9rem !important;
+}
+
+.image-container {
+    display: flex;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    scroll-snap-type: x mandatory; /* Optional: For snap scrolling */
+}
+
+.profile-image {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    margin-right: 20px;
+    scroll-snap-align: start; 
+    border-radius: 20%;
+}
+
+.image-container::-webkit-scrollbar {
+    display: none; /* Hide the scrollbar for WebKit browsers */
+}
+
+.message-icon {
+    color: #6a1b9a;
+}
+
+.custom-icon {
+    color: #bdbdbd; 
+}

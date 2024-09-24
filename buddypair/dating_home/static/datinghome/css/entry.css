@@ -1,0 +1,63 @@
+body{
+    margin: 0;
+    padding: 0;
+}
+.container-fluid{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    
+    
+    background-image: url('/static/home/img/entrybg.png');
+    background-size: cover;
+    background-position: center; 
+    background-repeat: no-repeat; 
+    
+}
+/*----------------------------------entry popup--------------------------------------------*/
+
+
+
+
+.wrapper button{
+  border-radius: 20px;
+  /* height: 30px; */
+  border: none;
+  outline: none;
+  cursor: pointer;
+  background-color: transparent;
+  
+}
+
+h6 {
+  width: 200px;
+  margin: 0 auto 5px;
+  padding: 10px;
+  background: red;
+  border-radius: 20px;
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 500;
+}
+.men{
+  background: #5856d6;
+}
+.women{
+  background: #ff2d55;
+}
+.both{
+  background: linear-gradient(to right, #017afe, #fff);
+}
+
+
+/*----------------------------------entry popup--------------------------------------------*/
+
+/*------------------for responsive-----------------------*/
+@media (max-width: 768px) {
+  .container-fluid {
+      background-size: cover; 
+      background-position: center; 
+  }
+}
+/*------------------for responsive-----------------------*/

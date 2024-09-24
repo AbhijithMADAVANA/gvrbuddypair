@@ -1,0 +1,41 @@
+{% extends 'shared/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="main-content">
+<div class="container-fluid ">
+    <div class="row justify-content-center custom-head align-items-center">
+        <div class="col-auto">
+            <i class="fa-solid fa-magnifying-glass fs-3"></i>
+        </div>
+        <div class="col text-center">
+            <h1 class="text-white mb-0">Received Requests</h1>
+        </div>
+    </div>
+
+    <div class="justify-content-center custom-content">
+        {% for request in received_requests %}
+        <div class="col mb-3">
+            <div class="d-flex align-items-center justify-content-between p-3 border rounded text-black">
+                <div class="d-flex align-items-center">
+                    <img src="{{ request.sender.profile_pic.url }}" alt="{{ request.sender.username }}'s profile picture" class="rounded-circle" style="width: 100px; height: 100px; object-fit: cover; margin-right: 20px;">
+                    <div>
+                        <h5 class="mb-1">{{ request.sender.username }}</h5>
+                        <p class="mb-0"><small>Requested on {{ request.timestamp|date:"Y-m-d" }}</small></p>
+                    </div>
+                </div>
+                <div class="d-flex">
+                    <a href="{% url 'rightmenubar:accept_connection_request' request.id %}" class="btn"><i class="fa-regular fa-circle-check fs-3 custom-icon"></i></a>
+                    <a href="{% url 'rightmenubar:decline_connection_request' request.id %}" class="btn"><i class="fas fa-times fs-3 custom-icon"></i></a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p class="text-center text-black">No received requests.</p>
+        {% endfor %}
+    </div>
+
+</div>
+</div>
+{% endblock content %}

@@ -1,0 +1,45 @@
+<div class="col-6 col-md-3 my-2"> <!-- col-6 for small screens (2 cards per row), col-md-3 for larger screens (4 cards per row) -->
+  <a href="{% url 'matrimony_profile:profile' user.user.id %}">
+    <div class="profile-card position-relative">
+      <!-- Profile Status -->
+      <div class="profile-info position-absolute top-0 start-0 ms-1 p-2 w-100">
+        <p class="fs-6 px-2 rounded-pill" style="border: 1px solid rgba(255, 255, 255, 0.791); width: fit-content; background-color: rgba(255, 255, 255, 0.146);">
+          {{ status }}
+        </p>
+      </div>
+
+      <!-- Profile Name, Gender, Age, Job, Location -->
+      <div class="profile-info position-absolute bottom-0 text-center p-2 w-100">
+        <small class="fw-bold fs-5">{{ name }}</small>
+        <small class="fw-light ms-1 fs-5 text-uppercase">{{ gender }} {{ age }}</small>
+        <p style="font-size: 10px" class="text-uppercase">{{ job }},{{ location }}</p>
+      </div>
+<style>
+  .profile-icons {
+    display: flex;
+    flex-direction: column; /* Arrange icons vertically */
+    gap: 10px; /* Adds space between each icon */
+}
+
+</style>
+      <!-- Profile Icons -->
+      <div class="profile-icons position-absolute top-50 end-0 translate-middle-y p-2">
+        <div class="icon my-2 px-2 rounded-circle">
+          <i class="fa-solid fa-thumbs-up fa-sm"></i>
+        </div>
+        <div class="icon my-2 px-2 rounded-circle">
+          <i class="fa-solid fa-comment fa-sm"></i>
+        </div>
+        <!-- <div class="icon my-2 px-2 rounded-circle>
+          <i class="fa-solid fa-comment fa-2xs"></i>
+        </div> -->
+        <div class="icon my-2 px-2 rounded-circle">
+          <i class="fa-solid fa-ellipsis fa-"></i>
+        </div>
+      </div>
+
+      <!-- Profile Image -->
+      <img src="{{ image }}" alt="Profile" class="img-fluid object-fit-cover rounded-5" style="width: 100%; height: 250px;" />
+    </div>
+  </a>
+</div>

@@ -1,0 +1,208 @@
+body{
+    margin: 0;
+    padding: 0;
+}
+.container-fluid{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-image: url(/static/registration/img/n1.png);
+    
+}
+.modal-content{
+    height: 480px;
+    top:100px;
+    
+}
+.modal{
+    --bs-modal-width: 400px;
+}
+.interest{
+    height: 300px;
+}
+.small{
+    height: 180px;
+    padding-top: 20px;
+}
+.btn-primary {
+    --bs-btn-bg: #520665;
+    --bs-btn-border-color: none;
+    --bs-btn-hover-bg: black;
+}
+#slider{
+    margin: 0 auto;
+    width: 800px;
+    max-width: 100%;
+    text-align: center;
+}
+#slider input[type=radio]{
+    display: none;
+}
+#slider label{
+    cursor:pointer;
+    text-decoration: none;
+}
+#slides{
+    /* padding: 10px; */
+    /* border:3px solid #ccc; border around slides------note */
+    background: #fff;
+    position:relative;
+    z-index: 1;
+    
+}
+#overflow{
+    width: 100%;
+    overflow: hidden;
+}
+#slide1:checked ~ #slides .inner{
+    margin-left: 0;
+}
+#slide2:checked ~ #slides .inner{
+    margin-left: -100%;
+}
+ #slide3:checked ~ #slides .inner{
+    margin-left: -200%;
+}
+#slide4:checked ~ #slides .inner{
+    margin-left: -300%;
+}
+
+#slides .inner{
+    transition: margin-left 800ms cubic-bezier(0.770,0.000,0.175,1.000);
+    width: 400%;
+    line-height: 0;
+    height: 400px;/* heifht of the each slide can be more*/
+} 
+#slides .slide{
+    width: 25%;
+    float: left;
+    display: block;
+    height: 100%;
+    color:#fff;
+}
+#slides .slide_1{
+    background-color: #fff;
+    padding: 20px;
+    
+}
+#slides .slide_2{
+    background-color: #fff;
+}
+#slides .slide_3{
+    background-color: #fff;
+}
+#slides .slide_4{
+    background-color: #fff;
+}
+
+.slide-content{
+    padding: 10px;
+    color:black;
+    font-weight: 500;
+}
+#controls{
+    margin: -130px 0 0 0;
+    width: 100%;
+    height: 50px;
+    /* z-index: 3; */
+    position: relative;
+}
+#controls label{
+    transition: opacity 0.2s ease-out;
+    display: none;
+    width: 50px;
+    height: 50px;
+    opacity: .4;
+}
+#controls label:hover{
+    
+    opacity: 1;
+}
+#bullets{
+    margin: -370px 0 0; /* it can be -320px 100px*/
+    text-align: center;
+}
+#bullets label{
+   display: inline-block;
+   width: 10px;
+   height: 10px; 
+   background: #40134b;
+   margin: 0 10px;
+   border-radius: 100%;
+}
+#bullets label:checked{
+    
+    background: rgb(215, 116, 182);
+    
+}
+/* #slide4:checked ~ #controls label:nth-child(1) */
+#slide1:checked ~ #controls label:nth-child(2),
+#slide2:checked ~ #controls label:nth-child(3),
+#slide3:checked ~ #controls label:nth-child(4){
+    
+    /* background: url(/static/jobSection/img/ri-arrow1.png) no-repeat; */
+    float:right;
+    margin: -89px -38px 0 0;
+    display: block;
+    background: url(/static/jobSection/img/ri-arrow.png) no-repeat;
+}
+
+/* #next-btn{
+   
+    width: 100%;
+    margin-top: 370px;
+    z-index: 1;
+    position: relative;
+    background-color: red;
+    height: 50px;
+   
+} */
+.head{
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.modal-input{
+    height: 300px;
+    
+    padding: 20px;
+    padding-top: 70px;
+}
+.form-check-input{
+    border: 3px solid black;
+}
+.form-check label{
+    margin-top: 10px;
+}
+.form-label{
+    position: relative;
+    top:-22px;
+    left:-70px;  
+    background-color: #fff;
+}
+
+.form-control:focus + .form-label{
+    top:-42px;
+    background: #fff;
+    color: #520665;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+.mb-3 .expert{
+    top:-10px;
+    left:-90px;
+}
+.form-control{
+    border:1px solid black;
+}
+.form-select{
+    border:1px solid black;
+}
+.modal-header{
+    border-bottom: none;
+}
+.near{
+    left: -110px;
+}

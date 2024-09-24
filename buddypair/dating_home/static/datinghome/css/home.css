@@ -1,0 +1,300 @@
+@import url('https://fonts.googleapis.com/css2?family=Aldrich&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Abel&family=Aldrich&family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Rajdhani:wght@300;400;500;600;700&display=swap');
+/*------------------story section-----------------*/
+.main-story-container{
+    height: 140px;
+    width: 100%;
+    /* background-color: #d07c7c; */
+    border-top: none;
+    
+}
+.horizontal-scroll{
+width: 100%;
+height: 140px;
+/* background-color: #fff; */
+/* border: 1px solid #ddd; */
+/* border-radius: 5px; */
+display:flex;
+flex-direction: row;
+justify-content: space-between;
+align-items: center;
+position: relative;
+overflow: hidden;
+/* box-shadow: 0 0 3px #11101D; */
+border-top: none;
+}
+.story-container{
+display:flex;
+flex-direction: row;
+justify-content: flex-start;
+align-items: center;
+position: absolute;
+left: 0;
+transition: 0.5s all ease-out;
+}
+.story{
+padding: 0px 10px;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+}
+.story:first-child{
+padding-left: 10px;
+}
+.story:last-child{
+padding-right: 10px;
+}
+.story-circle{
+/* background: linear-gradient(rgb(231,0,231),rgb(255,115,0)); */
+background-color: #6E3767;
+width: 76px;
+height: 76px;
+display: flex;
+justify-content: center;
+align-items: center;
+border-radius: 50%;
+transform: rotateZ(45deg);
+}
+.your-story{
+background: linear-gradient(silver,#9c9797,silver);
+}
+.story-circle img{
+width: 69px;
+height: 69px;
+border-radius: 50%;
+border: 3px solid #fff;
+transform: rotateZ(-45deg);
+}
+/* story view button*/
+.story .story-circle button{
+background-color: transparent;
+border: none;
+outline: none;
+font-size: 5px;
+cursor: pointer;
+}
+/* story view button*/
+.story span{
+color:black;
+font-weight: 300;
+font-size: 14px;
+max-width: 85px;
+overflow: hidden;
+margin-top: 2px;
+display: flex;
+flex-direction: row;
+}
+.horizontal-scroll .btn-scroll{
+background-color: #FFF;
+color:#999;
+padding: 5px 8px;
+border:0;
+border-radius: 50%;
+margin: 0 5px;
+z-index: 1;
+cursor: pointer;
+box-shadow: 0 0 10px #999;
+transition: 1s;
+}
+.horizontal-scroll .btn-scroll i{
+font-size: 20px;
+}
+.your-story i{
+margin-top: 58px;
+margin-left: -22px;
+font-size: 23px;
+transform: rotateZ(45deg);
+color: #0000007d;
+
+}
+/*------------------story section-----------------*/
+
+/*----------------------filter bar------------------------------*/
+.filter-bar{
+    height: 70px;
+    width: 100%;
+    /* background-color: rgb(235, 205, 247); */
+    
+    padding: 20px;
+    display: flex;
+    
+    
+    }
+    .filter-container{
+        width: 97%;
+        height: 40px;
+        border-radius: 20px;
+        background-color: rgb(220, 169, 238);
+        /* padding: 5px; */
+        display: flex;
+        /* box-shadow: 2px 2px 2px  rgb(255, 255, 255,0.8); */
+        border: 2px solid #fff;
+        justify-content: center;
+        align-items: center;
+    }
+    .filter-container button{
+    border: none;
+    outline: none;
+    height: 35px; /*40*/
+    width: 160px;/*180*/
+    border-radius: 20px;
+    margin-right: -20px;
+    background-color: #e599ee;
+    
+    
+    }
+    .filter-container button:hover{
+    background-color: #fff;
+    cursor: pointer;
+    z-index: 1;
+    color:rgb(25, 130, 196);
+    box-shadow: 2px 2px 2px 2px #d8d2d2;
+    transition: 1s;
+    }
+    .filter-container button:focus{
+    background-color: #fff;
+    cursor: pointer;
+    z-index: 1;
+    color:rgb(25, 130, 196);
+    box-shadow: 0px 1px 1px 1px #d8d2d2;
+    transition: 1s;
+    }
+/*----------------------filter bar------------------------------*/   
+
+/*---------------------------------------------profile section--new--------------------------------*/
+ .profile-view{
+    height: 800px;
+    width:100%;
+    display:flex;
+    flex-direction: row;
+    padding-top: 30px;
+    gap:20px;
+    /* background-color: #cfb3d2; */
+    padding-left: 35px;
+
+}
+.profile-container-left{
+    height: fit-content;
+    width: 45%;
+    /* background-color: aquamarine; */
+    display: flex;
+    flex-direction: column;
+    gap:30px;
+    padding: 20px;
+    
+}
+.profile-container-right{
+    height: fit-content;
+    width: 45%;
+    /* background-color: #ccd368; */
+    display: flex;
+    flex-direction: column;
+    gap:30px;
+    padding: 20px;
+    
+    
+}
+.profile{
+    height: 200px;
+    /* background-color: pink; */
+    border-radius: 15px;
+    
+}
+.profile img{
+    height: 200px;
+    width: 100%;
+    border-radius: 15px;
+}
+
+
+
+
+.profile .status{
+
+    background: rgba(255, 255, 255, 0.2);
+    padding: 3px 7px;
+    border-radius: 15px;
+    font-size: 13px;
+    width: fit-content;
+    color: white;
+    
+}
+
+.profile .overlay-text {
+    position: absolute;
+    font-family: "Aldrich", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 10px;
+    color: white;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to bottom, rgba(24, 24, 24, 0.3), rgba(225, 104, 227, 0.3));
+    /* make background transparent for get rid of thr overlay-text issue  = background:transparent;*/
+    border-radius: 15px;
+    transform: translateY(-200px);
+    height: 200px;
+    width: fit-content;
+  }
+
+
+.profile .overlay-text .action-icons {
+
+    
+    display: flex;
+    flex-direction: column;
+    gap:6px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.2);
+    height: 100px;
+    width: 30px;
+    padding: 6px;
+    margin-left: 260px;
+    
+}
+.icon1{
+    margin-left: 0px;
+}
+
+
+.action-icons .icon {
+    width: 20px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 10px;
+    cursor: pointer;
+}
+.action-icons .icon button{
+
+    background: transparent;
+    border: none;
+    outline: none;
+    color:#fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    cursor: pointer;
+} 
+
+
+/*---------------------------------------------profile section--new--------------------------------*/
+/*---------------------------------menu bar section--------------------------------------------*/
+.menu-bar-container{
+    display: none;
+}
+
+.menu-bar{
+    display: none;
+    
+} 
+
+

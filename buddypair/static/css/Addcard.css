@@ -1,0 +1,53 @@
+#mp{
+  background-color: white;
+  border-radius: 25px;
+  padding: 30px 20px;
+  justify-items: center;
+  width: 400px;
+}
+#head{
+  color:rgb(80, 1, 80);
+  margin-bottom: 20px;
+  font-weight: bold;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+#bt{
+  background-color:rgb(80, 1, 80);
+  border: none;
+  border-radius: 10px;
+  padding: 12px;
+  font-size: 16px;
+  margin-top: 1%;
+  color: white;
+}
+#im{
+  height:25px;
+  border-radius: 3px;
+  margin: 0 5px;
+}
+#card {
+  color: white;
+  background-color:rgb(80, 1, 80);
+  font-size: small;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.form-label {
+  color:black;
+  font-size: smaller;
+  font-weight: bold;
+}
+#ft {
+  color: gray;
+  font-size: 0.8em;
+  text-align: center;
+  margin-bottom: 15px;
+}
+#im{
+  height: 25px;
+  margin: 0 5px;
+}

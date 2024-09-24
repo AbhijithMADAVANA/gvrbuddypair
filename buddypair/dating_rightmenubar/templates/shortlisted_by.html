@@ -1,0 +1,41 @@
+{% extends 'shared/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row justify-content-center custom-head align-items-center">
+            <div class="col-auto">
+                <i class="fa-solid fa-magnifying-glass fs-3"></i>
+            </div>
+            <div class="col text-center">
+                <h1 class="text-white mb-0">Short Listed By</h1>
+            </div>
+        </div>
+
+        <div class="justify-content-center custom-content">
+            {% if shortlisted_by_users %}
+                {% for user in shortlisted_by_users %}
+                    <div class="col mb-3">
+                        <div class="d-flex align-items-center justify-content-between p-3 border rounded text-black">
+                            <div class="d-flex align-items-center">
+                                <img src="{{ user.profile_pic.url }}" alt="{{ user.username }}'s profile picture" class="rounded-circle" style="width: 100px; height: 100px; object-fit: cover; margin-right: 20px;">
+                                <div>
+                                    <h5 class="mb-1">{{ user.username }}</h5>
+                                    <p class="mb-0"><small>{{ user.bio|default:"No bio available" }}</small></p>
+                                </div>
+                            </div>
+                            {% comment %} <div class="d-flex">
+                                <a class="btn" type="button"><i class="fa-regular fa-heart fs-3 custom-icon"></i></a>
+                                <a class="btn" type="button"><i class="fas fa-times fs-3 custom-icon"></i></a>
+                            </div> {% endcomment %}
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-center text-black">No users have shortlisted you yet.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,38 @@
+{% extends 'shared/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="main-content">
+<div class="container-fluid ">
+    <div class="row justify-content-center custom-head align-items-center">
+        <div class="col-auto">
+            <i class="fa-solid fa-magnifying-glass fs-3"></i>
+        </div>
+        <div class="col text-center">
+            <h1 class="text-white mb-0">Reject Requests</h1>
+        </div>
+    </div>
+
+    <div class="justify-content-center custom-content">
+        {% for request in declined_requests %}
+        <div class="col mb-3">
+            <div class="d-flex align-items-center justify-content-between p-3 border rounded text-black">
+                <div class="d-flex align-items-center">
+                    <img src="{{ request.receiver.profile_pic.url }}" alt="{{ request.receiver.username }}'s profile picture" class="rounded-circle" style="width: 100px; height: 100px; object-fit: cover; margin-right: 20px;">
+                    <div>
+                        <h5 class="mb-1">{{ request.receiver.username }}</h5>
+                        <p class="mb-0"><small>Rejected your request.</small></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p class="text-center text-black">No declined requests found.</p>
+        {% endfor %}
+    </div>
+    
+
+</div>
+</div>
+    
+{% endblock content %}
