@@ -845,6 +845,7 @@ class RelationShipGoalView(FormView):
         return reverse_lazy('u_auth:auth_page')
 
 def UserType(request):
+    
     choose_type = request.GET.get('type')
     print(request.GET, choose_type)
     choices = {}
@@ -871,6 +872,32 @@ def UserType(request):
     # context['show_relationship_model'] = True    
     messages.error(request, "You Must choose correct one from above option")
     return redirect('u_auth:auth_page')
+
+# def UserType(request):
+#     choose_type = request.GET.get('type')
+#     print(request.GET, choose_type)
+    
+#     if choose_type:
+#         try:
+#             relation_goal = Relationship_Goals.objects.get(user=request.user)
+#             # Determine the redirect URL based on the relationship type
+#             if choose_type == 'is_long' and relation_goal.is_long:
+#                 # Redirect to Matrimony home
+#                 return redirect('matrimony_home_url')  # Replace with your actual URL name for Matrimony home
+
+#             elif choose_type == 'is_short' and relation_goal.is_short:
+#                 # Redirect to Dating home
+#                 return redirect('dating_home_url')  # Replace with your actual URL name for Dating home
+
+#             messages.error(request, "Wrong type...!!")
+#             return redirect('u_auth:auth_page')
+
+#         except Relationship_Goals.DoesNotExist:
+#             messages.error(request, "Relationship goals not found for this user.")
+#             return redirect('u_auth:auth_page')
+
+#     messages.error(request, "You must choose the correct one from the above options")
+#     return redirect('u_auth:auth_page')
 
 
 
@@ -912,34 +939,6 @@ class AdditionalDetailsView(FormView):
     def get_success_url(self) -> str:
         return reverse_lazy('u_auth:auth_page')
 
-
-# def UserType(request):
-#     choose_type = request.GET.get('type')
-#     print(request.GET, choose_type)
-    
-#     if choose_type:
-#         try:
-#             relation_goal = Relationship_Goals.objects.get(user=request.user)
-#             # Determine the redirect URL based on the relationship type
-#             if choose_type == 'is_long' and relation_goal.is_long:
-#                 # Redirect to Matrimony home
-#                 return redirect('matrimony_home_url')  # Replace with your actual URL name for Matrimony home
-
-#             elif choose_type == 'is_short' and relation_goal.is_short:
-#                 # Redirect to Dating home
-#                 return redirect('dating_home_url')  # Replace with your actual URL name for Dating home
-
-#             messages.error(request, "Wrong type...!!")
-#             return redirect('u_auth:auth_page')
-
-#         except Relationship_Goals.DoesNotExist:
-#             messages.error(request, "Relationship goals not found for this user.")
-#             return redirect('u_auth:auth_page')
-
-#     messages.error(request, "You must choose the correct one from the above options")
-#     return redirect('u_auth:auth_page')
-
-
 from django.shortcuts import render, redirect
 from django.views.generic import UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -960,7 +959,7 @@ class UserInterestView(LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         form.save()
         messages.success(self.request, "Your preference has been updated.")
-        return redirect('dating_home:home1')  # Replace with the desired URL
+        return redirect('dating_home:homel')  # Replace with the desired URL
 
 
 # class AdditionalDetailsView(FormView):
