@@ -109,100 +109,55 @@
                         <h1>Relationship Goals</h1>
                         <form action="{% url 'u_auth:relation_type' %}" method="post">
                             {% csrf_token %}
-                            {% include "widget/input_details_form.html" with type='checkbox' label='Long Term Relationship' name='is_long' %}
-                            {% include "widget/input_details_form.html" with type='checkbox' label='Short Term Relationship' name='is_short' %}
-                            {% if form.errors and show_relationmodel_modal %}
-                                <div class="alert alert-danger" role="alert">
-                                    {% for field, errors in form.errors.items %}
-                                        {% if field and field != '__all__' %}
-                                        <div>
-                                            {{ field }}: {{ errors|join:', ' }}
-                                        </div>
-                                        {% else %}
-                                        <div>
-                                            {{ errors|join:', ' }}
-                                        </div>
-                                        {% endif %}
-                                    {% endfor %}
-                                </div>
-                            {% endif %}
-                            <div class="row">
-                                <div class="col-6">
-                                    <button type="button" class="btn btn-dark w-100" id="prevToJobDetails">Previous</button>
-                                </div>
-                                <div class="col-6">
-                                    <button type="submit" class="btn btn-dark w-100" id="nextToInterested">Save</button>
-                                </div>
+                        {% include "widget/input_details_form.html" with type='checkbox' label='Long Term Relationship' name='is_long'%}
+                        {% include "widget/input_details_form.html" with type='checkbox' label='Short Term Relationship' name='is_short'%}
+                        {% if form.errors and show_relationmodel_modal%}
+                            <div class="alert alert-danger" role="alert">
+                                {% for field, errors in form.errors.items %}
+                                    {% if field and field != '__all__' %}
+                                    <div>
+                                        {{field }}: {{ errors|join:', ' }}
+                                    </div>
+                                    {% else %}
+                                    <div>
+                                        {{ errors|join:', ' }}
+                                    </div>
+                                    {% endif %}
+                                {% endfor %}
                             </div>
-                        </form>
+                        {% endif %}   
+                        <div class="row">
+                            <div class="col-6">
+                                <button type="button" class="btn btn-dark w-100" id="prevToJobDetails">Previous</button>
+                            </div>
+                            <div class="col-6">
+                                <button type="submit" class="btn btn-dark w-100" id="">save</button>
+                            </div>
+                        </div>
+                    </form>
+                    <!-- <button type="submit" class="btn btn-dark w-100" id="nextToInterested">nextToInterested</button> -->
+                    <!-- <a href="" id="nextToInterested">nextToInterested</a> -->
                     </div>
-                    
 
                     <!-- Step 5 -->
-                     
-                    <!-- Step 5: User Preferences -->
-<div id="step5" class="{% if not show_user_preference_form %}d-none{% endif %}">
-    <h1>User Preferences</h1>
-    <form action="{% url 'u_auth:user_preference' %}" method="post">
-        {% csrf_token %}
-        
-        <!-- Matrimony Option -->
-        <div class="form-group">
-            <div class="form-check">
-                <input type="checkbox" class="form-check-input" id="matrimony" name="matrimony" {% if form.matrimony.value %}checked{% endif %}>
-                <label class="form-check-label" for="matrimony">Matrimony</label>
-            </div>
-        </div>
-        
-        <!-- Dating Option -->
-        <div class="form-group">
-            <div class="form-check">
-                <input type="checkbox" class="form-check-input" id="dating" name="dating" {% if form.dating.value %}checked{% endif %}>
-                <label class="form-check-label" for="dating">Dating</label>
-            </div>
-        </div>
-        
-        <!-- Error Message Display -->
-        {% if form.errors %}
-            <div class="alert alert-danger" role="alert">
-                {% for field, errors in form.errors.items %}
-                    {% for error in errors %}
-                        <div>{{ error }}</div>
-                    {% endfor %}
-                {% endfor %}
-            </div>
-        {% endif %}
-        
-        <div class="row">
-            <!-- Previous Button to Go Back to Relationship Goal Selection -->
-            <div class="col-6">
-                <button type="button" class="btn btn-dark w-100" id="prevToRelationshipGoals">Previous</button>
-            </div>
-            
-            <!-- Submit Button to Save Preferences -->
-            <div class="col-6">
-                <button type="submit" class="btn btn-dark w-100">Submit</button>
-            </div>
-        </div>
-    </form>
-</div>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Show previous step (step4) when clicking on the 'Previous' button in step5
-        document.getElementById('prevToRelationshipGoals').addEventListener('click', function() {
-            document.getElementById('step5').classList.add('d-none');
-            document.getElementById('step4').classList.remove('d-none');
-        });
-    
-        // Show next step (step5) when clicking on the 'Save' button in step4
-        document.getElementById('nextToInterested').addEventListener('click', function() {
-            document.getElementById('step4').classList.add('d-none');
-            document.getElementById('step5').classList.remove('d-none');
-        });
-    });
-    </script>
-    
-                        
+                    <div id="step5" class="d-none">
+                        <h1>Interested</h1>
+                        <form action="{% url 'u_auth:check_type' %}" method="get">
+                        {% include "widget/input_details_form.html" with type='for_relationtype_check' label='Matrimony' name='type'  value='is_long'%}
+                        {% include "widget/input_details_form.html" with type='for_relationtype_check' label='Dating' name='type' value='is_short'%}
+                        <div class="row">
+                            <!-- <div class="col-6">
+                                <button type="button" class="btn btn-dark w-100" id="prevToRelationshipGoals">Previous</button>
+                            </div> -->
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-dark w-100" id="">submit</button>
+                            </div>
+                        </div>
+                        </form>
+                        <!-- <button type="button" class="btn btn-dark w-100" id="nextToAdditionalDetails">nextToAdditionalDetails</button> -->
+                        <!-- <a href="" id="nextToAdditionalDetails">nextToAdditionalDetails</a> -->
+                    </div>
+
                     <!-- Step 6 -->
                     <div id="step6" class="d-none">
                         <h1>Additional Details</h1>

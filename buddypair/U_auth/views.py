@@ -816,136 +816,61 @@ class JobDetailsView(FormView):
     def get_success_url(self) -> str:
         return reverse_lazy('u_auth:auth_page')
 
-# class RelationShipGoalView(FormView):
-
-#     template_name = 'auth/auth.html'    
-#     form_class = RelationShipGoalForm
-
-#     def get_form_kwargs(self):
-#         """
-#         Passes the request data to the form.
-#         """
-#         kwargs = super().get_form_kwargs()
-#         # Pass the user to the form
-#         kwargs['user'] = self.request.user
-    
-#         print(kwargs, "***********************************")
-
-#         return kwargs
-
-#     def form_valid(self, form):
-#         form.save(commit=True)
-#         self.request.session['check_type'] = True
-#         return super().form_valid(form)
-    
-#     def form_invalid(self, form):
-#         return self.render_to_response(self.get_context_data(form=form, show_relationmodel_modal=True))
-
-#     def get_success_url(self) -> str:
-#         return reverse_lazy('u_auth:auth_page')
-
-# def UserType(request):
-#     choose_type = request.GET.get('type')
-#     print(request.GET, choose_type)
-#     choices = {}
-    
-#     if choose_type:
-#         try:
-#             relation_goal = Relationship_Goals.objects.get(user=request.user)
-#             choices['Matrimony'] = ('is_long',relation_goal.is_long)
-#             choices['Dating'] = ('is_short',relation_goal.is_short)
-#             for value, iteam in choices.items():
-#                 if iteam[1] and iteam[0] == choose_type:
-#                     # context['show_addition_details_model'] = True
-#                     request.session.pop('check_type', None)
-#                     return redirect('u_auth:auth_page')
-                    
-#             messages.error(request, "Wrong type...!!")
-#             # context['show_relationship_model'] = True
-#             return redirect('u_auth:auth_page')
-
-#         except Relationship_Goals.DoesNotExist:
-#             messages.error(request, "Relationship goals not found for this user.")
-#             return redirect('u_auth:auth_page')
-
-#     # context['show_relationship_model'] = True    
-#     messages.error(request, "You Must choose correct one from above option")
-#     return redirect('u_auth:auth_page')
-
-from django.views.generic.edit import FormView
-from django.shortcuts import redirect
-from django.urls import reverse_lazy
-from django.contrib import messages
-from .forms import RelationShipGoalForm, UserPreferenceForm
-from .models import Relationship_Goals, UserPreference
-
 class RelationShipGoalView(FormView):
-    template_name = 'auth/auth.html'
+
+    template_name = 'auth/auth.html'    
     form_class = RelationShipGoalForm
 
     def get_form_kwargs(self):
+        """
+        Passes the request data to the form.
+        """
         kwargs = super().get_form_kwargs()
+        # Pass the user to the form
         kwargs['user'] = self.request.user
+    
+        print(kwargs, "***********************************")
+
         return kwargs
 
     def form_valid(self, form):
-        # Save the relationship goal data
-        relationship_goal = form.save(commit=True)
-        
-        # Create or update UserPreference with default values
-        UserPreference.objects.update_or_create(
-            user=self.request.user,
-            defaults={
-                'matrimony': False,
-                'dating': False
-            }
-        )
-        
-        # Set session variable to show the next step form
-        self.request.session['show_user_preference_form'] = True
-        
-        # Redirect to user preference view
-        return redirect('u_auth:user_preference')
-
+        form.save(commit=True)
+        self.request.session['check_type'] = True
+        return super().form_valid(form)
+    
     def form_invalid(self, form):
         return self.render_to_response(self.get_context_data(form=form, show_relationmodel_modal=True))
 
-    def get_success_url(self):
-        return reverse_lazy('u_auth:user_preference')
+    def get_success_url(self) -> str:
+        return reverse_lazy('u_auth:auth_page')
 
+def UserType(request):
+    choose_type = request.GET.get('type')
+    print(request.GET, choose_type)
+    choices = {}
+    
+    if choose_type:
+        try:
+            relation_goal = Relationship_Goals.objects.get(user=request.user)
+            choices['Matrimony'] = ('is_long',relation_goal.is_long)
+            choices['Dating'] = ('is_short',relation_goal.is_short)
+            for value, iteam in choices.items():
+                if iteam[1] and iteam[0] == choose_type:
+                    # context['show_addition_details_model'] = True
+                    request.session.pop('check_type', None)
+                    return redirect('u_auth:auth_page')
+                    
+            messages.error(request, "Wrong type...!!")
+            # context['show_relationship_model'] = True
+            return redirect('u_auth:auth_page')
 
-class UserPreferenceView(FormView):
-    template_name = 'auth/auth.html'
-    form_class = UserPreferenceForm
+        except Relationship_Goals.DoesNotExist:
+            messages.error(request, "Relationship goals not found for this user.")
+            return redirect('u_auth:auth_page')
 
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs['user'] = self.request.user
-        return kwargs
-
-    def form_valid(self, form):
-        user_preference = form.save(commit=False)
-        relationship_goal = Relationship_Goals.objects.get(user=self.request.user)
-
-        # Handling preferences based on relationship goal
-        if relationship_goal.is_long:
-            if not user_preference.matrimony and not user_preference.dating:
-                messages.error(self.request, "Please select at least one option (Matrimony or Dating) for Long Term Relationship.")
-                return self.form_invalid(form)
-            user_preference.save()
-        
-        elif relationship_goal.is_short:
-            if user_preference.matrimony:
-                messages.error(self.request, "You cannot select Matrimony for Short Term Relationship. Please select Dating or choose Long Term Relationship.")
-                return self.form_invalid(form)
-            user_preference.save()
-
-        # Success redirection after saving preferences
-        return super().form_valid(form)
-
-    def get_success_url(self):
-        return reverse_lazy('u_auth:success_page')  # Redirect to a desired success page
-
+    # context['show_relationship_model'] = True    
+    messages.error(request, "You Must choose correct one from above option")
+    return redirect('u_auth:auth_page')
 
 
 
