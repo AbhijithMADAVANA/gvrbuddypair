@@ -55,6 +55,11 @@
                   <button type="button"><h6 class="men">MEN</h6></button>
                   <button type="button"><h6 class="women">WOMEN</h6></button>
                   <button type="button"><h6 class="both">BOTH</h6></button>
+                  <form method="post" action="{% url 'u_auth:interest_view' %}">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-primary w-100">Save</button>
+                </form>
                 </div>
             </div>
         </div>

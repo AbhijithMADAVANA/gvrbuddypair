@@ -237,7 +237,7 @@
                                 </div>
                                 <div>
                                     <form method="post"
-                                          action="{% url 'matrimony_profile:handle_request' request.pk 'matrimony_profile:reject' %}"
+                                          action="{% url 'matrimony_profile:handle_request' request.pk 'reject' %}"
                                           style="display: inline">
                                         {% csrf_token %}
                                         <button class="btn  cross_icon">
@@ -247,7 +247,7 @@
                                 </div>
                                 <div>
                                     <form method="post"
-                                          action="{% url 'matrimony_profile:handle_request' request.pk 'matrimony_profile:accept' %}"
+                                          action="{% url 'matrimony_profile:handle_request' request.pk 'accept' %}"
                                           style="display: inline">
                                         {% csrf_token %}
                                         <button class="btn heart_icon">

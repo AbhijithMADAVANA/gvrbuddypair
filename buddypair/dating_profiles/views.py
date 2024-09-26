@@ -22,23 +22,64 @@ from django.urls import reverse, reverse_lazy
 
 # Create your views here.
 
-class UserProfileView(TemplateView):
+# class UserProfileView(TemplateView):
+#     template_name = 'dt/users_pr_view.html'
+
+#     def get_context_data(self, **kwargs) -> dict[str, Any]:
+#         context = super().get_context_data(**kwargs)
+#         user_id = self.kwargs.get('user_id', None)
+#         if user_id:
+#             user = costume_user.objects.get(id=user_id)
+#             user_details = UserPersonalDetails.objects.get(user=user) 
+#             additional_details = AdditionalDetails.objects.get(user=user)
+#             pictures = Pictures.objects.filter(user=user_details)
+#             context['user'] = user
+#             context['user_details'] = user_details
+#             context['additional_details'] = additional_details
+#             context['pictures'] = pictures
+#             context['user'] = user
+#             return context
+
+# views.py
+from django.shortcuts import get_object_or_404
+from django.contrib.auth.mixins import LoginRequiredMixin
+from .models import DatingProfileView
+
+class UserProfileView(LoginRequiredMixin, TemplateView):
     template_name = 'dt/users_pr_view.html'
 
-    def get_context_data(self, **kwargs) -> dict[str, Any]:
+    def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        user_id = self.kwargs.get('user_id', None)
+        user_id = self.kwargs.get('user_id')
         if user_id:
-            user = costume_user.objects.get(id=user_id)
-            user_details = UserPersonalDetails.objects.get(user=user) 
-            additional_details = AdditionalDetails.objects.get(user=user)
+            user = get_object_or_404(costume_user, id=user_id)
+            user_details = get_object_or_404(UserPersonalDetails, user=user)
+            additional_details = get_object_or_404(AdditionalDetails, user=user)
             pictures = Pictures.objects.filter(user=user_details)
+
+            # Log the profile view if the viewer is not viewing their own profile
+            if self.request.user != user:
+                DatingProfileView.objects.get_or_create(viewer=self.request.user, viewed=user)
+
             context['user'] = user
             context['user_details'] = user_details
             context['additional_details'] = additional_details
             context['pictures'] = pictures
-            context['user'] = user
-            return context
+        return context
+
+# views.py
+from django.views.generic import ListView
+
+class ProfileViewersListView(LoginRequiredMixin, ListView):
+    model = DatingProfileView
+    template_name = 'dt/profile_viewer.html'
+    context_object_name = 'viewers'
+
+    def get_queryset(self):
+        # Get the logged-in user
+        user = self.request.user
+        # Return all ProfileView entries where the logged-in user is the viewed profile
+        return DatingProfileView.objects.filter(viewed=user).order_by('-timestamp')
 
 
 # #Interest request View
@@ -82,30 +123,98 @@ class UserProfileView(TemplateView):
 #                 return redirect(reverse('dating_profiles:profile', kwargs={'user_id': receiver.id}))
 
 
+# class SendRequestView(RedirectNotAuthenticatedUserMixin, View):
+#     def post(self, request, *args, **kwargs):
+#         sender = request.user
+#         receiver = get_object_or_404(costume_user, id=self.kwargs['pk'])
+        
+#         existing_request = Dating_InterestRequest.objects.filter(sender=sender, receiver=receiver).exists()
+        
+#         if existing_request:
+#             messages.warning(request, "You have already sent a request to this user.")
+#             resolved_url = reverse('dating_profiles:profile', kwargs={'user_id': receiver.id})
+#             print(f"Resolved URL: {resolved_url}")  # Debug statement
+#             return redirect(resolved_url)
+#         else:
+#             try:
+#                 Dating_InterestRequest.objects.create(sender=sender, receiver=receiver)
+#                 messages.success(request, "Interest request sent successfully!")
+#                 resolved_url = reverse_lazy('dating_profiles:sented_request')
+#                 print(f"Resolved URL: {resolved_url}")  # Debug statement
+#                 return redirect(resolved_url)
+#             except Exception as e:
+#                 messages.error(request, f"Failed to send interest request: {str(e)}")
+#                 resolved_url = reverse('dating_profiles:profile', kwargs={'user_id': receiver.id})
+#                 print(f"Resolved URL: {resolved_url}")  # Debug statement
+#                 return redirect(resolved_url)
+
+# class SendRequestView(RedirectNotAuthenticatedUserMixin, View):
+#     def post(self, request, *args, **kwargs):
+#         sender = request.user
+#         receiver = get_object_or_404(costume_user, id=self.kwargs['pk'])
+        
+#         # Check for existing request only with "pending" or "accepted" status
+#         existing_request = Dating_InterestRequest.objects.filter(
+#             sender=sender, receiver=receiver
+#         ).exclude(status='rejected').exists()
+        
+#         if existing_request:
+#             messages.warning(request, "You have already sent a request to this user.")
+#             resolved_url = reverse('dating_profiles:profile', kwargs={'user_id': receiver.id})
+#             return redirect(resolved_url)
+#         else:
+#             try:
+#                 Dating_InterestRequest.objects.create(sender=sender, receiver=receiver)
+#                 messages.success(request, "Interest request sent successfully!")
+#                 resolved_url = reverse_lazy('dating_profiles:sented_request')
+#                 return redirect(resolved_url)
+#             except Exception as e:
+#                 messages.error(request, f"Failed to send interest request: {str(e)}")
+#                 resolved_url = reverse('dating_profiles:profile', kwargs={'user_id': receiver.id})
+#                 return redirect(resolved_url)
+
+from .models import Friendship
 class SendRequestView(RedirectNotAuthenticatedUserMixin, View):
     def post(self, request, *args, **kwargs):
         sender = request.user
         receiver = get_object_or_404(costume_user, id=self.kwargs['pk'])
         
-        existing_request = Dating_InterestRequest.objects.filter(sender=sender, receiver=receiver).exists()
+        # Check if there's an existing request between the two users, regardless of who sent it
+        existing_request = Dating_InterestRequest.objects.filter(
+            models.Q(sender=sender, receiver=receiver) | 
+            models.Q(sender=receiver, receiver=sender)
+        ).exclude(status='rejected').exists()
         
-        if existing_request:
+        # Check if they are already friends
+        are_friends = Friendship.objects.filter(
+            models.Q(user1=sender, user2=receiver) |
+            models.Q(user1=receiver, user2=sender)
+        ).exists()
+        
+        if are_friends:
+            # If they are already friends, show the message
+            messages.info(request, "You are already friends with this user.")
+            resolved_url = reverse('dating_profiles:profile', kwargs={'user_id': receiver.id})
+            return redirect(resolved_url)
+        elif existing_request:
+            # If a request exists, but not friends yet, show this message
             messages.warning(request, "You have already sent a request to this user.")
             resolved_url = reverse('dating_profiles:profile', kwargs={'user_id': receiver.id})
-            print(f"Resolved URL: {resolved_url}")  # Debug statement
             return redirect(resolved_url)
         else:
             try:
+                # Create a new interest request
                 Dating_InterestRequest.objects.create(sender=sender, receiver=receiver)
                 messages.success(request, "Interest request sent successfully!")
                 resolved_url = reverse_lazy('dating_profiles:sented_request')
-                print(f"Resolved URL: {resolved_url}")  # Debug statement
                 return redirect(resolved_url)
             except Exception as e:
+                # Handle any errors during request creation
                 messages.error(request, f"Failed to send interest request: {str(e)}")
                 resolved_url = reverse('dating_profiles:profile', kwargs={'user_id': receiver.id})
-                print(f"Resolved URL: {resolved_url}")  # Debug statement
                 return redirect(resolved_url)
+
+
 
 
 class SentedRequestView(RedirectNotAuthenticatedUserMixin,ListView):
@@ -148,13 +257,51 @@ class HandleRequestView(RedirectNotAuthenticatedUserMixin, View):
         
         if action == 'accept':  # If 'action' is 'accept'
             interest_request.status = 'accepted'  # Set the request's status to 'accepted'
-            messages.success(request, "Interest request has accepted successfully!")
+            messages.success(request, "Interest request has been accepted successfully!")
+            
+            # Create a friendship
+            Friendship.objects.get_or_create(
+                user1=min(interest_request.sender, interest_request.receiver, key=lambda x: x.id),
+                user2=max(interest_request.sender, interest_request.receiver, key=lambda x: x.id)
+            )
         elif action == 'reject':  # Otherwise, if 'action' is 'reject'
             interest_request.status = 'rejected'  # Set the request's status to 'rejected'
-            messages.success(request, "Interest request has rejected successfully!")
+            messages.success(request, "Interest request has been rejected successfully!")
 
         interest_request.save()
         return redirect(reverse_lazy('dating_profiles:received_request'))
+
+
+# class HandleRequestView(RedirectNotAuthenticatedUserMixin, View):
+#     def post(self, request, *args, **kwargs):
+#         interest_request = get_object_or_404(Dating_InterestRequest, id=self.kwargs['pk'], receiver=request.user)
+#         action = self.kwargs.get('action')  # This fetches the value of 'action' from the URL ('accept' or 'reject').
+        
+#         if action == 'accept':  # If 'action' is 'accept'
+#             interest_request.status = 'accepted'  # Set the request's status to 'accepted'
+#             messages.success(request, "Interest request has been accepted successfully!")
+#         elif action == 'reject':  # Otherwise, if 'action' is 'reject'
+#             interest_request.status = 'rejected'  # Set the request's status to 'rejected'
+#             messages.success(request, "Interest request has been rejected successfully!")
+
+#         interest_request.save()
+#         return redirect(reverse_lazy('dating_profiles:received_request'))
+
+
+# class HandleRequestView(RedirectNotAuthenticatedUserMixin, View):
+#     def post(self, request, *args, **kwargs):
+#         interest_request = get_object_or_404(Dating_InterestRequest, id=self.kwargs['pk'], receiver=request.user)
+#         action = self.kwargs.get('action')  # This fetches the value of 'action' from the URL ('accept' or 'reject').
+        
+#         if action == 'accept':  # If 'action' is 'accept'
+#             interest_request.status = 'accepted'  # Set the request's status to 'accepted'
+#             messages.success(request, "Interest request has accepted successfully!")
+#         elif action == 'reject':  # Otherwise, if 'action' is 'reject'
+#             interest_request.status = 'rejected'  # Set the request's status to 'rejected'
+#             messages.success(request, "Interest request has rejected successfully!")
+
+#         interest_request.save()
+#         return redirect(reverse_lazy('dating_profiles:received_request'))
 
 # class AcceptedRequestView(RedirectNotAuthenticatedUserMixin, ListView):
 #     model = Dating_InterestRequest

@@ -1,8 +1,9 @@
 from django.contrib import admin
-from .models import InterestRequest, Shortlist
+from .models import InterestRequest, Shortlist,MatrimonyFriendship
 # Register your models here
 # admin.site.register(InterestRequest)
 admin.site.register(Shortlist)
+admin.site.register(MatrimonyFriendship)
 
 from django.contrib import admin
 from .models import InterestRequest

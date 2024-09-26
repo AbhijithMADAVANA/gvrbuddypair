@@ -466,21 +466,20 @@ class JobDetailsForm(forms.ModelForm):
             job.save()
         return job
 
+from django import forms
+from .models import Relationship_Goals, UserPreference
 
 class RelationShipGoalForm(forms.ModelForm):
-
     def __init__(self, *args, **kwargs):
-        # Capture the user instance passed via kwargs
         self.user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
-    
+
     class Meta:
         model = Relationship_Goals
-        fields = ('is_short', 'is_long')
+        fields = ['is_short', 'is_long']
 
-    def save(self, commit : bool) -> Any:
-        relation_type =  super().save(commit=False)
-        # Assign the user if it's available
+    def save(self, commit=True):
+        relation_type = super().save(commit=False)
         if self.user:
             relation_type.user = self.user
             relation_type.is_short = self.cleaned_data.get('is_short', False)
@@ -488,7 +487,26 @@ class RelationShipGoalForm(forms.ModelForm):
         if commit:
             relation_type.save()
         return relation_type
-    
+
+
+class UserPreferenceForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+
+    class Meta:
+        model = UserPreference
+        fields = ['matrimony', 'dating']
+
+    def save(self, commit=True):
+        preference = super().save(commit=False)
+        if self.user:
+            preference.user = self.user
+        if commit:
+            preference.save()
+        return preference
+
+
 
 class AdditionalDetailsForm(forms.ModelForm):
     
@@ -645,3 +663,18 @@ class UserPartnerPreferenceForm(forms.ModelForm):
         
         return partner_obj
     
+
+from django import forms
+from .models import UserInterest
+
+class UserInterestForm(forms.ModelForm):
+    interested_in = forms.ChoiceField(
+        choices=UserInterest.INTEREST_CHOICES,
+        widget=forms.RadioSelect(attrs={'class': 'form-check-input'}),
+        required=True,
+        label="I'm interested in"
+    )
+
+    class Meta:
+        model = UserInterest
+        fields = ['interested_in']

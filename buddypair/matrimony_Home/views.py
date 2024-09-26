@@ -69,11 +69,14 @@ class Home(RedirectNotAuthenticatedUserMixin, SuccessMessageMixin, ListView):
         filter_value = self.request.GET.get('filter', 'all')  # Default to 'all' if no filter is provided
         loged_user = get_object_or_404(UserPersonalDetails, user=user)
 
+        # Filter to include only users with is_long=True in their Relationship_Goals
+        queryset = queryset.filter(user__relationship_goals__is_long=True)
+
         # Return all users if the filter is 'all' or if no filter is applied
         if filter_value == 'all':
             queryset = queryset.all()
 
-        # Apply filters based on the filter_value if not 'all'
+        # Apply additional filters based on the filter_value if not 'all'
         elif filter_value == 'Location':
             queryset = queryset.filter(user__user_details__user_location=loged_user.user_location)
         elif filter_value == 'Designation':
@@ -106,6 +109,57 @@ class Home(RedirectNotAuthenticatedUserMixin, SuccessMessageMixin, ListView):
         except UserPersonalDetails.DoesNotExist:
             context['user_details'] = None
         return context
+
+
+# class Home(RedirectNotAuthenticatedUserMixin, SuccessMessageMixin, ListView):
+#     model = UserPersonalDetails
+#     template_name = 'Home/home.html'
+#     context_object_name = 'users'
+#     success_message = "This is a success message."
+
+#     def get_queryset(self):
+#         user = self.request.user
+#         queryset = super().get_queryset()
+#         filter_value = self.request.GET.get('filter', 'all')  # Default to 'all' if no filter is provided
+#         loged_user = get_object_or_404(UserPersonalDetails, user=user)
+
+#         # Return all users if the filter is 'all' or if no filter is applied
+#         if filter_value == 'all':
+#             queryset = queryset.all()
+
+#         # Apply filters based on the filter_value if not 'all'
+#         elif filter_value == 'Location':
+#             queryset = queryset.filter(user__user_details__user_location=loged_user.user_location)
+#         elif filter_value == 'Designation':
+#             job_details = Job_Details.objects.filter(user=loged_user.user).first()
+#             if job_details:
+#                 queryset = queryset.filter(user__job_details__designation=job_details.designation)
+#         elif filter_value == 'Qualification':
+#             user_qualifications = loged_user.qualifications.all()
+#             queryset = queryset.filter(qualifications__in=user_qualifications)
+
+#         # Exclude users based on gender preference
+#         if loged_user.gender == 'M':
+#             queryset = queryset.exclude(Q(user__user_details__gender='M') | Q(user__user_details__gender='O'))
+#         elif loged_user.gender == 'F':
+#             queryset = queryset.exclude(Q(user__user_details__gender='F') | Q(user__user_details__gender='O'))
+#         elif loged_user.gender == 'O':
+#             queryset = queryset.all()
+
+#         # Exclude the logged-in user from the queryset
+#         queryset = queryset.exclude(user=user)
+
+#         return queryset
+
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         user = self.request.user
+#         try:
+#             user_details = UserPersonalDetails.objects.get(user=user)
+#             context['user_details'] = user_details
+#         except UserPersonalDetails.DoesNotExist:
+#             context['user_details'] = None
+#         return context
 
 
 # class Home(RedirectNotAuthenticatedUserMixin, SuccessMessageMixin, ListView):

@@ -41,26 +41,63 @@ class UserProfileView(TemplateView):
             return context
 
 
-#Interest request View
-class SendRequestView(RedirectNotAuthenticatedUserMixin, View):
+# #Interest request View
+# class SendRequestView(RedirectNotAuthenticatedUserMixin, View):
+#     def post(self, request, *args, **kwargs):
+#         sender = request.user
+#         receiver = get_object_or_404(costume_user, id=self.kwargs['pk'])
+        
+#         existing_request = InterestRequest.objects.filter(sender=sender, receiver=receiver).exists()
+        
+#         if existing_request:
+#             messages.warning(request, "You have already sent a request to this user.")
+#             return redirect(reverse('matrimony_profile:profile', kwargs={'user_id': receiver.id}))
+#         else:
+#             try:
+#                 InterestRequest.objects.create(sender=sender, receiver=receiver)
+#                 messages.success(request, "Interest request sent successfully!")
+#                 return redirect(reverse_lazy('matrimony_profile:sented_request'))
+#             except Exception as e:
+#                 messages.error(request, f"Failed to send interest request: {str(e)}")
+#                 return redirect(reverse('matrimony_profile:profile', kwargs={'user_id': receiver.id}))
+
+
+from .models import MatrimonyFriendship
+
+class SendRequestView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         sender = request.user
         receiver = get_object_or_404(costume_user, id=self.kwargs['pk'])
-        
-        existing_request = InterestRequest.objects.filter(sender=sender, receiver=receiver).exists()
-        
-        if existing_request:
-            messages.warning(request, "You have already sent a request to this user.")
+
+        # Check if there's any existing request between the two users
+        existing_request = InterestRequest.objects.filter(
+            Q(sender=sender, receiver=receiver) | 
+            Q(sender=receiver, receiver=sender)
+        ).exclude(status='rejected').exists()
+
+        # Check if they are already friends
+        are_friends = MatrimonyFriendship.objects.filter(
+            Q(user1=sender, user2=receiver) |
+            Q(user1=receiver, user2=sender)
+        ).exists()
+
+        if are_friends:
+            messages.info(request, "You are already friends with this user.")
+            return redirect(reverse('matrimony_profile:profile', kwargs={'user_id': receiver.id}))
+        elif existing_request:
+            messages.warning(request, "A request is already pending with this user.")
             return redirect(reverse('matrimony_profile:profile', kwargs={'user_id': receiver.id}))
         else:
             try:
+                # Create a new interest request if none exist
                 InterestRequest.objects.create(sender=sender, receiver=receiver)
                 messages.success(request, "Interest request sent successfully!")
                 return redirect(reverse_lazy('matrimony_profile:sented_request'))
             except Exception as e:
                 messages.error(request, f"Failed to send interest request: {str(e)}")
                 return redirect(reverse('matrimony_profile:profile', kwargs={'user_id': receiver.id}))
-            
+
+
         
 class SentedRequestView(RedirectNotAuthenticatedUserMixin,ListView):
     model = InterestRequest
@@ -95,20 +132,49 @@ class ReceivedRequestView(RedirectNotAuthenticatedUserMixin,ListView):
             )
         return queryset
 
-class HandleRequestView(RedirectNotAuthenticatedUserMixin, View):
+# class HandleRequestView(RedirectNotAuthenticatedUserMixin, View):
+#     def post(self, request, *args, **kwargs):
+#         interest_request = get_object_or_404(InterestRequest, id=self.kwargs['pk'], receiver=request.user)
+#         action = self.kwargs.get('action')  # This fetches the value of 'action' from the URL ('accept' or 'reject').
+        
+#         if action == 'accept':  # If 'action' is 'accept'
+#             interest_request.status = 'accepted'  # Set the request's status to 'accepted'
+#             messages.success(request, "Interest request has accepted successfully!")
+#         elif action == 'reject':  # Otherwise, if 'action' is 'reject'
+#             interest_request.status = 'rejected'  # Set the request's status to 'rejected'
+#             messages.success(request, "Interest request has rejected successfully!")
+
+#         interest_request.save()
+#         return redirect(reverse_lazy('matrimony_profile:received_request'))
+
+
+class HandleRequestView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         interest_request = get_object_or_404(InterestRequest, id=self.kwargs['pk'], receiver=request.user)
         action = self.kwargs.get('action')  # This fetches the value of 'action' from the URL ('accept' or 'reject').
-        
-        if action == 'accept':  # If 'action' is 'accept'
-            interest_request.status = 'accepted'  # Set the request's status to 'accepted'
-            messages.success(request, "Interest request has accepted successfully!")
-        elif action == 'reject':  # Otherwise, if 'action' is 'reject'
-            interest_request.status = 'rejected'  # Set the request's status to 'rejected'
-            messages.success(request, "Interest request has rejected successfully!")
 
-        interest_request.save()
+        if action == 'accept':
+            interest_request.status = 'accepted'
+            interest_request.save()  # Save the request status first
+            messages.success(request, "Interest request has been accepted successfully!")
+
+            # Check if a friendship already exists before creating a new one
+            if not MatrimonyFriendship.objects.filter(
+                    Q(user1=interest_request.sender, user2=interest_request.receiver) |
+                    Q(user1=interest_request.receiver, user2=interest_request.sender)
+            ).exists():
+                # Create a friendship if none exists
+                MatrimonyFriendship.objects.create(
+                    user1=min(interest_request.sender, interest_request.receiver, key=lambda x: x.id),
+                    user2=max(interest_request.sender, interest_request.receiver, key=lambda x: x.id)
+                )
+        elif action == 'reject':
+            interest_request.status = 'rejected'
+            interest_request.save()
+            messages.success(request, "Interest request has been rejected successfully!")
+
         return redirect(reverse_lazy('matrimony_profile:received_request'))
+
 
 class AcceptedRequestView(RedirectNotAuthenticatedUserMixin, ListView):
     model = InterestRequest

@@ -159,6 +159,18 @@ class Relationship_Goals(models.Model):
 
     def __str__(self):
         return f"relation_type_of_{self.user.username}"
+    
+from django.db import models
+from U_auth.models import costume_user
+
+class UserPreference(models.Model):
+    user = models.OneToOneField(costume_user, on_delete=models.CASCADE)
+    matrimony = models.BooleanField(default=False)
+    dating = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"Preference for {self.user.username}: Matrimony({self.matrimony}), Dating({self.dating})"
+
 
 class Disabilities(models.Model):
     disability_type = models.CharField(max_length=50)
@@ -313,6 +325,24 @@ class UserExtraDetails(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.device_name}"
+    
+
+from django.db import models
+from django.conf import settings
+
+class UserInterest(models.Model):
+    INTEREST_CHOICES = [
+        ('M', 'Men'),
+        ('W', 'Women'),
+        ('B', 'Both'),
+    ]
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='interest')
+    interested_in = models.CharField(max_length=1, choices=INTEREST_CHOICES, default='B')
+
+    def __str__(self):
+        return f"{self.user.username} - {self.get_interested_in_display()}"
+
+
 
 # ...............-.model for user profile view............................
 

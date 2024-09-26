@@ -1,0 +1,218 @@
+<div class="modal fade" style="backdrop-filter: blur(10px);background-color: transparent;" id="PersonalModal" tabindex="-1" aria-labelledby="PersonalModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="PersonalModalLabel">Personal Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="d-grid">
+                    <form action="{% url 'u_auth:user_details' %}" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                    <!-- Step 1 -->
+                    <div id="step1">
+                        <h1>Personal Details</h1>
+                        {% include "widget/input_details_form.html" with type='number' label='Age'  name='age'%}
+                        {% include "widget/input_details_form.html" with type='gender_select' label='gender' name='gender' %}
+                        {% include "widget/input_details_form.html" with type='date' label='DOB' name='dob'%}
+                        {% if  show_personaldetails_modal%}
+                        {% include "widget/input_details_form.html" with type='text' label='Location' name='location' %}
+                        {% endif %}
+                        {% include "widget/input_details_form.html" with type='context_select' label='Hobbies'%}
+                        {% include "widget/input_details_form.html" with type='context_select' label='Intrestes'%}
+                        {% include "widget/input_details_form.html" with type='context_select' label='Qualifications'%}
+                        {% include "widget/input_details_form.html" with type='checkbox' label='Smoking Habits' name='smoking_habits' %}
+                        {% include "widget/input_details_form.html" with type='checkbox' label='Drinking Habits' name='drinking_habits' %}
+                        <!-- {% include "widget/input_details_form.html" with type='text' label='Qualifications' name='qualification' %} -->
+                        {% include "widget/input_details_form.html" with type='file' label='Profile Pic' name='profile_pic' %}
+                        {% include "widget/input_details_form.html" with type='file' label='more Pic' name='photos' multi='true' %}
+                        {% include "widget/input_details_form.html" with type='file' label='Short Reels' name='short_video' %}
+                        {% if form.errors and show_personaldetails_modal%}
+                            <div class="alert alert-danger" role="alert">
+                                {% for field, errors in form.errors.items %}
+                                    {% if field and field != '__all__' %}
+                                    <div>
+                                        {{field }}: {{ errors|join:', ' }}
+                                    </div>
+                                    {% else %}
+                                    <div>
+                                        {{ errors|join:', ' }}
+                                    </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        {% endif %}        
+                        <button type="button" class="btn btn-dark w-100" id="nextToJobStatus">Next</button>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div id="step2" class="d-none">
+                        <h1>Job Status</h1>
+                        {% include "widget/input_details_form.html" with type='checkbox' label='Employer' name='is_employer' %}
+                        {% include "widget/input_details_form.html" with type='checkbox' label='Employee' name='is_employee' %}
+                        {% include "widget/input_details_form.html" with type='checkbox' label='Job Seeker' name='is_jobseeker' %}
+                        <div class="row">
+                            <div class="col-6">
+                                <button type="button" class="btn btn-dark w-100" id="prevToPersonal">Previous</button>
+                            </div>
+                            <div class="col-6">
+                                <button type="submit" class="btn btn-dark w-100" >save</button>
+                            </div>
+                            <!-- <button type="button" class="btn btn-dark w-100" id="nextToJobDetails">job</button> -->
+                        </div>
+                    </div>
+                </form>
+                    <!-- Step 3 -->
+                    <div id="step3" class="d-none">
+                        <form action="{% url 'u_auth:job_details' %}" method="post">
+                            {% csrf_token %}
+                        <h1>Job Details</h1>
+                        {% include "widget/input_details_form.html" with type='text' label='Title' name='job_title' %}
+                        {% include "widget/input_details_form.html" with type='text' label='company name' name='company_name' %}
+                        {% if  show_jobdetails_modal%}
+                        {% include "widget/input_details_form.html" with type='text' label='Location' name='location' %}
+                        {% endif %}
+                        {% include "widget/input_details_form.html" with type='text' label='designation' name='designation' %}
+                        {% include "widget/input_details_form.html" with type='select' label='Experience Level' name='experiences_level' select_options=experance_level %}
+                        {% if form.errors and show_jobdetails_modal%}
+                            <div class="alert alert-danger" role="alert">
+                                {% for field, errors in form.errors.items %}
+                                    {% if field and field != '__all__' %}
+                                    <div>
+                                        {{field }}: {{ errors|join:', ' }}
+                                    </div>
+                                    {% else %}
+                                    <div>
+                                        {{ errors|join:', ' }}
+                                    </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        {% endif %}   
+                        <div class="row">
+                            <!-- <div class="col-6">
+                                <button type="button" class="btn btn-dark w-100" id="prevToJobStatus">Previous</button>
+                            </div> -->
+                            <div class="col-12">
+                                <!--change to submit-->
+                                <button type="submit" class="btn btn-dark w-100">Save</button>
+                            </div>
+                        </div>
+                    </form>
+                    <!-- <a href="" id="nextToRelationshipGoals">nextToRelationshipGoals</a> -->
+                    <!-- <button type="button" class="btn btn-dark w-100" id="nextToRelationshipGoals">nextToRelationshipGoals</button> -->
+
+                    </div>
+
+                    <!-- Step 4 -->
+                    <div id="step4" class="d-none">
+                        <h1>Relationship Goals</h1>
+                        <form action="{% url 'u_auth:relation_type' %}" method="post">
+                            {% csrf_token %}
+                        {% include "widget/input_details_form.html" with type='checkbox' label='Long Term Relationship' name='is_long'%}
+                        {% include "widget/input_details_form.html" with type='checkbox' label='Short Term Relationship' name='is_short'%}
+                        {% if form.errors and show_relationmodel_modal%}
+                            <div class="alert alert-danger" role="alert">
+                                {% for field, errors in form.errors.items %}
+                                    {% if field and field != '__all__' %}
+                                    <div>
+                                        {{field }}: {{ errors|join:', ' }}
+                                    </div>
+                                    {% else %}
+                                    <div>
+                                        {{ errors|join:', ' }}
+                                    </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        {% endif %}   
+                        <div class="row">
+                            <div class="col-6">
+                                <button type="button" class="btn btn-dark w-100" id="prevToJobDetails">Previous</button>
+                            </div>
+                            <div class="col-6">
+                                <button type="submit" class="btn btn-dark w-100" id="">save</button>
+                            </div>
+                        </div>
+                    </form>
+                    <!-- <button type="submit" class="btn btn-dark w-100" id="nextToInterested">nextToInterested</button> -->
+                    <!-- <a href="" id="nextToInterested">nextToInterested</a> -->
+                    </div>
+
+                    <!-- Step 5 -->
+                    <div id="step5" class="d-none">
+                        <h1>Interested</h1>
+                        <form action="{% url 'u_auth:check_type' %}" method="get">
+                        {% include "widget/input_details_form.html" with type='for_relationtype_check' label='Matrimony' name='type'  value='is_long'%}
+                        {% include "widget/input_details_form.html" with type='for_relationtype_check' label='Dating' name='type' value='is_short'%}
+                        <div class="row">
+                            <!-- <div class="col-6">
+                                <button type="button" class="btn btn-dark w-100" id="prevToRelationshipGoals">Previous</button>
+                            </div> -->
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-dark w-100" id="">submit</button>
+                            </div>
+                        </div>
+                        </form>
+                        <!-- <button type="button" class="btn btn-dark w-100" id="nextToAdditionalDetails">nextToAdditionalDetails</button> -->
+                        <!-- <a href="" id="nextToAdditionalDetails">nextToAdditionalDetails</a> -->
+                    </div>
+
+                    <!-- Step 6 -->
+                    <div id="step6" class="d-none">
+                        <h1>Additional Details</h1>
+                        <form action="{% url 'u_auth:additional_datas' %}" method="post">
+                            {% csrf_token %}
+                        {% include "widget/input_details_form.html" with type='select_married_status' label='Marital Status' name='married_status'%}
+                        {% include "widget/input_details_form.html" with type='text' label='Annual Income' name='annual_income' %}
+                        {% include "widget/input_details_form.html" with type='select_family_type' label='Family Type' name='family_type'%}
+                        {% include "widget/input_details_form.html" with type='text' label='Family Name' name='family_name' %}
+                        <!-- {% include "widget/input_details_form.html" with type='text' label='Family Name' %} -->
+                        {% include "widget/input_details_form.html" with type='text' label='Father\'s Name' name='father_name' %}
+                        {% include "widget/input_details_form.html" with type='text' label='Father\'s Occupation' name='father_occupation' %}
+                        {% include "widget/input_details_form.html" with type='text' label='Mother\'s Name' name='mother_name'%}
+                        {% include "widget/input_details_form.html" with type='text' label='Mother\'s Occupation' name='mother_occupation'%}
+                        {% include "widget/input_details_form.html" with type='text' label='Total Siblings' name='total_siblings' %}
+                        {% include "widget/input_details_form.html" with type='text' label='Number Of Siblings Married' name='total_siblings_married' %}
+                        {% include "widget/input_details_form.html" with type='context_select' label='Disabilities' name='disabilitys'%}
+                        {% include "widget/input_details_form.html" with type='text' label='Height' name='height'%}
+                        {% include "widget/input_details_form.html" with type='text' label='Weight' name='weight'%}
+                        {% include "widget/input_details_form.html" with type='text' label='Blood Type' name='blood_group' %}
+                        {% include "widget/input_details_form.html" with type='select_religion' label='Religion' name='religion'%}
+                        {% include "widget/input_details_form.html" with type='text' label='Caste/Community' name='caste_or_community'%}
+                        {% include "widget/input_details_form.html" with type='text' label='Complexion' name='complexion'%}
+                        <!-- {% include "widget/input_details_form.html" with type='text' label='Siblings Name & Details' %} -->
+                        <!-- {% include "widget/input_details_form.html" with type='text' label='Drinking Habits' %} -->
+                        <!-- {% include "widget/input_details_form.html" with type='text' label='Expectation from Partner' %} -->
+                        {% if form.errors and show_additionaldetails_modal%}
+                            <div class="alert alert-danger" role="alert">
+                                {% for field, errors in form.errors.items %}
+                                    {% if field and field != '__all__' %}
+                                    <div>
+                                        {{field }}: {{ errors|join:', ' }}
+                                    </div>
+                                    {% else %}
+                                    <div>
+                                        {{ errors|join:', ' }}
+                                    </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        {% endif %}   
+                        <div class="row">
+                            <!-- <div class="col-6">
+                                <button type="button" class="btn btn-dark w-100" id="prevToInterested">Previous</button>
+                            </div> -->
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-dark w-100" >Submit</button>
+                            </div>
+                        </div>
+                        </form>
+                    </div>
+                
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>

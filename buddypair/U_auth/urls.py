@@ -25,7 +25,10 @@ urlpatterns = [
     path('job_details/', views.JobDetailsView.as_view(), name='job_details'),
     path('relation_type/', views.RelationShipGoalView.as_view(), name='relation_type'),
     path('additional_datas/', views.AdditionalDetailsView.as_view(), name="additional_datas"),
-    path('check_type', views.UserType, name='check_type'),
+    path('interest/', views.UserInterestView.as_view(), name='interest_view'),
+    path('user_preference/', views.UserPreferenceView.as_view(), name='user_preference'),
+
+    # path('check_type', views.UserType, name='check_type'),
     path('profile/', views.UserProfile.as_view(), name="profile"),
     path('profile_edit/', views.ProfileEdit.as_view(), name="profile_edit"),
     path('remove_files/<str:type>/<int:id>/', views.RemoveFiles.as_view(), name='remove_files'),

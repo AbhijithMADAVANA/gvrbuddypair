@@ -5,13 +5,15 @@ app_name = 'dating_profiles'
 
 urlpatterns = [
     path('dtprofile/<int:user_id>/',views.UserProfileView.as_view(), name="profile"),
+    path('profile_viewers/',views.ProfileViewersListView.as_view(), name='profile_viewers'),
     # path('msg_pg',views.messages_pg, name="msg_pg"),
     path('dtsend/<int:pk>/',views.SendRequestView.as_view(), name="send_request"),
     path('dtsent/',views.SentedRequestView.as_view(), name="sented_request"),
     path('dtaccept/',views.AcceptedRequestView.as_view(), name="accepted_request"),
     path('dtreject/',views.RejectedRequestView.as_view(), name="rejected_request"),
     path('dtreceived/',views.ReceivedRequestView.as_view(), name="received_request"),
-    path('dtrequest-hanlde/<int:pk>/<str:action>/', views.HandleRequestView.as_view(), name='handle_request'),
+    # path('dtrequest-hanlde/<int:pk>/<str:action>/', views.HandleRequestView.as_view(), name='handle_request'),
+    path('dtrequest-handle/<int:pk>/<str:action>/', views.HandleRequestView.as_view(), name='handle_request'),
     path("dtrequest/delete/<int:pk>", views.DeleteRequestView.as_view(), name="delete_request"),
     path('dtshortlist/', views.ShortlistView.as_view(), name='shortlist'),
     path('dtshortlist/add/<int:user_id>/', views.AddToShortlistView.as_view(), name='add_to_shortlist'),

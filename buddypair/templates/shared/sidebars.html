@@ -232,7 +232,7 @@
                 <a href="{% url 'dating_profiles:sented_request' %}">
                 <button class="button">Sent Request</button>
                 </a>
-                <a href="">
+                <a href="{% url 'dating_profiles:profile_viewers' %}">
                 <button class="button">Viewed My Profile</button>
                 </a>
                 <a href="{% url 'dating_profiles:accepted_request' %}">
@@ -260,11 +260,19 @@
                 <button class="button">Settings</button>
                 </a>
             </div>
-            <div class="logout-button-container">
+            <!-- <div class="logout-button-container">
                 <button class="logout-button">
                     <i class="fas fa-sign-out-alt"></i> Logout
                 </button>
+            </div> -->
+            <div class="logout-button-container">
+                <a href="{% url 'u_auth:logout' %}">
+                    <button class="logout-button">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </a>
             </div>
+            
 
         </div>
     </div>

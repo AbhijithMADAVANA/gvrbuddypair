@@ -25,3 +25,15 @@ class Shortlist(models.Model):
 
     def __str__(self):
         return f"{self.user.username} shortlisted {self.shortlisted_user.username}"
+
+
+class MatrimonyFriendship(models.Model):
+    user1 = models.ForeignKey(costume_user, related_name="friendships_initiated_matrimony", on_delete=models.CASCADE)
+    user2 = models.ForeignKey(costume_user, related_name="friendships_received_matrimony", on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user1', 'user2')
+
+    def __str__(self):
+        return f"Friendship between {self.user1} and {self.user2}"
