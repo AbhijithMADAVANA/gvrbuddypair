@@ -55,4 +55,3 @@ class Payment(models.Model):
 #     upi_id = models.CharField(max_length=50)
 #     upi_name = models.CharField(max_length=50)
 #     created_at = models.DateTimeField(auto_now_add=True)
-

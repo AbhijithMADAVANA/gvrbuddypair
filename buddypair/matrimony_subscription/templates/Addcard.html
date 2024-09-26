@@ -94,7 +94,7 @@
 
     document.querySelector("#payment-form").onsubmit = function (e) {
       e.preventDefault();
-      fetch("{% url 'payment' %}", {
+      fetch("{% url 'matrimony_subscription:payment' %}", {
         method: "POST",
         body: new FormData(this),
       })
@@ -112,7 +112,7 @@
             order_id: data.razorpay_order_id,
             handler: function (response) {
               console.log(response,"ooooooooo");
-              fetch("{% url 'payment-callback' %}", {
+              fetch("{% url 'matrimony_subscription:payment-callback' %}", {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/x-www-form-urlencoded",

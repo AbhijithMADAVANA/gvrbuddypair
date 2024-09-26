@@ -302,7 +302,7 @@
 
 
                 $.ajax({
-                  url: "{% url 'payment' %}?plan_type=" + choosen_plan.value,  // Pass dynamically chosen plan
+                  url: "{% url 'matrimony_subscription:payment' %}?plan_type=" + choosen_plan.value,  // Pass dynamically chosen plan
                   type: 'GET',
                   success: function(response) {
                       console.log(response);

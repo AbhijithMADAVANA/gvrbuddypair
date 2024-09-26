@@ -15,7 +15,7 @@ from django.contrib import messages
 from .models import Payment
 from django.urls import reverse
 from django.template.loader import get_template, render_to_string
-from xhtml2pdf import pisa
+# from xhtml2pdf import pisa
 # from weasyprint import HTML
 import tempfile
 
@@ -46,7 +46,7 @@ class PaymentView(RedirectNotAuthenticatedUserMixin,FormView):
             context = {
                 'status': HTTPStatus.OK,
                 'redirect': True,
-                'redirect_url': 'matrimony_subscription:pay'
+                'redirect_url': 'pay'
             }
             return JsonResponse(context)
         
@@ -65,7 +65,7 @@ class PaymentView(RedirectNotAuthenticatedUserMixin,FormView):
         except Subscription.DoesNotExist:
             # If subscription does not exist, show an error and redirect
             messages.error(request, "Choose a Plan...!!!")
-            return redirect(reverse('matrimony_subscription:subscribe'))  # Redirects to the subscription page
+            return redirect(reverse('subscribe'))  # Redirects to the subscription page
         
 
     def form_valid(self, form):
@@ -142,7 +142,11 @@ class PaymentCallbackView(RedirectNotAuthenticatedUserMixin,TemplateView):
         print(context,"in PaymentCallbackView post method")
         return self.render_to_response(self.get_context_data(context))
         # return reverse('')
-    
+
+from weasyprint import HTML
+import tempfile
+
+
 class PaymentDetails(RedirectNotAuthenticatedUserMixin, TemplateView):
     template_name = 'payment_details.html'
 
@@ -166,7 +170,7 @@ class PaymentDetails(RedirectNotAuthenticatedUserMixin, TemplateView):
             # Create a temporary file to store the PDF
             with tempfile.NamedTemporaryFile(delete=True) as output_file:
                 # Generate the PDF using WeasyPrint
-                # HTML(string=html_string).write_pdf(output_file.name)
+                HTML(string=html_string).write_pdf(output_file.name)
 
                 # Return the PDF as a downloadable response
                 response = HttpResponse(output_file.read(), content_type='application/pdf')
