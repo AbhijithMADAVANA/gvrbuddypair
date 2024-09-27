@@ -747,6 +747,44 @@ class UserLogout(LoginRequiredMixin,View):
         return redirect('u_auth:auth_page')
 
     
+# class ResetPassword(RedirectAuthenticatedUserMixin, FormView):
+#     template_name = 'auth/auth.html'
+#     form_class = ResetPasswordForm
+#     items = ['email', 'phone']
+
+#     def form_valid(self, form):
+#         email_or_phone = form.cleaned_data.get('email_or_phone', None)
+        
+#         try:
+#             if '@' in email_or_phone:
+#                 user = costume_user.objects.get(email=email_or_phone)
+#             else:
+#                 user = costume_user.objects.get(phone=email_or_phone)
+#             self.request.session['user'] = user.email
+#             otp_code = generate_otp(user)
+#             print(f"Generated OTP: {otp_code}")  # Debugging
+#             messages.success(self.request, f"OTP sent to your {self.items}")
+            
+#             # Redirect to the OTP verification page
+#             return super().form_valid(form)
+        
+#         except costume_user.DoesNotExist:
+#             # Handle the case where the user does not exist
+#             messages.error(self.request, "User doesn't exist..!!")
+#             # Render the form with errors without redirecting
+#             # return self.form_invalid(form)
+#             return self.render_to_response(self.get_context_data(form=form, show_resetPass_modal=True))
+
+#     def get_success_url(self):
+#         # Store context data in the session
+#         self.request.session['purpose'] = 'reset_pass_verification'
+        
+#         # Sending message for OTP usage
+#         messages.success(self.request, "Verification for password changing..!!")
+#         # Redirect to a success URL after form submission
+#         return reverse_lazy('u_auth:check_otp')
+
+
 class ResetPassword(RedirectAuthenticatedUserMixin, FormView):
     template_name = 'auth/auth.html'
     form_class = ResetPasswordForm
@@ -756,14 +794,23 @@ class ResetPassword(RedirectAuthenticatedUserMixin, FormView):
         email_or_phone = form.cleaned_data.get('email_or_phone', None)
         
         try:
+            # Check if input is an email or phone number and get the user
             if '@' in email_or_phone:
                 user = costume_user.objects.get(email=email_or_phone)
             else:
                 user = costume_user.objects.get(phone=email_or_phone)
+            
+            # Store user's email in session
             self.request.session['user'] = user.email
+            
+            # Generate OTP
             otp_code = generate_otp(user)
-            print(f"Generated OTP: {otp_code}")  # Debugging
-            messages.success(self.request, f"OTP sent to your {self.items}")
+            
+            # Send OTP via email
+            self.send_otp_email(user.email, otp_code)
+            
+            # Inform the user that OTP has been sent
+            messages.success(self.request, f"OTP sent to your {self.items}. Please check your email.")
             
             # Redirect to the OTP verification page
             return super().form_valid(form)
@@ -772,7 +819,6 @@ class ResetPassword(RedirectAuthenticatedUserMixin, FormView):
             # Handle the case where the user does not exist
             messages.error(self.request, "User doesn't exist..!!")
             # Render the form with errors without redirecting
-            # return self.form_invalid(form)
             return self.render_to_response(self.get_context_data(form=form, show_resetPass_modal=True))
 
     def get_success_url(self):
@@ -781,8 +827,24 @@ class ResetPassword(RedirectAuthenticatedUserMixin, FormView):
         
         # Sending message for OTP usage
         messages.success(self.request, "Verification for password changing..!!")
+        
         # Redirect to a success URL after form submission
         return reverse_lazy('u_auth:check_otp')
+
+    def send_otp_email(self, email, otp_code):
+        """
+        Send OTP to user's email.
+        """
+        subject = 'Your OTP for Password Reset'
+        message = f'Hello,\n\nYour OTP for password reset is {otp_code}. Please use this OTP to reset your password.\n\nThank you!'
+        from_email = settings.DEFAULT_FROM_EMAIL
+        
+        try:
+            send_mail(subject, message, from_email, [email])
+            print(f"Sent OTP {otp_code} to {email}")  # Debugging
+        except Exception as e:
+            print(f"Failed to send OTP email: {e}")
+
 
 class ResetPassword_2(FormView):
 
