@@ -947,8 +947,6 @@ class JobDetailsView(FormView):
         return reverse_lazy('u_auth:auth_page')
 
 
-
-# views.py
 from django.views.generic.edit import FormView
 from django.urls import reverse_lazy
 from .forms import RelationShipGoalForm
@@ -1008,42 +1006,6 @@ class RelationShipGoalView(FormView):
 #     return redirect('u_auth:auth_page')
 
 from .models import Relationship_Goals, UserPreference
-# views.py
-# def UserType(request):
-#     if request.method == 'POST':
-#         matrimony = request.POST.get('matrimony') == 'on'
-#         dating = request.POST.get('dating') == 'on'
-        
-#         try:
-#             # Fetch relationship goals for the current user
-#             relation_goal = Relationship_Goals.objects.get(user=request.user)
-            
-#             # Check conditions based on the selected options
-#             if matrimony and not relation_goal.is_long:
-#                 messages.error(request, "To use Matrimony, please select Long Term Relationship first.")
-#                 return redirect('u_auth:auth_page')
-            
-#             # Update or create user preferences
-#             UserPreference.objects.update_or_create(
-#                 user=request.user,
-#                 defaults={'matrimony': matrimony, 'dating': dating}
-#             )
-            
-#             # Set session variable to indicate successful completion of step 5
-#             request.session['step5_completed'] = True
-#             request.session['step6_completed'] = False  # Ensure step6 isn't marked as completed yet
-#             messages.success(request, "Preferences updated successfully. Please fill in additional details.")
-#             return redirect('u_auth:auth_page')  # Redirect back to the same page to reload the form
-        
-#         except Relationship_Goals.DoesNotExist:
-#             messages.error(request, "Relationship goals not found for this user.")
-#             return redirect('u_auth:auth_page')
-
-#     # Debugging: Check session value on page load
-#     print("Session value:", request.session.get('step5_completed'))
-#     return render(request, 'auth/auth.html')
-
-
 from django.http import JsonResponse
 
 def UserType(request):
@@ -1069,8 +1031,6 @@ def UserType(request):
 
 
 
-
-
 class AdditionalDetailsView(FormView):
     template_name = 'auth/auth.html'
     form_class = AdditionalDetailsForm
@@ -1092,16 +1052,26 @@ class AdditionalDetailsView(FormView):
         return kwargs
 
     def form_valid(self, form: Any) -> HttpResponse:
-        relation_goal = Relationship_Goals.objects.get(user=self.request.user)
         form.save(commit=True)
 
-        # Check the relationship type and redirect accordingly
-        if relation_goal.is_long:
-            return redirect('matrimony_home:home')  # Redirect to Matrimony home
-        elif relation_goal.is_short:
+        # Fetch user preference
+        try:
+            user_preference = UserPreference.objects.get(user=self.request.user)
+        except UserPreference.DoesNotExist:
+            messages.error(self.request, "User preferences not found. Please update your preferences.")
+            return redirect('u_auth:auth_page')  # Redirect back to the form if preferences are missing
+
+        # Check the conditions based on user preferences
+        if user_preference.matrimony and user_preference.dating:
             return redirect('u_auth:interest_view')  # Redirect to Dating home
-        
-        return super().form_valid(form)
+        elif user_preference.matrimony:
+            return redirect('matrimony_home:home')  # Redirect to Matrimony home
+        elif user_preference.dating:
+            return redirect('u_auth:interest_view')  # Redirect to Dating home
+
+        # If none of the preferences are set, return to the form with an error message
+        messages.error(self.request, "Please select your preferences before proceeding.")
+        return redirect('u_auth:auth_page')
 
     def form_invalid(self, form: Any) -> HttpResponse:
         return self.render_to_response(self.get_context_data(form=form, show_additionaldetails_modal=True))
@@ -1109,12 +1079,53 @@ class AdditionalDetailsView(FormView):
     def get_success_url(self) -> str:
         return reverse_lazy('u_auth:auth_page')
 
-from django.shortcuts import render, redirect
-from django.views.generic import UpdateView
-from django.contrib.auth.mixins import LoginRequiredMixin
+
+
+
+# class AdditionalDetailsView(FormView):
+#     template_name = 'auth/auth.html'
+#     form_class = AdditionalDetailsForm
+
+#     def get_context_data(self, **kwargs: dict) -> dict:
+#         context = super().get_context_data(**kwargs)
+#         disabilities_list = []
+#         disabilities_obj = Disabilities.objects.all()
+        
+#         for disabilitie in disabilities_obj:
+#             disabilities_list.append(disabilitie.disability_type)   
+        
+#         context['disabilities_list'] = disabilities_list
+#         return context
+
+#     def get_form_kwargs(self):
+#         kwargs = super().get_form_kwargs()
+#         kwargs['user'] = self.request.user
+#         return kwargs
+
+#     def form_valid(self, form: Any) -> HttpResponse:
+#         relation_goal = Relationship_Goals.objects.get(user=self.request.user)
+#         form.save(commit=True)
+
+#         # Check the relationship type and redirect accordingly
+#         if relation_goal.is_long:
+#             return redirect('matrimony_home:home')  # Redirect to Matrimony home
+#         elif relation_goal.is_short:
+#             return redirect('u_auth:interest_view')  # Redirect to Dating home
+        
+#         return super().form_valid(form)
+
+#     def form_invalid(self, form: Any) -> HttpResponse:
+#         return self.render_to_response(self.get_context_data(form=form, show_additionaldetails_modal=True))
+
+#     def get_success_url(self) -> str:
+#         return reverse_lazy('u_auth:auth_page')
+
+
+from django.views.generic.edit import UpdateView
 from django.contrib import messages
-from .forms import UserInterestForm
 from .models import UserInterest
+from .forms import UserInterestForm
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 class UserInterestView(LoginRequiredMixin, UpdateView):
     model = UserInterest
@@ -1129,7 +1140,12 @@ class UserInterestView(LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         form.save()
         messages.success(self.request, "Your preference has been updated.")
-        return redirect('dating_home:homel')  # Replace with the desired URL
+        return redirect('dating_home:home1')  # Replace with the desired URL
+
+    def form_invalid(self, form):
+        messages.error(self.request, "Please correct the error below.")
+        return super().form_invalid(form)
+
 
 
 # class AdditionalDetailsView(FormView):

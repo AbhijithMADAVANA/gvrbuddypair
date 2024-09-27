@@ -706,14 +706,14 @@ class UserPartnerPreferenceForm(forms.ModelForm):
         
         return partner_obj
     
-
+    
 from django import forms
 from .models import UserInterest
 
 class UserInterestForm(forms.ModelForm):
     interested_in = forms.ChoiceField(
         choices=UserInterest.INTEREST_CHOICES,
-        widget=forms.RadioSelect(attrs={'class': 'form-check-input'}),
+        widget=forms.RadioSelect(attrs={'class': 'form-check-input d-none'}),  # Hide radio buttons using CSS
         required=True,
         label="I'm interested in"
     )
@@ -721,3 +721,5 @@ class UserInterestForm(forms.ModelForm):
     class Meta:
         model = UserInterest
         fields = ['interested_in']
+
+

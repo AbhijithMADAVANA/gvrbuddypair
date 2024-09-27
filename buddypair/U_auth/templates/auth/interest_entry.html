@@ -51,15 +51,56 @@
         <div class="entry-popup" id="entry-popup">
             <div class="entrypopup-content">
                 <div class="wrapper">
-                  <form method="post" action="{% url 'u_auth:interest_view' %}">
-                    {% csrf_token %}
-                    {{ form.as_p }}
-                    <button type="submit" class="btn btn-primary">Save</button>
-                </form>
+                    <p class="head" style="font-size: 25px;font-weight: 700;padding: 10px;">Interested in</p>
+
+                    <!-- Form submission -->
+                    <form id="interest-form" method="post" action="{% url 'u_auth:interest_view' %}">
+                        {% csrf_token %}
+                        <!-- Hidden field to store the selected value -->
+                        <input type="hidden" name="interested_in" id="interested-in-input">
+                    </form>
+
+                    <!-- Buttons to select interest -->
+                    <button type="button" class="interest-button men-button" id="men-btn">Men</button>
+                    <button type="button" class="interest-button women-button" id="women-btn">Women</button>
+                    <button type="button" class="interest-button both-button" id="both-btn">Both</button>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- JavaScript to handle button clicks -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get the hidden input field
+            const interestedInInput = document.getElementById('interested-in-input');
+            const interestForm = document.getElementById('interest-form');
+
+            // Function to handle button click and form submission
+            function handleButtonClick(value) {
+                // Set the value in the hidden input field
+                interestedInInput.value = value;
+
+                // Automatically submit the form
+                interestForm.submit();
+            }
+
+            // Add click event listeners to buttons
+            document.getElementById('men-btn').addEventListener('click', function() {
+                handleButtonClick('M');  // Submit 'M' for Men
+            });
+
+            document.getElementById('women-btn').addEventListener('click', function() {
+                handleButtonClick('W');  // Submit 'W' for Women
+            });
+
+            document.getElementById('both-btn').addEventListener('click', function() {
+                handleButtonClick('B');  // Submit 'B' for Both
+            });
+        });
+    </script>
+    
+    
     
 </body>
 </html>

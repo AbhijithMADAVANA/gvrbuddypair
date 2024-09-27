@@ -91,6 +91,96 @@ from django.shortcuts import get_object_or_404
 #         return context
 
 
+from django.views.generic import ListView
+from django.shortcuts import get_object_or_404
+from django.contrib.messages.views import SuccessMessageMixin
+from django.db.models import Q
+
+class HomeView(RedirectNotAuthenticatedUserMixin, SuccessMessageMixin, ListView):
+    model = UserPersonalDetails
+    template_name = 'home.html'
+    context_object_name = 'users'
+    success_message = "This is a success message."
+
+    def get_queryset(self):
+        user = self.request.user
+        queryset = super().get_queryset()
+        filter_value = self.request.GET.get('filter', 'all')  # Default to 'all' if no filter is provided
+        logged_user = get_object_or_404(UserPersonalDetails, user=user)
+
+        # Only include users who have a short video
+        queryset = queryset.filter(short_video__isnull=False)  # Filter users with short video
+
+        # Apply additional filters based on filter_value (optional)
+        if filter_value == 'Location':
+            queryset = queryset.filter(user__user_details__user_location=logged_user.user_location)
+        elif filter_value == 'Designation':
+            job_details = Job_Details.objects.filter(user=logged_user.user).first()
+            if job_details:
+                queryset = queryset.filter(user__job_details__designation=job_details.designation)
+        elif filter_value == 'Qualification':
+            user_qualifications = logged_user.qualifications.all()
+            queryset = queryset.filter(qualifications__in=user_qualifications)
+
+        # Get logged-in user's interest
+        user_interest = UserInterest.objects.filter(user=user).first()
+        logged_user_gender = logged_user.gender
+
+        # Apply interest-based filtering if the user has set preferences
+        if user_interest:
+            if logged_user_gender == 'M':
+                # Logged user is male
+                if user_interest.interested_in == 'B':
+                    # Show both male and female
+                    queryset = queryset.filter(user__user_details__gender__in=['F', 'M'])
+                elif user_interest.interested_in == 'M':
+                    # Show only male
+                    queryset = queryset.filter(user__user_details__gender='M')
+                elif user_interest.interested_in == 'W':
+                    # Show only female
+                    queryset = queryset.filter(user__user_details__gender='F')
+            elif logged_user_gender == 'F':
+                # Logged user is female
+                if user_interest.interested_in == 'B':
+                    # Show both male and female
+                    queryset = queryset.filter(user__user_details__gender__in=['M', 'F'])
+                elif user_interest.interested_in == 'M':
+                    # Show only male
+                    queryset = queryset.filter(user__user_details__gender='M')
+                elif user_interest.interested_in == 'W':
+                    # Show only female
+                    queryset = queryset.filter(user__user_details__gender='F')
+            elif logged_user_gender == 'O':
+                # Logged user is other (non-binary)
+                if user_interest.interested_in == 'B':
+                    # Show both male and female
+                    queryset = queryset.filter(user__user_details__gender__in=['M', 'F'])
+                elif user_interest.interested_in == 'M':
+                    # Show only male
+                    queryset = queryset.filter(user__user_details__gender='M')
+                elif user_interest.interested_in == 'W':
+                    # Show only female
+                    queryset = queryset.filter(user__user_details__gender='F')
+
+        # Exclude the logged-in user from the queryset
+        queryset = queryset.exclude(user=user)
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        try:
+            user_details = UserPersonalDetails.objects.get(user=user)
+            context['user_details'] = user_details  # Pass logged-in user details
+        except UserPersonalDetails.DoesNotExist:
+            context['user_details'] = None
+
+        # Pass only users with short videos for the "story" section
+        context['other_users'] = self.get_queryset()  # Pass filtered users
+        return context
+
+
 # class HomeView(RedirectNotAuthenticatedUserMixin, SuccessMessageMixin, ListView):
 #     model = UserPersonalDetails
 #     template_name = 'home.html'
@@ -103,60 +193,10 @@ from django.shortcuts import get_object_or_404
 #         filter_value = self.request.GET.get('filter', 'all')  # Default to 'all' if no filter is provided
 #         loged_user = get_object_or_404(UserPersonalDetails, user=user)
 
-#         # Only include users who have is_short=True in Relationship_Goals
-#         queryset = queryset.filter(user__relationship_goals__is_short=True)
+#         # Only include users who have a short video
+#         queryset = queryset.filter(short_video__isnull=False)  # Filter users with short video
 
-#         # Apply additional filters based on filter_value if not 'all'
-#         if filter_value == 'Location':
-#             queryset = queryset.filter(user__user_details__user_location=loged_user.user_location)
-#         elif filter_value == 'Designation':
-#             job_details = Job_Details.objects.filter(user=loged_user.user).first()
-#             if job_details:
-#                 queryset = queryset.filter(user__job_details__designation=job_details.designation)
-#         elif filter_value == 'Qualification':
-#             user_qualifications = loged_user.qualifications.all()
-#             queryset = queryset.filter(qualifications__in=user_qualifications)
-
-#         # Exclude users based on gender preference
-#         if loged_user.gender == 'M':
-#             queryset = queryset.exclude(Q(user__user_details__gender='M') | Q(user__user_details__gender='O'))
-#         elif loged_user.gender == 'F':
-#             queryset = queryset.exclude(Q(user__user_details__gender='F') | Q(user__user_details__gender='O'))
-#         elif loged_user.gender == 'O':
-#             queryset = queryset.all()
-
-#         # Exclude the logged-in user from the queryset
-#         queryset = queryset.exclude(user=user)
-
-#         return queryset
-
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         user = self.request.user
-#         try:
-#             user_details = UserPersonalDetails.objects.get(user=user)
-#             context['user_details'] = user_details
-#         except UserPersonalDetails.DoesNotExist:
-#             context['user_details'] = None
-#         return context
-
-
-# class HomeView(RedirectNotAuthenticatedUserMixin, SuccessMessageMixin, ListView):
-#     model = UserPersonalDetails
-#     template_name = 'home.html'
-#     context_object_name = 'users'
-#     success_message = "This is a success message."
-
-#     def get_queryset(self):
-#         user = self.request.user
-#         queryset = super().get_queryset()
-#         filter_value = self.request.GET.get('filter', 'all')  # Default to 'all' if no filter is provided
-#         loged_user = get_object_or_404(UserPersonalDetails, user=user)
-
-#         # Only include users who have is_short=True in Relationship_Goals
-#         queryset = queryset.filter(user__relationship_goals__is_short=True)
-
-#         # Apply additional filters based on filter_value if not 'all'
+#         # Additional filters based on filter_value (optional)
 #         if filter_value == 'Location':
 #             queryset = queryset.filter(user__user_details__user_location=loged_user.user_location)
 #         elif filter_value == 'Designation':
@@ -189,62 +229,9 @@ from django.shortcuts import get_object_or_404
 #         except UserPersonalDetails.DoesNotExist:
 #             context['user_details'] = None
 
-#         # Pass all other users for the "story" section
-#         context['other_users'] = self.get_queryset()  # Pass other users excluding logged-in user
+#         # Pass only users with short videos for the "story" section
+#         context['other_users'] = self.get_queryset()  # Pass filtered users
 #         return context
-
-
-class HomeView(RedirectNotAuthenticatedUserMixin, SuccessMessageMixin, ListView):
-    model = UserPersonalDetails
-    template_name = 'home.html'
-    context_object_name = 'users'
-    success_message = "This is a success message."
-
-    def get_queryset(self):
-        user = self.request.user
-        queryset = super().get_queryset()
-        filter_value = self.request.GET.get('filter', 'all')  # Default to 'all' if no filter is provided
-        loged_user = get_object_or_404(UserPersonalDetails, user=user)
-
-        # Only include users who have a short video
-        queryset = queryset.filter(short_video__isnull=False)  # Filter users with short video
-
-        # Additional filters based on filter_value (optional)
-        if filter_value == 'Location':
-            queryset = queryset.filter(user__user_details__user_location=loged_user.user_location)
-        elif filter_value == 'Designation':
-            job_details = Job_Details.objects.filter(user=loged_user.user).first()
-            if job_details:
-                queryset = queryset.filter(user__job_details__designation=job_details.designation)
-        elif filter_value == 'Qualification':
-            user_qualifications = loged_user.qualifications.all()
-            queryset = queryset.filter(qualifications__in=user_qualifications)
-
-        # Exclude users based on gender preference
-        if loged_user.gender == 'M':
-            queryset = queryset.exclude(Q(user__user_details__gender='M') | Q(user__user_details__gender='O'))
-        elif loged_user.gender == 'F':
-            queryset = queryset.exclude(Q(user__user_details__gender='F') | Q(user__user_details__gender='O'))
-        elif loged_user.gender == 'O':
-            queryset = queryset.all()
-
-        # Exclude the logged-in user from the queryset
-        queryset = queryset.exclude(user=user)
-
-        return queryset
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        user = self.request.user
-        try:
-            user_details = UserPersonalDetails.objects.get(user=user)
-            context['user_details'] = user_details  # Pass logged-in user details
-        except UserPersonalDetails.DoesNotExist:
-            context['user_details'] = None
-
-        # Pass only users with short videos for the "story" section
-        context['other_users'] = self.get_queryset()  # Pass filtered users
-        return context
 
 
 
