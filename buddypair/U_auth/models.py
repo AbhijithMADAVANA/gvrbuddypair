@@ -160,8 +160,7 @@ class Relationship_Goals(models.Model):
     def __str__(self):
         return f"relation_type_of_{self.user.username}"
     
-from django.db import models
-from U_auth.models import costume_user
+
 
 class UserPreference(models.Model):
     user = models.OneToOneField(costume_user, on_delete=models.CASCADE)

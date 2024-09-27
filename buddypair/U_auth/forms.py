@@ -416,13 +416,10 @@ class UserPersonalDetailsForm(forms.ModelForm):
             raise forms.ValidationError(str(e))
 
 
-class JobDetailsForm(forms.ModelForm):
+# forms.py
+from .models import Job_Details, Location
 
-    def __init__(self, *args, **kwargs):
-        # Capture the user instance passed via kwargs
-        self.user = kwargs.pop('user', None)
-        super().__init__(*args, **kwargs)
-    
+class JobDetailsForm(forms.ModelForm):
     location = forms.CharField(
         required=True,
         widget=forms.TextInput()
@@ -433,44 +430,105 @@ class JobDetailsForm(forms.ModelForm):
         widget=forms.Textarea()
     )
     
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+        if self.user:
+            # Check if a Job_Details instance exists for the user
+            try:
+                self.instance = Job_Details.objects.get(user=self.user)
+            except Job_Details.DoesNotExist:
+                # No existing instance, a new one will be created
+                self.instance = Job_Details(user=self.user)
+
     class Meta:
         model = Job_Details
         fields = ('job_title', 'company_name', 'designation', 'experiences_level')
 
-    
-    def save(self, commit : bool) -> Any:
-        job =  super().save(commit=False)
-        # Assign the user if it's available
+    def save(self, commit=True):
+        job = super().save(commit=False)
         if self.user:
             job.user = self.user
             # Parse location
-            locations = self.cleaned_data['location'].split(',')  # Split the single string into a list of lat and lng
-            longitude = float(locations[1].strip())  # Extract and convert longitude
-            latitude = float(locations[0].strip())   # Extract and convert latitude
+            locations = self.cleaned_data['location'].split(',')
+            longitude = float(locations[1].strip())
+            latitude = float(locations[0].strip())
 
             # Parse address_details
-            address_details_str = self.cleaned_data['address_details']  # Extract the single string
-            # Parse the JSON string into a Python dictionary
+            address_details_str = self.cleaned_data['address_details']
             address_details_json = json.loads(address_details_str)
 
-            # Create Location instance
-            location_details = Location.objects.create(
+            # Create or update Location instance
+            location_details, _ = Location.objects.update_or_create(
                 longitude=longitude,
                 latitude=latitude,
-                address_details=address_details_json
+                defaults={'address_details': address_details_json}
             )
 
-            # Assign to UserPersonalDetails
+            # Assign location to job
             job.job_location = location_details
+
         if commit:
             job.save()
         return job
 
 
-class RelationShipGoalForm(forms.ModelForm):
+# class JobDetailsForm(forms.ModelForm):
 
+#     def __init__(self, *args, **kwargs):
+#         # Capture the user instance passed via kwargs
+#         self.user = kwargs.pop('user', None)
+#         super().__init__(*args, **kwargs)
+    
+#     location = forms.CharField(
+#         required=True,
+#         widget=forms.TextInput()
+#     )
+
+#     address_details = forms.CharField(
+#         required=True,
+#         widget=forms.Textarea()
+#     )
+    
+#     class Meta:
+#         model = Job_Details
+#         fields = ('job_title', 'company_name', 'designation', 'experiences_level')
+
+    
+#     def save(self, commit : bool) -> Any:
+#         job =  super().save(commit=False)
+#         # Assign the user if it's available
+#         if self.user:
+#             job.user = self.user
+#             # Parse location
+#             locations = self.cleaned_data['location'].split(',')  # Split the single string into a list of lat and lng
+#             longitude = float(locations[1].strip())  # Extract and convert longitude
+#             latitude = float(locations[0].strip())   # Extract and convert latitude
+
+#             # Parse address_details
+#             address_details_str = self.cleaned_data['address_details']  # Extract the single string
+#             # Parse the JSON string into a Python dictionary
+#             address_details_json = json.loads(address_details_str)
+
+#             # Create Location instance
+#             location_details = Location.objects.create(
+#                 longitude=longitude,
+#                 latitude=latitude,
+#                 address_details=address_details_json
+#             )
+
+#             # Assign to UserPersonalDetails
+#             job.job_location = location_details
+#         if commit:
+#             job.save()
+#         return job
+
+# forms.py
+from django import forms
+from .models import Relationship_Goals
+
+class RelationShipGoalForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
-        # Capture the user instance passed via kwargs
         self.user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
     
@@ -478,16 +536,19 @@ class RelationShipGoalForm(forms.ModelForm):
         model = Relationship_Goals
         fields = ('is_short', 'is_long')
 
-    def save(self, commit : bool) -> Any:
-        relation_type =  super().save(commit=False)
-        # Assign the user if it's available
-        if self.user:
-            relation_type.user = self.user
-            relation_type.is_short = self.cleaned_data.get('is_short', False)
-            relation_type.is_long = self.cleaned_data.get('is_long', False)
+    def save(self, commit=True):
+        # Update existing record if user already has a Relationship_Goal entry
+        relation_type, created = Relationship_Goals.objects.update_or_create(
+            user=self.user,
+            defaults={
+                'is_short': self.cleaned_data.get('is_short', False),
+                'is_long': self.cleaned_data.get('is_long', False)
+            }
+        )
         if commit:
             relation_type.save()
         return relation_type
+
 
 
 class AdditionalDetailsForm(forms.ModelForm):

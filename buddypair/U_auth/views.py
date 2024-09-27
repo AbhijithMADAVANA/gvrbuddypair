@@ -574,8 +574,79 @@ class ResendOTPView(View):
             return redirect(reverse('u_auth:auth_page'))
 
 
-class LoginView(RedirectAuthenticatedUserMixin, FormView):
+# class LoginView(RedirectAuthenticatedUserMixin, FormView):
 
+#     template_name = 'auth/auth.html'
+#     form_class = LoginForm
+#     success_url = reverse_lazy('home')
+#     user_email = None
+
+#     def get_form_kwargs(self):
+#         """
+#         Passes the request data to the form.
+#         """
+#         # Get the default form kwargs
+#         kwargs = super().get_form_kwargs()
+
+#         # Extract email from the request's POST data
+#         self.user_email = self.request.POST.get('email', None)
+
+#         # Debugging: Print the extracted email
+#         print(f"Extracted email: {self.user_email}")
+#         self.request.session['user'] = self.user_email
+
+
+#         print(kwargs, "**********************************")
+
+#         return kwargs
+
+
+#     def form_valid(self, form):
+#         """
+#         If the form is valid, authenticate and log in the user.
+#         """
+#         email_or_phone = form.cleaned_data['email_or_phone']
+#         password = form.cleaned_data['password']
+
+#         user = authenticate(email=email_or_phone, password=password)
+
+#         if user is not None:
+#             login(self.request, user)
+#             return super().form_valid(form)  # Redirects to success_url
+#         else:
+#             # Add a non-field error to the form
+#             form.add_error(None, "Invalid username or password.")
+#             return self.form_invalid(form)  # Redirects to error handling
+    
+#     def form_invalid(self, form):
+#         # Render the form with errors and trigger the login modal
+#         if costume_user.objects.filter(email=self.user_email).exists():
+#             user = costume_user.objects.get(email=self.user_email)
+#             if not user.is_verified:
+#                 # Handle the "user already exists" error
+#                 print(self.user_email, "in invalid_form")
+#                 print("User is not verified error detected")
+
+#                 messages.error(self.request, "You Need to verify yourself. Please check your email for OTP.")
+#                 # Generate OTP after the user is created
+#                 user = costume_user.objects.get(email=self.user_email)
+#                 otp_code = generate_otp(user)
+#                 print(f"Generated OTP: {otp_code}")  # Debugging
+#                 self.request.session['purpose'] = 'newuser_verification'
+#                 return redirect('u_auth:check_otp')
+                    
+#         return self.render_to_response(self.get_context_data(form=form, show_login_modal=True))
+    
+#     def get_success_url(self):
+#         # check user completed basic steps firest
+#         if not self.request.user.is_completed:
+#             messages.error(self.request, "First complete basic steps..")
+#             return reverse('u_auth:auth_page')
+#         # Redirect to a success URL after form submission
+#         return reverse_lazy('matrimony_home:home')
+    
+
+class LoginView(RedirectAuthenticatedUserMixin, FormView):
     template_name = 'auth/auth.html'
     form_class = LoginForm
     success_url = reverse_lazy('home')
@@ -595,11 +666,8 @@ class LoginView(RedirectAuthenticatedUserMixin, FormView):
         print(f"Extracted email: {self.user_email}")
         self.request.session['user'] = self.user_email
 
-
         print(kwargs, "**********************************")
-
         return kwargs
-
 
     def form_valid(self, form):
         """
@@ -617,34 +685,59 @@ class LoginView(RedirectAuthenticatedUserMixin, FormView):
             # Add a non-field error to the form
             form.add_error(None, "Invalid username or password.")
             return self.form_invalid(form)  # Redirects to error handling
-    
+
     def form_invalid(self, form):
-        # Render the form with errors and trigger the login modal
+        """
+        Handle form invalid cases, such as unverified user or incorrect credentials.
+        """
         if costume_user.objects.filter(email=self.user_email).exists():
             user = costume_user.objects.get(email=self.user_email)
             if not user.is_verified:
-                # Handle the "user already exists" error
+                # Handle the "user not verified" case
                 print(self.user_email, "in invalid_form")
                 print("User is not verified error detected")
-
                 messages.error(self.request, "You Need to verify yourself. Please check your email for OTP.")
-                # Generate OTP after the user is created
-                user = costume_user.objects.get(email=self.user_email)
+                # Generate OTP and redirect to OTP verification
                 otp_code = generate_otp(user)
                 print(f"Generated OTP: {otp_code}")  # Debugging
                 self.request.session['purpose'] = 'newuser_verification'
                 return redirect('u_auth:check_otp')
                     
         return self.render_to_response(self.get_context_data(form=form, show_login_modal=True))
-    
+
     def get_success_url(self):
-        # check user completed basic steps firest
-        if not self.request.user.is_completed:
-            messages.error(self.request, "First complete basic steps..")
+        """
+        Redirect the user based on their relationship goal after login.
+        """
+        user = self.request.user
+        
+        # Ensure the user has completed the basic steps
+        if not user.is_completed:
+            messages.error(self.request, "First complete basic steps.")
             return reverse('u_auth:auth_page')
-        # Redirect to a success URL after form submission
-        return reverse_lazy('matrimony_home:home')
-    
+        
+        # Check the user's relationship goals to determine the redirection
+        try:
+            relationship_goal = Relationship_Goals.objects.get(user=user)
+
+            if relationship_goal.is_long:
+                # Redirect to matrimony home if the user selected a long-term relationship
+                return reverse_lazy('matrimony_home:home')
+            elif relationship_goal.is_short:
+                # Redirect to dating home if the user selected a short-term relationship
+                return reverse_lazy('dating_home:home')
+            else:
+                messages.error(self.request, "You haven't selected any relationship goals.")
+                return reverse('u_auth:auth_page')
+
+        except Relationship_Goals.DoesNotExist:
+            # If the relationship goal isn't set, redirect to a page to set it
+            messages.error(self.request, "You need to set your relationship goals first.")
+            return reverse('u_auth:set_relationship_goals')
+
+        # Default success URL
+        return super().get_success_url()
+
 
 class UserLogout(LoginRequiredMixin,View):
     login_url = 'auth_page'
@@ -784,20 +877,49 @@ class UserPersonalDetailsView(FormView):
         return reverse_lazy('u_auth:auth_page')
     
 
+# class JobDetailsView(FormView):
+#     template_name = 'auth/auth.html'
+#     form_class = JobDetailsForm    
+
+#     def get_form_kwargs(self):
+#         """
+#         Passes the request data to the form.
+#         """
+#         kwargs = super().get_form_kwargs()
+#         # Pass the user to the form
+#         kwargs['user'] = self.request.user
+
+#         print(kwargs, "***********************************")
+
+#         return kwargs
+
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context['experance_level'] = ['entry', 'mid', 'senior']
+#         return context
+
+#     def form_valid(self, form: Any) -> HttpResponse:
+#         job = form.save(commit=True)
+#         return super().form_valid(form)
+    
+#     def form_invalid(self, form: Any) -> HttpResponse:
+        
+#         return self.render_to_response(self.get_context_data(form=form, show_jobdetails_modal=True))
+    
+#     def get_success_url(self) -> str:
+#         return reverse_lazy('u_auth:auth_page')
+
+# views.py
+from django.shortcuts import get_object_or_404
+from django.db import IntegrityError
+
 class JobDetailsView(FormView):
     template_name = 'auth/auth.html'
     form_class = JobDetailsForm    
 
     def get_form_kwargs(self):
-        """
-        Passes the request data to the form.
-        """
         kwargs = super().get_form_kwargs()
-        # Pass the user to the form
         kwargs['user'] = self.request.user
-
-        print(kwargs, "***********************************")
-
         return kwargs
 
     def get_context_data(self, **kwargs):
@@ -805,99 +927,147 @@ class JobDetailsView(FormView):
         context['experance_level'] = ['entry', 'mid', 'senior']
         return context
 
-    def form_valid(self, form: Any) -> HttpResponse:
-        job = form.save(commit=True)
-        return super().form_valid(form)
-    
-    def form_invalid(self, form: Any) -> HttpResponse:
-        
+    def form_valid(self, form):
+        try:
+            # Try to save the form
+            job = form.save(commit=True)
+            return super().form_valid(form)
+        except IntegrityError:
+            # If an IntegrityError occurs, it means the entry already exists
+            # Retrieve the existing job details for the user
+            existing_job = Job_Details.objects.get(user=self.request.user)
+            form.instance.id = existing_job.id  # Set the form instance id to update the existing entry
+            job = form.save(commit=True)
+            return super().form_valid(form)
+
+    def form_invalid(self, form):
         return self.render_to_response(self.get_context_data(form=form, show_jobdetails_modal=True))
     
-    def get_success_url(self) -> str:
+    def get_success_url(self):
         return reverse_lazy('u_auth:auth_page')
 
-class RelationShipGoalView(FormView):
 
-    template_name = 'auth/auth.html'    
+
+# views.py
+from django.views.generic.edit import FormView
+from django.urls import reverse_lazy
+from .forms import RelationShipGoalForm
+from django.contrib import messages
+
+class RelationShipGoalView(FormView):
+    template_name = 'auth/auth.html'
     form_class = RelationShipGoalForm
 
     def get_form_kwargs(self):
-        """
-        Passes the request data to the form.
-        """
         kwargs = super().get_form_kwargs()
         # Pass the user to the form
         kwargs['user'] = self.request.user
-    
-        print(kwargs, "***********************************")
-
         return kwargs
 
     def form_valid(self, form):
         form.save(commit=True)
         self.request.session['check_type'] = True
+        messages.success(self.request, "Your relationship goals have been updated successfully.")
         return super().form_valid(form)
-    
+
     def form_invalid(self, form):
+        messages.error(self.request, "Please correct the errors below.")
         return self.render_to_response(self.get_context_data(form=form, show_relationmodel_modal=True))
 
-    def get_success_url(self) -> str:
+    def get_success_url(self):
         return reverse_lazy('u_auth:auth_page')
 
-def UserType(request):
-    
-    choose_type = request.GET.get('type')
-    print(request.GET, choose_type)
-    choices = {}
-    
-    if choose_type:
-        try:
-            relation_goal = Relationship_Goals.objects.get(user=request.user)
-            choices['Matrimony'] = ('is_long',relation_goal.is_long)
-            choices['Dating'] = ('is_short',relation_goal.is_short)
-            for value, iteam in choices.items():
-                if iteam[1] and iteam[0] == choose_type:
-                    # context['show_addition_details_model'] = True
-                    request.session.pop('check_type', None)
-                    return redirect('u_auth:auth_page')
-                    
-            messages.error(request, "Wrong type...!!")
-            # context['show_relationship_model'] = True
-            return redirect('u_auth:auth_page')
-
-        except Relationship_Goals.DoesNotExist:
-            messages.error(request, "Relationship goals not found for this user.")
-            return redirect('u_auth:auth_page')
-
-    # context['show_relationship_model'] = True    
-    messages.error(request, "You Must choose correct one from above option")
-    return redirect('u_auth:auth_page')
 
 # def UserType(request):
+    
 #     choose_type = request.GET.get('type')
 #     print(request.GET, choose_type)
+#     choices = {}
     
 #     if choose_type:
 #         try:
 #             relation_goal = Relationship_Goals.objects.get(user=request.user)
-#             # Determine the redirect URL based on the relationship type
-#             if choose_type == 'is_long' and relation_goal.is_long:
-#                 # Redirect to Matrimony home
-#                 return redirect('matrimony_home_url')  # Replace with your actual URL name for Matrimony home
-
-#             elif choose_type == 'is_short' and relation_goal.is_short:
-#                 # Redirect to Dating home
-#                 return redirect('dating_home_url')  # Replace with your actual URL name for Dating home
-
+#             choices['Matrimony'] = ('is_long',relation_goal.is_long)
+#             choices['Dating'] = ('is_short',relation_goal.is_short)
+#             for value, iteam in choices.items():
+#                 if iteam[1] and iteam[0] == choose_type:
+#                     # context['show_addition_details_model'] = True
+#                     request.session.pop('check_type', None)
+#                     return redirect('u_auth:auth_page')
+                    
 #             messages.error(request, "Wrong type...!!")
+#             # context['show_relationship_model'] = True
 #             return redirect('u_auth:auth_page')
 
 #         except Relationship_Goals.DoesNotExist:
 #             messages.error(request, "Relationship goals not found for this user.")
 #             return redirect('u_auth:auth_page')
 
-#     messages.error(request, "You must choose the correct one from the above options")
+#     # context['show_relationship_model'] = True    
+#     messages.error(request, "You Must choose correct one from above option")
 #     return redirect('u_auth:auth_page')
+
+from .models import Relationship_Goals, UserPreference
+# views.py
+# def UserType(request):
+#     if request.method == 'POST':
+#         matrimony = request.POST.get('matrimony') == 'on'
+#         dating = request.POST.get('dating') == 'on'
+        
+#         try:
+#             # Fetch relationship goals for the current user
+#             relation_goal = Relationship_Goals.objects.get(user=request.user)
+            
+#             # Check conditions based on the selected options
+#             if matrimony and not relation_goal.is_long:
+#                 messages.error(request, "To use Matrimony, please select Long Term Relationship first.")
+#                 return redirect('u_auth:auth_page')
+            
+#             # Update or create user preferences
+#             UserPreference.objects.update_or_create(
+#                 user=request.user,
+#                 defaults={'matrimony': matrimony, 'dating': dating}
+#             )
+            
+#             # Set session variable to indicate successful completion of step 5
+#             request.session['step5_completed'] = True
+#             request.session['step6_completed'] = False  # Ensure step6 isn't marked as completed yet
+#             messages.success(request, "Preferences updated successfully. Please fill in additional details.")
+#             return redirect('u_auth:auth_page')  # Redirect back to the same page to reload the form
+        
+#         except Relationship_Goals.DoesNotExist:
+#             messages.error(request, "Relationship goals not found for this user.")
+#             return redirect('u_auth:auth_page')
+
+#     # Debugging: Check session value on page load
+#     print("Session value:", request.session.get('step5_completed'))
+#     return render(request, 'auth/auth.html')
+
+
+from django.http import JsonResponse
+
+def UserType(request):
+    if request.method == 'POST':
+        try:
+            matrimony = request.POST.get('matrimony') == 'on'
+            dating = request.POST.get('dating') == 'on'
+            relation_goal = Relationship_Goals.objects.get(user=request.user)
+
+            if matrimony and not relation_goal.is_long:
+                return JsonResponse({'success': False, 'message': 'To use Matrimony, please select Long Term Relationship first.'})
+
+            UserPreference.objects.update_or_create(
+                user=request.user,
+                defaults={'matrimony': matrimony, 'dating': dating}
+            )
+            request.session['step5_completed'] = True
+            request.session['step6_completed'] = False
+            return JsonResponse({'success': True})
+        except Relationship_Goals.DoesNotExist:
+            return JsonResponse({'success': False, 'message': 'Relationship goals not found for this user.'})
+    return JsonResponse({'success': False, 'message': 'Invalid request'})
+
+
 
 
 

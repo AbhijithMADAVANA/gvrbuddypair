@@ -105,61 +105,117 @@
                     </div>
 
                     <!-- Step 4 -->
-                    <div id="step4" class="d-none">
-                        <h1>Relationship Goals</h1>
-                        <form action="{% url 'u_auth:relation_type' %}" method="post">
-                            {% csrf_token %}
-                        {% include "widget/input_details_form.html" with type='checkbox' label='Long Term Relationship' name='is_long'%}
-                        {% include "widget/input_details_form.html" with type='checkbox' label='Short Term Relationship' name='is_short'%}
-                        {% if form.errors and show_relationmodel_modal%}
-                            <div class="alert alert-danger" role="alert">
-                                {% for field, errors in form.errors.items %}
-                                    {% if field and field != '__all__' %}
-                                    <div>
-                                        {{field }}: {{ errors|join:', ' }}
-                                    </div>
-                                    {% else %}
-                                    <div>
-                                        {{ errors|join:', ' }}
-                                    </div>
-                                    {% endif %}
-                                {% endfor %}
-                            </div>
-                        {% endif %}   
-                        <div class="row">
-                            <div class="col-6">
-                                <button type="button" class="btn btn-dark w-100" id="prevToJobDetails">Previous</button>
-                            </div>
-                            <div class="col-6">
-                                <button type="submit" class="btn btn-dark w-100" id="">save</button>
-                            </div>
-                        </div>
-                    </form>
-                    <!-- <button type="submit" class="btn btn-dark w-100" id="nextToInterested">nextToInterested</button> -->
-                    <!-- <a href="" id="nextToInterested">nextToInterested</a> -->
-                    </div>
+                    <!-- auth/details_form.html -->
+<div id="step4" class="d-none">
+    <h1>Relationship Goals</h1>
+    <form action="{% url 'u_auth:relation_type' %}" method="post">
+        {% csrf_token %}
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="is_long" name="is_long" {% if form.is_long.value %}checked{% endif %}>
+            <label class="form-check-label" for="is_long">Long Term Relationship</label>
+        </div>
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="is_short" name="is_short" {% if form.is_short.value %}checked{% endif %}>
+            <label class="form-check-label" for="is_short">Short Term Relationship</label>
+        </div>
+        {% if form.errors and show_relationmodel_modal %}
+            <div class="alert alert-danger" role="alert">
+                {% for field, errors in form.errors.items %}
+                    {% for error in errors %}
+                        <div>{{ error }}</div>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+        {% endif %}
+        <div class="row">
+            <div class="col-6">
+                <button type="button" class="btn btn-dark w-100" id="prevToJobDetails">Previous</button>
+            </div>
+            <div class="col-6">
+                <button type="submit" class="btn btn-dark w-100" id="">Save</button>
+            </div>
+        </div>
+    </form>
+</div>
+<!-- base.html or relevant template -->
+{% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+{% endif %}
+
 
                     <!-- Step 5 -->
-                    <div id="step5" class="d-none">
-                        <h1>Interested</h1>
-                        <form action="{% url 'u_auth:check_type' %}" method="get">
-                        {% include "widget/input_details_form.html" with type='for_relationtype_check' label='Matrimony' name='type'  value='is_long'%}
-                        {% include "widget/input_details_form.html" with type='for_relationtype_check' label='Dating' name='type' value='is_short'%}
-                        <div class="row">
-                            <!-- <div class="col-6">
-                                <button type="button" class="btn btn-dark w-100" id="prevToRelationshipGoals">Previous</button>
-                            </div> -->
-                            <div class="col-12">
-                                <button type="submit" class="btn btn-dark w-100" id="">submit</button>
-                            </div>
+                
+
+                   <!-- <div id="step5" class="d-none">
+                    <h1>Interested</h1>
+                    <form action="{% url 'u_auth:check_type' %}" method="get">
+                    {% include "widget/input_details_form.html" with type='for_relationtype_check' label='Matrimony' name='matrimony'  value='matrimony'%}
+                    {% include "widget/input_details_form.html" with type='for_relationtype_check' label='Dating' name='dating' value='dating'%}
+                    <div class="row">
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-dark w-100" id="">submit</button>
                         </div>
-                        </form>
-                        <!-- <button type="button" class="btn btn-dark w-100" id="nextToAdditionalDetails">nextToAdditionalDetails</button> -->
-                        <!-- <a href="" id="nextToAdditionalDetails">nextToAdditionalDetails</a> -->
                     </div>
+                    </form>
+                </div> -->
+
+<!-- <div id="step5" class="d-none"> -->
+    <div id="step5" class="{% if not request.session.step5_completed %} d-none {% endif %}">
+
+    <h1>Interested</h1>
+    <form action="{% url 'u_auth:check_type' %}" method="post">
+        {% csrf_token %}
+        
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="matrimony" name="matrimony">
+            <label class="form-check-label" for="matrimony">Matrimony</label>
+        </div>
+        
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="dating" name="dating">
+            <label class="form-check-label" for="dating">Dating</label>
+        </div>
+        
+        {% if messages %}
+            <div class="alert alert-danger">
+                {% for message in messages %}
+                    <div>{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        
+        <div class="row mt-3">
+            <div class="col-6">
+                <button type="button" class="btn btn-dark w-100" id="prevToRelationshipGoals">Previous</button>
+            </div>
+            <div class="col-6">
+                <button type="submit" class="btn btn-dark w-100">Submit</button>
+            </div>
+        </div>
+    </form>
+</div> 
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Navigate to the previous step
+        document.getElementById('prevToRelationshipGoals').addEventListener('click', function() {
+            // Hide current step and show the previous step (step4)
+            document.getElementById('step5').classList.add('d-none');
+            document.getElementById('step4').classList.remove('d-none');
+        });
+    });
+</script>
+
 
                     <!-- Step 6 -->
                     <div id="step6" class="d-none">
+                        <!-- <div id="step6" class="{% if request.session.step5_completed and not request.session.step6_completed %} {% else %} d-none {% endif %}"> -->
+
+
                         <h1>Additional Details</h1>
                         <form action="{% url 'u_auth:additional_datas' %}" method="post">
                             {% csrf_token %}
@@ -211,7 +267,48 @@
                     </div>
                 
                 </div>
-                
+                <script>
+                    document.addEventListener("DOMContentLoaded", function() {
+    // Get the form element for step 5
+    const step5Form = document.querySelector('form[action="{% url 'u_auth:check_type' %}"]');
+
+    // Add an event listener to handle form submission
+    if (step5Form) {
+        step5Form.addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            // Collect form data
+            const formData = new FormData(step5Form);
+
+            // Make an AJAX POST request to submit the form
+            fetch(step5Form.action, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': formData.get('csrfmiddlewaretoken') // CSRF token for security
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) { // Check if the server response indicates success
+                    // Hide step 5
+                    document.getElementById('step5').classList.add('d-none');
+                    // Show step 6
+                    document.getElementById('step6').classList.remove('d-none');
+                } else {
+                    // Handle errors by displaying messages (if any)
+                    alert(data.message || 'An error occurred. Please try again.');
+                }
+            })
+            .catch(error => {
+                console.error('Error submitting form:', error);
+                alert('An error occurred. Please try again.');
+            });
+        });
+    }
+});
+
+                </script>
             </div>
         </div>
     </div>
