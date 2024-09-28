@@ -1509,3 +1509,268 @@ class UserPartnerPreferenceView_2(RedirectNotAuthenticatedUserMixin, FormView):
 
     def get_success_url(self) -> str:
         return reverse('privacy_setting_sec')  
+
+
+
+
+class DatingUserProfile(RedirectNotAuthenticatedUserMixin,TemplateView):
+    template_name = 'User_profile_templates/dating_profile_view.html'
+
+    
+    def get(self, request: HttpRequest, *args: str, **kwargs: dict) -> HttpResponse:
+        # Fetch user details and extra photos
+        user_details = UserPersonalDetails.objects.get(user=request.user)
+        extra_photos = Pictures.objects.filter(user=user_details) 
+        
+        # Add the details to context
+        context = self.get_context_data(user_details=user_details, extra_photos=extra_photos)
+        
+        # Return the rendered template with the context
+        return self.render_to_response(context)
+
+    
+class DatingProfileEdit(RedirectNotAuthenticatedUserMixin, TemplateView):
+    template_name = 'User_profile_templates/dating_profile_edit.html'
+
+    def get(self, request: HttpRequest, *args: str, **kwargs: dict) -> HttpResponse:
+        # Fetch user details and extra photos
+        user_details = UserPersonalDetails.objects.get(user=request.user)
+        extra_photos = Pictures.objects.filter(user=user_details) 
+        print(extra_photos)
+        # Add the details to context
+        context = self.get_context_data(user_details=user_details, extra_photos=extra_photos)
+        
+        # Return the rendered template with the context
+        return self.render_to_response(context)
+    
+    
+    def post(self, request: HttpRequest, *args: str, **kwargs: dict) -> HttpResponse:
+        # Handle POST data (like form submission)
+        field_dict = [(costume_user, 'username', 'email', 'phone'), 
+                    (UserPersonalDetails, 'profile_pic', 'bio', 'short_video'), 
+                    (Pictures, 'photos')]
+        
+        # Loop through request.POST items
+        for key, value in request.POST.items():
+            if value:  # If the POST value is not empty
+                # print(f"{key}: {value}")  # Debugging
+
+                # Loop through field_dict and check only the fields 'username', 'email', 'phone'
+                for fields in field_dict:
+                    if key in fields[1:]:  # fields[1:] to skip the model name and only check field names
+                        print(f"{fields[0]}: Matched field '{key}' in the model...")  # Output the matched model
+
+                        # Handle user_data based on the model
+                        if fields[0] == costume_user:
+                            user_data = fields[0].objects.get(id=request.user.id)
+                        else:
+                            user_data = fields[0].objects.get(user=request.user)
+
+                        recieved_value = request.POST.get(key)    
+                        # Use setattr to dynamically update the model's field
+                        setattr(user_data, key, value)  # Dynamically set the field value
+                        user_data.save()  # Save the changes
+                        
+                        print(f"Updated {user_data, key} with {recieved_value}")  # Output the          
+        
+        # Print all uploaded files  
+        print("Files:")
+        # print(request.FILES.getlist('photos'))
+
+        for key, value in request.FILES.items():
+            print(f"{key}: {value}")
+            if value:  # If the POST value is not empty
+                for fields in field_dict:
+                    if key in fields[1:]:  # fields[1:] to skip the model name and only check field names
+                        print(f"{fields[0]}: Matched field '{key}' in the model...")
+
+                        if fields[0] == Pictures:
+                            user_details = UserPersonalDetails.objects.get(user=request.user)
+                            
+                            # Handle file uploads
+                            photo_list = request.FILES.getlist(key)  # Retrieve list of files for the key
+                            if photo_list:
+                                for photo in photo_list:
+                                    # Create a new record for each uploaded photo
+                                    fields[0].objects.create(user=user_details, photos=photo)
+                                messages.success(request, "Photos updated successfully")
+                                return redirect('u_auth:profile_edit')
+                        else:
+                            # Handle other models (e.g., costume_user, UserPersonalDetails)
+                            user_data = fields[0].objects.get(user=request.user)
+
+                            recieved_value = request.FILES.getlist(key)  # Retrieve list of files for the key
+                            if recieved_value:
+                                for val in recieved_value:
+                                    # Use setattr to dynamically update the model's field
+                                    setattr(user_data, key, val)  # Dynamically set the field value
+                                    user_data.save()  # Save the changes
+
+                            print(f"Updated {user_data} with {recieved_value}")          
+
+        messages.success(request, "Data Updated Sucessfully")
+        return redirect('u_auth:profile_edit')
+
+class DatingRemoveFiles(RedirectNotAuthenticatedUserMixin, View):
+    
+    def post(self, request: HttpRequest, *args: str, **kwargs: dict) -> HttpResponse:
+        # Handle POST data (like form submission)
+        id = kwargs.get('id')
+        print(f"ID: {id}")
+        which_one = kwargs.get('type')
+        print(f"Which one: {which_one}")
+        user_details = UserPersonalDetails.objects.get(user=request.user)
+        if which_one == 'photos':
+            # Get the user's profile picture
+            extra_photos = Pictures.objects.filter(user=user_details)
+            for photo in extra_photos:
+                if photo.id == int(id):
+                    photo.delete()
+                    print(f"Deleted photo with id: {id}")
+                    messages.success(request, "Photo deleted successfully")
+
+        if which_one == 'reel':
+            # Get the user's reel
+            user_details.short_video = None
+            user_details.save()
+            messages.success(request, "reel deleted successfully")
+
+        return redirect('u_auth:profile_edit')
+
+class DatingForgotPassword(RedirectNotAuthenticatedUserMixin, FormView):
+    template_name = 'User_profile_templates/dating_change_password.html'
+    form_class = ForgotPasswordForm
+
+    def form_valid(self, form):
+        password = form.cleaned_data['current_password']
+        new_password = form.cleaned_data['password_2']
+        try:
+            current_user = costume_user.objects.get(password=password)
+            if check_password(password, current_user.password):
+                messages.error(self.request, "Incorrect Password..!!!")
+
+            else:
+                # current_user.set_password(new_password)  # Set the new password (Django will hash it)
+                # current_user.save()  # Save the updated user
+                messages.success(self.request, "Password changed successfully.")
+
+            return super().form_valid(form)
+        except costume_user.DoesNotExist:
+            messages.error(self.request, "User does not exist.")
+            return super().form_invalid(form)
+    
+    def get_success_url(self):
+        # Redirect to a success URL after form submission
+        return reverse_lazy('matrimony_u_auth:change_pass')
+
+
+class DatingUserSetting(RedirectNotAuthenticatedUserMixin, TemplateView):
+    template_name = 'User_profile_templates/dating_user_setting.html'
+
+    def get_context_data(self, **kwargs: dict) -> dict[str, Any]:
+        context =  super().get_context_data(**kwargs)
+        context['user'] = self.request.user
+        return context
+
+
+class DatingUserPrivacySetting(RedirectNotAuthenticatedUserMixin, TemplateView):
+
+    template_name = 'User_profile_templates/dating_privacy_setting.html'
+
+
+    def get_context_data(self, **kwargs: dict) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context['user'] = self.request.user
+        context['location_details'] = UserPersonalDetails.objects.get(user=self.request.user)
+        context['device_name'] = self.get_device_name(self.request)
+        context['active_sessions_count'] = self.get_active_sessions_count(self.request.user)  # Active sessions count
+        return context
+
+    def get_device_name(self, request):
+            user_agent = request.META.get('HTTP_USER_AGENT', '')
+            parsed_agent = httpagentparser.detect(user_agent)
+            if 'platform' in parsed_agent and 'browser' in parsed_agent:
+                device_name = f"{parsed_agent['platform']['name']} - {parsed_agent['browser']['name']} {parsed_agent['browser']['version']}"
+            elif 'platform' in parsed_agent:
+                device_name = f"{parsed_agent['platform']['name']}"
+            elif 'browser' in parsed_agent:
+                device_name = f"{parsed_agent['browser']['name']} {parsed_agent['browser']['version']}"
+            else:
+                device_name = "Unknown Device"
+            return device_name
+
+    def get_active_sessions_count(self, user):
+        # Get all sessions
+        sessions = Session.objects.filter(expire_date__gte=timezone.now())
+
+        # Filter sessions by user ID
+        count = 0
+        for session in sessions:
+            data = session.get_decoded()  # Get session data
+            if str(user.id) == str(data.get('_auth_user_id')):  # Compare user ID
+                count += 1
+        return count 
+
+
+    def post(self, request: HttpRequest, *args: str, **kwargs: dict) -> HttpResponse:
+        self.clear_other_sessions(request.user)
+        return redirect('u_auth:privacy_setting')
+
+    def clear_other_sessions(self, user):
+        current_session_key = self.request.session.session_key
+        sessions = Session.objects.filter(expire_date__gte=timezone.now())
+        
+        # Loop through all sessions and delete those that belong to the user but are not the current session
+        for session in sessions:
+            data = session.get_decoded()
+            if str(user.id) == str(data.get('_auth_user_id')) and session.session_key != current_session_key:
+                session.delete()
+
+class DatingUserPartnerPreferenceView_2(RedirectNotAuthenticatedUserMixin, FormView):
+    template_name = 'User_profile_templates/dating_privacy_setting_2.html'
+    form_class = UserPartnerPreferenceForm
+
+    def get_context_data(self, **kwargs: dict) -> dict[str, Any]:
+        context =  super().get_context_data(**kwargs)
+        interst_hobbies_list = []
+        qualification_list = []
+        locations_list = []
+        LifestyleChoice_list = []
+        interst_obj = Interests.objects.all()
+        hobbies_obj = Hobbies.objects.all()
+        qualification_obj = Qualifications.objects.all()
+        locations_obj = Location.objects.all()
+        LifestyleChoice_obj =  LifestyleChoice.objects.all()
+        for Lifestyle in LifestyleChoice_obj:
+            LifestyleChoice_list.append(Lifestyle.name)
+        for interst in interst_obj:
+            interst_hobbies_list.append(interst.interest)
+        for hobbie in hobbies_obj:
+            interst_hobbies_list.append(hobbie.hobby)
+        for qualifiction in qualification_obj:
+            qualification_list.append(qualifiction.qualification)
+        for location in locations_obj:
+            if location.address_details['state_district'] not in locations_list :
+                locations_list.append(location.address_details['state_district'])
+        context['interest_hobbies_list'] = interst_hobbies_list
+        context['qualifications_list'] = qualification_list
+        context['location_list'] = locations_list
+        context['LifestyleChoice_list'] = LifestyleChoice_list
+        context['occupation'] = [occupation.job_title for occupation in Job_Details.objects.all()]
+        return context
+
+    def get_form_kwargs(self) -> dict[str, Any]:
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        print(kwargs,"datas............!!!!!!!!!!!!!!11")
+        return kwargs
+    
+    def form_valid(self, form: Any) -> HttpResponse:
+        details = form.save(commit = True)
+        print(details,"details............!!!!!!!!!!!!!!11")
+        messages.success(self.request, "Data sucessfully Updated..!!")
+        return super().form_valid(form)
+    
+
+    def get_success_url(self) -> str:
+        return reverse('privacy_setting_sec')  

@@ -27,8 +27,8 @@ urlpatterns = [
     path('additional_datas/', views.AdditionalDetailsView.as_view(), name="additional_datas"),
     path('interest/', views.UserInterestView.as_view(), name='interest_view'),
     # path('user_preference/', views.UserPreferenceView.as_view(), name='user_preference'),
-
     path('check_type', views.UserType, name='check_type'),
+    
     path('profile/', views.UserProfile.as_view(), name="profile"),
     path('profile_edit/', views.ProfileEdit.as_view(), name="profile_edit"),
     path('remove_files/<str:type>/<int:id>/', views.RemoveFiles.as_view(), name='remove_files'),
@@ -36,4 +36,12 @@ urlpatterns = [
     path('settings/', views.UserSetting.as_view(), name="settings"),
     path('privacy_setting_sec/', views.UserPartnerPreferenceView_2.as_view(), name="privacy_setting_sec"),
     path('privacy_setting/', views.UserPrivacySetting.as_view(), name="privacy_setting"),
+
+    path('datingprofile/', views.DatingUserProfile.as_view(), name="dating_profile"),
+    path('datingprofile_edit/', views.DatingProfileEdit.as_view(), name="dating_profile_edit"),
+    path('datingremove_files/<str:type>/<int:id>/', views.DatingRemoveFiles.as_view(), name='dating_remove_files'),
+    path('datingchange_pass/',views.DatingForgotPassword.as_view(),name="dating_change_pass"),
+    path('datingsettings/', views.DatingUserSetting.as_view(), name="dating_settings"),
+    path('datingprivacy_setting_sec/', views.DatingUserPartnerPreferenceView_2.as_view(), name="dating_privacy_setting_sec"),
+    path('datingprivacy_setting/', views.DatingUserPrivacySetting.as_view(), name="dating_privacy_setting"),
 ]

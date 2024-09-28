@@ -265,7 +265,7 @@
         <div class="col-md-12">
             <nav class="navbar-custom">
                 <div class="nav-left">
-                    <a href="{%url 'u_auth:profile'%}">
+                    <a href="{%url 'u_auth:dating_profile'%}">
                         <i class='fas fa-angle-left' style='font-size:24px'></i>
                     </a>
                 </div>
@@ -318,7 +318,7 @@
                         {% for img in extra_photos %}
                         <div class="image-container">
                         <div class="cross_icon">
-                            <a href="#" class="delete-icon" data-url="{% url 'u_auth:remove_files' 'photos' img.id %}">
+                            <a href="#" class="delete-icon" data-url="{% url 'u_auth:dating_remove_files' 'photos' img.id %}">
                                 {% csrf_token %}
                                 <i class="fas fa-times-circle"></i>
                             </a>
@@ -340,7 +340,7 @@
                            {% if user_details.short_video %}
                            <div class="image-container">
                            <div class="cross_icon">
-                            <a  href="#" class="delete-icon" data-url="{% url 'u_auth:remove_files' 'reel' user_details.id %}" method='post'>
+                            <a  href="#" class="delete-icon" data-url="{% url 'u_auth:dating_remove_files' 'reel' user_details.id %}" method='post'>
                                 {% csrf_token %}
                                 <i class="fas fa-times-circle"></i>
                             </a>
@@ -358,7 +358,7 @@
                 </div>
 
                 <div class="user_form text-white">
-                    <form action="{% url 'u_auth:profile_edit' %}" method="post" enctype="multipart/form-data">
+                    <form action="{% url 'u_auth:dating_profile_edit' %}" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         <!-- username -->
                           
@@ -398,7 +398,7 @@
                             {% for img in extra_photos %}
                             <div class="image-container">
                                 <div class="cross_icon">
-                                    <a href="#" class="delete-icon" data-url="{% url 'u_auth:remove_files' 'photos' img.id %}">
+                                    <a href="#" class="delete-icon" data-url="{% url 'u_auth:dating_remove_files' 'photos' img.id %}">
                                         <i class="fas fa-times-circle"></i>
                                     </a>
                                 </div>
@@ -418,7 +418,7 @@
                         {% if user_details.short_video %}
                         <div class="image-container">
                         <div class="cross_icon">
-                            <a href="#" class="delete-icon" data-url = "{% url 'u_auth:remove_files' 'reel' user_details.id %}">
+                            <a href="#" class="delete-icon" data-url = "{% url 'u_auth:dating_remove_files' 'reel' user_details.id %}">
                                 <i class="fas fa-times-circle"></i>
                             </a>
                             </div>
@@ -452,7 +452,7 @@
                         </div>
                         
                         <div class="form-outline mb-4">
-                            <a href="{%url 'u_auth:change_pass'%}">change password</a>
+                            <a href="{%url 'u_auth:dating_change_pass'%}">change password</a>
                         </div>
                         <!-- Submit button -->
                          <div class="row">

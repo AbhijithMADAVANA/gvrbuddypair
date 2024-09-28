@@ -89,6 +89,8 @@ from django.shortcuts import get_object_or_404
 #         except UserPersonalDetails.DoesNotExist:
 #             context['user_details'] = None
 #         return context
+
+
 from django.views.generic import ListView
 from django.shortcuts import get_object_or_404
 from django.contrib.messages.views import SuccessMessageMixin
@@ -108,7 +110,7 @@ class HomeView(RedirectNotAuthenticatedUserMixin, SuccessMessageMixin, ListView)
         logged_user = get_object_or_404(UserPersonalDetails, user=user)
 
         # Only include users who have a short video
-        queryset = queryset.filter(short_video__isnull=False)  # Filter users with short video
+        queryset = queryset.filter(short_video__isnull=False)
 
         # Apply additional filters based on filter_value (optional)
         if filter_value == 'Location':
@@ -121,44 +123,34 @@ class HomeView(RedirectNotAuthenticatedUserMixin, SuccessMessageMixin, ListView)
             user_qualifications = logged_user.qualifications.all()
             queryset = queryset.filter(qualifications__in=user_qualifications)
 
-        # Get logged-in user's interest
+        # Get logged-in user's interest and gender
         user_interest = UserInterest.objects.filter(user=user).first()
         logged_user_gender = logged_user.gender
 
-        # Apply interest-based filtering if the user has set preferences
+        # Apply interest-based filtering according to the user's preferences and gender
         if user_interest:
             if logged_user_gender == 'M':
                 # Logged user is male
                 if user_interest.interested_in == 'B':
-                    # Show both male and female
+                    # Show both male and female, with male pre-selected
                     queryset = queryset.filter(gender__in=['M', 'F'])
                 elif user_interest.interested_in == 'M':
-                    # Show only male
+                    # Show only males, with both and men pre-selected
                     queryset = queryset.filter(gender='M')
                 elif user_interest.interested_in == 'W':
-                    # Show only female
+                    # Show only females, with both and women pre-selected
                     queryset = queryset.filter(gender='F')
+
             elif logged_user_gender == 'F':
                 # Logged user is female
                 if user_interest.interested_in == 'B':
-                    # Show both male and female
+                    # Show both male and female, with female pre-selected
                     queryset = queryset.filter(gender__in=['M', 'F'])
                 elif user_interest.interested_in == 'M':
-                    # Show only male
+                    # Show only males, with both and men pre-selected
                     queryset = queryset.filter(gender='M')
                 elif user_interest.interested_in == 'W':
-                    # Show only female
-                    queryset = queryset.filter(gender='F')
-            elif logged_user_gender == 'O':
-                # Logged user is non-binary/other
-                if user_interest.interested_in == 'B':
-                    # Show both male and female
-                    queryset = queryset.filter(gender__in=['M', 'F'])
-                elif user_interest.interested_in == 'M':
-                    # Show only male
-                    queryset = queryset.filter(gender='M')
-                elif user_interest.interested_in == 'W':
-                    # Show only female
+                    # Show only females, with both and women pre-selected
                     queryset = queryset.filter(gender='F')
 
         # Exclude the logged-in user from the queryset
