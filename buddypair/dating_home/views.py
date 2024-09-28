@@ -95,7 +95,6 @@ from django.views.generic import ListView
 from django.shortcuts import get_object_or_404
 from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import Q
-from django.db.models import Q
 
 class HomeView(RedirectNotAuthenticatedUserMixin, SuccessMessageMixin, ListView):
     model = UserPersonalDetails
