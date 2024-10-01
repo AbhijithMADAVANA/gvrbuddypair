@@ -1248,20 +1248,28 @@ class UserInterestView(LoginRequiredMixin, UpdateView):
 #         return reverse_lazy('u_auth:auth_page')
 
 
-class UserProfile(RedirectNotAuthenticatedUserMixin,TemplateView):
+# views.py
+
+from django.views.generic import TemplateView
+from django.shortcuts import get_object_or_404
+from django.http import HttpRequest, HttpResponse
+from .models import UserPersonalDetails, Pictures  # Import your models
+
+
+class UserProfile(RedirectNotAuthenticatedUserMixin, TemplateView):
     template_name = 'User_profile_templates/profile_view.html'
 
-    
     def get(self, request: HttpRequest, *args: str, **kwargs: dict) -> HttpResponse:
         # Fetch user details and extra photos
-        user_details = UserPersonalDetails.objects.get(user=request.user)
-        extra_photos = Pictures.objects.filter(user=user_details) 
+        user_details = get_object_or_404(UserPersonalDetails, user=request.user)  # Get user details or 404
+        extra_photos = Pictures.objects.filter(user=user_details)  # Fetch user's extra photos
         
         # Add the details to context
         context = self.get_context_data(user_details=user_details, extra_photos=extra_photos)
         
         # Return the rendered template with the context
         return self.render_to_response(context)
+
 
     
 class ProfileEdit(RedirectNotAuthenticatedUserMixin, TemplateView):

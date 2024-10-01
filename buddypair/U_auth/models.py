@@ -37,6 +37,7 @@ class costume_user(AbstractUser):
     is_online = models.BooleanField(default=False)
     is_completed = models.BooleanField(default=False)
     is_verified = models.BooleanField(default=False)
+    is_subscribed = models.BooleanField(default=False)
     objects = UserManager()
 
     USERNAME_FIELD = 'email'

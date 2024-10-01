@@ -318,38 +318,37 @@
 {% endblock header %}
 
 {% block content %}
-
+<!-- profile_view.html -->
 <div class="container-fluid custom-container">
     <div class="profile-container">
         <div class="carousel-container">
             <nav class="navbar-custom">
                 <div class="nav-left">
                     <a href="{% url 'matrimony_home:home' %}">
-                    <i class='fas fa-angle-left' style='font-size:24px'></i>
+                        <i class='fas fa-angle-left' style='font-size:24px'></i>
                     </a>
                 </div>
                 <div class="nav-right">
                     <a href="{% url 'u_auth:profile_edit' %}">
-                        <div class="distance"><i class="fas fa-edit" style="font-size: 18px;"></i>Edit
-                        </div>
+                        <div class="distance"><i class="fas fa-edit" style="font-size: 18px;"></i>Edit</div>
                     </a>
                 </div>
             </nav>
+
             <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner">
+                    <!-- Display the main profile picture -->
                     <div class="carousel-item active">
-                        <img src="{{user_details.profile_pic.url}}"
-                            class="d-block img-fluid" alt="...">
+                        <img src="{{ user_details.profile_pic.url }}" class="d-block img-fluid" alt="Profile Picture">
                     </div>
+                    <!-- Display extra photos if available -->
                     {% if extra_photos %}
-                    {% for pic in extra_photos %}
-                    <div class="carousel-item">
-                        <img src="{{pic.photos.url}}"
-                            class="d-block img-fluid" alt="...">
-                    </div>
-                    {% endfor %}
+                        {% for pic in extra_photos %}
+                            <div class="carousel-item">
+                                <img src="{{ pic.photos.url }}" class="d-block img-fluid" alt="Extra Photo">
+                            </div>
+                        {% endfor %}
                     {% endif %}
-                    
                 </div>
                 <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls"
                     data-bs-slide="prev">
@@ -363,13 +362,12 @@
                 </button>
             </div>
 
-
             <div class="profile-name">
                 <label>
-                    <h2>{{user_details.user.username}}</h2>
+                    <h2>{{ user_details.user.username }}</h2>
                 </label>
                 <label>
-                    <h4>{{user_details.user_location.address_details.town}}</h4>
+                    <h4>{{ user_details.user_location.address_details.town }}</h4>
                 </label>
                 <button type="button" class="profile-button" data-mdb-ripple-init>
                     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSeGWA3wIXqIM-zGxxIQJ4h42ygmb4nYquSKQ&s"
@@ -377,18 +375,13 @@
                     Success
                 </button>
             </div>
-
-            <!-- {% include "widget/menu.html" %} -->
-
         </div>
 
         <div class="user_details">
-
             <div class="nav_button">
                 <div class="but_1" id="button_1">
                     <a onclick="show_about()" href="#">About</a>
                 </div>
-
                 <div class="but_2" id="button_2">
                     <a onclick="show_address()" href="#">Contact</a>
                 </div>
@@ -396,8 +389,7 @@
 
             <div class="about_user mt-3 ps-2" id="show_details">
                 <label for="titile" style="font-size:15px; font-weight: bold;">About : </label>
-                <p>{{user_details.bio}}
-                </p>
+                <p>{{ user_details.bio }}</p>
             </div>
 
             <div class="about_user mt-3 ps-2" id="address" style="display: none;">
@@ -409,14 +401,14 @@
                 <p>Road: {{ user_details.user_location.address_details.road }}</p>
                 <p>Postcode: {{ user_details.user_location.address_details.postcode }}</p>
                 <p>Country: {{ user_details.user_location.address_details.country }}</p>
-                <p>Is Verified: {% if user_details.user.is_verified %} &#x2705; <!-- Tick mark if verified --> {% else %} &#x274C; <!-- Cross mark if not verified --> {% endif %}</p>
+                <p>Is Verified: {% if user_details.user.is_verified %} &#x2705; {% else %} &#x274C; {% endif %}</p>
             </div>
 
             <div class="interest ps-2" id="interest_section">
                 <label for="title" style="font-size:15px; font-weight: bold;">Interests : </label>
                 <div class="interest_flex">
                     {% for interest in user_details.interests.all %}
-                        <span>{{ interest.interest}}</span>
+                        <span>{{ interest.interest }}</span>
                     {% empty %}
                         <li>No interests available</li>
                     {% endfor %}
@@ -426,7 +418,7 @@
                 <label for="title" style="font-size:15px; font-weight: bold;">Hobbies : </label>
                 <div class="interest_flex">
                     {% for hobbie in user_details.hobbies.all %}
-                        <span>{{ hobbie.hobby}}</span>
+                        <span>{{ hobbie.hobby }}</span>
                     {% empty %}
                         <li>No hobbies available</li>
                     {% endfor %}

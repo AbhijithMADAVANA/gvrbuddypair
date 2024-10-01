@@ -91,6 +91,23 @@ from django.shortcuts import get_object_or_404
 #         return context
 
 
+from django.views.generic import DetailView
+from django.shortcuts import get_object_or_404
+
+class VideoPlaybackView(LoginRequiredMixin, DetailView):
+    model = UserPersonalDetails
+    template_name = 'video_playback.html'  # Create this template
+    context_object_name = 'user_details'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user_details = self.get_object()
+        context['short_reel'] = user_details.short_video.url if user_details.short_video else None
+        context['profile_pic'] = user_details.profile_pic.url if user_details.profile_pic else None
+        context['username'] = user_details.user.username
+        return context
+
+
 from django.views.generic import ListView
 from django.shortcuts import get_object_or_404
 from django.contrib.messages.views import SuccessMessageMixin

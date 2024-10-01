@@ -21,7 +21,7 @@ from django.conf.urls.static import static
 from django.conf.urls import handler404, handler500
 
 urlpatterns = [
-    path('main_admin', admin.site.urls),
+    path('main_admin/', admin.site.urls),
     path('auth/', include("U_auth.urls")),
     # path(' ', include("U_auth.urls")),
     path('job/', include('job.urls')),  # This includes job.urls

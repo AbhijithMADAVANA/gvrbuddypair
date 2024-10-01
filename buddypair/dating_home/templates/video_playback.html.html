@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="position: relative; width: 100%; height: 100vh;">
+    <video controls style="width: 100%; height: 100%;">
+        <source src="{{ short_reel }}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <div style="position: absolute; top: 10px; left: 10px;">
+        <img src="{{ profile_pic }}" alt="{{ username }}'s profile" style="width: 50px; height: 50px; border-radius: 50%;">
+        <span>{{ username }}</span>
+    </div>
+    <div style="position: absolute; top: 10px; right: 10px;">
+        <button onclick="window.location.href='{% url 'home' %}'">Back to Home</button>
+        <button>Add</button> <!-- Add your add button functionality -->
+    </div>
+</div>
+{% endblock %}

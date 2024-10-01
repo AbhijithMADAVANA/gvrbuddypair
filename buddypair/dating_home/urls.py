@@ -7,6 +7,7 @@ urlpatterns = [
     path('home/', HomeView.as_view(),name="home1"),
     path('entry',EntryView.as_view(),name="entry"),
     path('sharedslidbar',SharedSlidbar.as_view(),name="sharedslidbar"),
-   
+    path('story/<slug:slug>/', VideoPlaybackView.as_view(), name='video_playback'),
+
 
 ]

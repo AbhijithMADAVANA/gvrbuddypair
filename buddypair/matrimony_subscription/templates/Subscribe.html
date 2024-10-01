@@ -1,15 +1,13 @@
-{% extends "base_files/base.html" %} 
-{% load custom_tags %} 
+{% extends "base_files/base.html" %}
+{% load static %}
+{% load custom_tags %}
 
-{% block meta %}{%endblock meta %} 
+{% block meta %}{% endblock meta %}
 
 {% block title %}Subscription{% endblock title %}
 
-{% block link %}{%endblock link %} 
-
- {% block style %}
+{% block style %}
 <style>
-  /* Custom styles for the messaging interface */
   .nav-right {
     flex-grow: 1;
     display: flex;
@@ -21,9 +19,9 @@
     color: white;
     padding-right: 8px;
   }
- 
+
   .menu-icon {
-    position: sticky; /* Keeps the menu-icon fixed within its container */
+    position: sticky;
     top: 0;
     background-color: #343a40;
     z-index: 10;
@@ -38,17 +36,12 @@
     color: white;
   }
 
-  /* Container for chat users */
   .chat_userview {
-    height: calc(
-      100vh - 80px
-    ); /* Adjust based on the height of the .menu-icon and any other fixed elements */
-    overflow-y: auto; /* Enable vertical scrolling */
-    /* background-color: #343a40; */
+    height: calc(100vh - 80px);
+    overflow-y: auto;
     padding: 10px;
   }
 
-  /* Ensure the view_user div elements do not overflow */
   .view_user {
     display: flex;
     align-items: center;
@@ -57,7 +50,6 @@
     border-color: darkgray;
   }
 
-  /* Ensure the image in view_user scales properly */
   .view_user_img img {
     width: 50px;
     height: 50px;
@@ -69,12 +61,8 @@
     color: white;
   }
 
-  .col-10.col-md-11 {
-    padding-right: 0;
-  }
-
   .chat-section {
-    background-color:black;
+    background-color: black;
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -93,13 +81,14 @@
     align-items: center;
     margin-left: 155px;
   }
-  #sub{
+
+  #sub {
     color: white;
-    font-size:x-large;
+    font-size: x-large;
   }
 
-  #btn1{
-    background-color:rgb(61, 61, 61);
+  #btn1 {
+    background-color: rgb(61, 61, 61);
     color: white;
     border-radius: 10px;
   }
@@ -114,19 +103,10 @@
       align-items: baseline;
       background-color: black;
     }
-    .chat-section {
-      background-color: #343a40;
-      display: flex;
-      flex-direction: row;
-      position: relative;
-    }
 
-    /* Container for chat users */
     .chat_userview {
-      height: calc(
-        100vh - 80px
-      ); /* Adjust based on the height of the .menu-icon and any other fixed elements */
-      overflow-y: auto; /* Enable vertical scrolling */
+      height: calc(100vh - 80px);
+      overflow-y: auto;
       background-color: black;
       padding: 15px;
       border-top-right-radius: 45px;
@@ -134,15 +114,6 @@
       margin-top: 30px;
     }
 
-    .view_user {
-      display: flex;
-      align-items: center;
-      padding: 10px 0;
-      border-top: inset;
-      border-color: darkgray;
-    }
-
-    /* Ensure the image in view_user scales properly */
     .view_user_img img {
       width: 50px;
       height: 50px;
@@ -158,21 +129,21 @@
       margin-left: 70px;
       color: white;
     }
+
     .inner {
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-        padding-left:0;
-        width: 100%;
-        align-items: center;
-        margin-left:0;
-      }
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      padding-left: 0;
+      width: 100%;
+      align-items: center;
+      margin-left: 0;
+    }
   }
-
 </style>
-{% endblock style %} 
-{% block header %}
+{% endblock style %}
 
+{% block header %}
 <div class="container-fluid">
   <div class="row" style="height:90px;background-color:rgb(80, 1, 80);">
     <div class="col-md-12">
@@ -189,150 +160,90 @@
     </div>
   </div>
 </div>
-{% endblock header %} {% block content %}
+{% endblock header %}
+
+{% block content %}
 <div class="container-fluid" style="background-color:rgb(80, 1, 80)">
   <div class="row chat-section" style="padding-top:10px;border-radius:20px;">
-    <!-- Chat User View -->
     <div class="col-md-6 chat_userview">
-        
       <div class="inner">
         <h1 style="font-weight: bold; color: rgb(248, 247, 247)">
-          Choose Your plan
+          Choose Your Plan
         </h1>
-        <!-- <span style="color: rgb(248, 247, 247); font-size: xx-large"
-        ><b>$79</b>/-month</span -->
-        <!-- > -->
         {% for details in subscription_details %}
         <div class="col-md-12" style="margin-top: 3%">
-          <input type="checkbox" name="checkboxGroup" id="checkbox_{{ forloop.counter }}">
-          <input type="hidden" name="plan_type" id="type_{{ forloop.counter }}" value="{{ details.plan_type }}">
+          <input type="radio" name="plan_type" id="radio_{{ forloop.counter }}" value="{{ details.plan_type }}">
           <span style="color: white; font-size: smaller">
             <i class="fa-solid fa-circle-check" style="color: white"></i>
             {{ details.plan_type }}
           </span>
           <p style="color: white; padding-left: 10%; font-size: small; margin-top: 1%; margin-right: 9%; margin-left: 40px; padding-top: 2%;">
-            {% for info in details.sub_info.all %}
-              {{ info.info }}<br>
-            {% endfor %}
+            {{ details.info }}
           </p>
           <hr style="color: aliceblue" />
         </div>
-        {% endfor %} 
-        <input type="hidden" name="plan_type" id="type2">
-
-
-          <div
-            class="col-md-12"
-            style="display: flex; justify-content: center; margin-top: 0%"
-          >
-            <a href="#" class="btn text-center" id="btn1"
-              >Subscribe</a
-            >
-          </div>
-        </div> 
-
+        {% endfor %}
+        
+        <div class="col-md-12" style="display: flex; justify-content: center; margin-top: 0%">
+          <a href="#" class="btn text-center" id="btn1">Subscribe</a>
+        </div>
       </div>
-      
     </div>
   </div>
 </div>
-{% endblock content %} 
-{% block footer %}{% endblock footer %} 
-{% block scripts%}
+{% endblock content %}
+
+{% block scripts %}
 <script>
-      // Select all checkboxes with the name 'checkboxGroup'
-  const checkboxes = document.querySelectorAll('input[name="checkboxGroup"]');
-
-  // Add event listeners to all checkboxes
-  checkboxes.forEach((checkbox, index) => {
-    checkbox.addEventListener('click', function () {
-      // Uncheck all checkboxes except the one that was clicked
-      let selected_plan = document.getElementById('type2');  // The hidden field where the selected plan will be stored
-
-      // Get the corresponding hidden input based on the checkbox index
-      let plan_data = document.getElementById('type_' + (index + 1));
-      
-      if (this.checked) {
-        selected_plan.value = plan_data.value;  // Set the value of the hidden input to type2
-        console.log("Selected Plan: ", selected_plan.value);
-      }
-
-      // Uncheck other checkboxes
-      checkboxes.forEach((cb, cbIndex) => {
-        if (cb !== this) {
-          cb.checked = false;  // Uncheck all other checkboxes
-          if (cbIndex !== index) {
-            // Clear the selected_plan value if it's a different checkbox
-            // selected_plan.value = ''; 
-          }
-        }
-      });
-    });
-  });
-
   // Get the button element by its ID
   const button = document.getElementById("btn1");
 
   // Add the click event listener to the button
   button.addEventListener("click", function(event) {
-      // Prevent the default behavior (e.g., if it's a form submission)
+      // Prevent the default behavior
       event.preventDefault();
-      let choosen_plan = document.getElementById('type2');
-      console.log(choosen_plan.value,"val")
 
-      // Display the SweetAlert2 confirmation dialog
-      Swal.fire({
+      // Get selected plan
+      const selectedPlan = document.querySelector('input[name="plan_type"]:checked');
+      
+      if (!selectedPlan) {
+        Swal.fire("Please select a plan!", { icon: "warning" });
+      } else {
+        // Confirm the subscription choice
+        Swal.fire({
           title: "Are you sure?",
-          text: "Once deleted, you will not be able to recover this imaginary file!",
+          text: "Confirm your subscription!",
           icon: "warning",
           showCancelButton: true,
-          confirmButtonText: "Yes, delete it!",
-          cancelButtonText: "No, keep it",
-          dangerMode: true,
-      }).then((result) => {
+          confirmButtonText: "Yes, subscribe!",
+          cancelButtonText: "No, cancel",
+        }).then((result) => {
           if (result.isConfirmed) {
-              if (!choosen_plan.value) {
-                  Swal.fire("Please Select a plan..!!", {
-                      icon: "warning",
-                  });
-              } else {
-                // Call the server-side function to proceed with the selected plan
-                console.log("Selected Plan: ", choosen_plan.value);
-                // You can now proceed with submitting the selected plan or making an AJAX request
-
-
-                $.ajax({
-                  url: "{% url 'matrimony_subscription:payment' %}?plan_type=" + choosen_plan.value,  // Pass dynamically chosen plan
-                  type: 'GET',
-                  success: function(response) {
-                      console.log(response);
-                      // You can now proceed with the response data
-                      // For example, you can redirect to a new page or display a success message
-                      window.location.href = response.redirect_url;
-
-                  },
-                  error: function(xhr, status, error) {
-                      swal.fire(
-                          'Error!',
-                          'There was an error processing the payment.',
-                          'error'
-                      );
-                  }
-              });
-
+            // Send the selected plan to the server
+            $.ajax({
+              url: "{% url 'matrimony_subscription:subscribe' %}",
+              type: 'POST',
+              data: {
+                'plan_type': selectedPlan.value,
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+              },
+              success: function(response) {
+                // Redirect to the payment page if successful
+                window.location.href = "{% url 'matrimony_subscription:payment' %}?plan_type=" + selectedPlan.value;
+              },
+              error: function(xhr, status, error) {
+                Swal.fire("Error!", "Something went wrong!", "error");
               }
-
-          } else {
-              Swal.fire("Your imaginary file is safe!");
+            });
           }
-      });
+        });
+      }
   });
 
-  {% if messages %}    
+  {% if messages %}
     {% for message in messages %}
-      Swal.fire("Alert..!", "{{ message}}", "{{message.tags}}");
+      Swal.fire("Alert!", "{{ message }}", "{{ message.tags }}");
     {% endfor %}
   {% endif %}
-
 </script>
 {% endblock scripts %}

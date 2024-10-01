@@ -5,3 +5,4 @@ from .models import *
 admin.site.register(Dating_InterestRequest)
 admin.site.register(Dating_Shortlist)
 admin.site.register(DatingProfileView)
+admin.site.register(ProfileViewCounter)

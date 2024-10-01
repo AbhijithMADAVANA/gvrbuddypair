@@ -6,6 +6,44 @@ from datetime import timedelta
 from django.utils.text import slugify
 
 
+from django.db import models
+
+class MatrimonySubscription(models.Model):
+    PLAN_CHOICES = [
+        ('daily', 'Daily'),
+        ('weekly', 'Weekly'),
+        ('monthly', 'Monthly'),
+        ('premium', 'Premium (Yearly)'),
+    ]
+
+    STATUS_CHOICES = [
+        ('active', 'Active'),
+        ('inactive', 'Inactive'),
+    ]
+
+    slug = models.SlugField(unique=True, blank=True, null=True)
+    plan_type = models.CharField(max_length=100, choices=PLAN_CHOICES)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    day_limit = models.IntegerField(default=1)  # Number of days for the plan
+    status = models.CharField(max_length=100, choices=STATUS_CHOICES, default='active')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    info = models.TextField(blank=True, null=True)  # Information about the plan
+
+    class Meta:
+        verbose_name = "MatrimonySubscription"
+        verbose_name_plural = "MatrimonySubscriptions"
+
+    def __str__(self):
+        return f"{self.plan_type} - {self.price}"
+
+    # Save slug automatically
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.plan_type)
+        super().save(*args, **kwargs)
+
+
 class Payment(models.Model):
     PAYMENT_TYPE = [
         ('upi', 'upi'),
@@ -15,7 +53,7 @@ class Payment(models.Model):
     ]
     user = models.ForeignKey(costume_user, on_delete=models.CASCADE, related_name="userpayment_details")
     slug_name = models.SlugField(unique=True, blank=True, null=True)  # New slug field
-    subscription_plan = models.ForeignKey(Subscription, related_name="sub_plan", on_delete=models.CASCADE)
+    subscription_plan = models.ForeignKey(MatrimonySubscription, related_name="sub_plan", on_delete=models.CASCADE)
     payment_type = models.CharField(choices=PAYMENT_TYPE, max_length=50)
     razorpay_order_id = models.CharField(max_length=100,null=True)
     razorpay_payment_id = models.CharField(max_length=100,null=True)
@@ -55,3 +93,4 @@ class Payment(models.Model):
 #     upi_id = models.CharField(max_length=50)
 #     upi_name = models.CharField(max_length=50)
 #     created_at = models.DateTimeField(auto_now_add=True)
+

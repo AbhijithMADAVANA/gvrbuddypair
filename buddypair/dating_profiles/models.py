@@ -48,3 +48,14 @@ class Friendship(models.Model):
 
     def __str__(self):
         return f"Friendship between {self.user1} and {self.user2}"
+
+
+from django.utils import timezone
+
+class ProfileViewCounter(models.Model):
+    viewer = models.ForeignKey(costume_user, on_delete=models.CASCADE, related_name='profile_views')
+    viewed_user = models.ForeignKey(costume_user, on_delete=models.CASCADE, related_name='viewed_profiles')
+    view_date = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return f"{self.viewer.username} viewed {self.viewed_user.username} on {self.view_date}"
