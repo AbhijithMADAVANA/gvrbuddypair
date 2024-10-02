@@ -87,8 +87,10 @@ from .models import ProfileViewCounter
 #             context['pictures'] = pictures
 #             context['show_subscription_modal'] = False  # Don't show the modal
 #         return context
-
 from dating_subscription.models import Payment  # Adjust the import path based on your project structure
+from django.views.generic import TemplateView
+from django.shortcuts import get_object_or_404
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 class UserProfileView(LoginRequiredMixin, TemplateView):
     template_name = 'dating_profiles/users_pr_view.html'
@@ -96,6 +98,7 @@ class UserProfileView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user_id = self.kwargs.get('user_id')
+        
         if user_id:
             user = get_object_or_404(costume_user, id=user_id)
             user_details = get_object_or_404(UserPersonalDetails, user=user)
@@ -106,12 +109,14 @@ class UserProfileView(LoginRequiredMixin, TemplateView):
             successful_payment = Payment.objects.filter(user=self.request.user, status='success').exists()
 
             if not successful_payment:
-                # Check if they have viewed more than 5 profiles in total (all time)
+                # Check if they have viewed more than 5 profiles in total
                 total_views = ProfileViewCounter.objects.filter(viewer=self.request.user).count()
 
-                if total_views >= 5 and self.request.user != user:
-                    # Redirect to the subscription modal if they've viewed 5 profiles in total
-                    context['show_subscription_modal'] = True  # Flag to show the modal
+                # Check if the current profile has already been viewed
+                already_viewed = ProfileViewCounter.objects.filter(viewer=self.request.user, viewed_user=user).exists()
+
+                if total_views >= 5 and not already_viewed and self.request.user != user:
+                    context['show_subscription_modal'] = True  # Show the modal if they reached limit
                     return context
 
             # Log the profile view if the viewer is not viewing their own profile
@@ -120,11 +125,13 @@ class UserProfileView(LoginRequiredMixin, TemplateView):
                 ProfileViewCounter.objects.create(viewer=self.request.user, viewed_user=user)
                 DatingProfileView.objects.get_or_create(viewer=self.request.user, viewed=user)
 
+            # Add user details to the context
             context['user'] = user
             context['user_details'] = user_details
             context['additional_details'] = additional_details
             context['pictures'] = pictures
-            context['show_subscription_modal'] = False  # Don't show the modal
+            context['show_subscription_modal'] = False  # Don't show the modal if the user is viewing their own profile
+            
         return context
 
 

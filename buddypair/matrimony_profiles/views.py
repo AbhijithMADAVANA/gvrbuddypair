@@ -61,11 +61,15 @@ class UserProfileView(LoginRequiredMixin, TemplateView):
             # Check if the logged-in user has a successful payment
             successful_payment = MatrimonyPayment.objects.filter(user=self.request.user, status='success').exists()
 
+            # If the user has not made a successful payment
             if not successful_payment:
                 # Check if they have viewed more than 5 profiles in total
                 total_views = MatrimonyProfileViewCounter.objects.filter(viewer=self.request.user).count()
 
-                if total_views >= 5 and self.request.user != user:
+                # Check if the current profile was already viewed by the user
+                already_viewed = MatrimonyProfileViewCounter.objects.filter(viewer=self.request.user, viewed_user=user).exists()
+
+                if total_views >= 5 and not already_viewed and self.request.user != user:
                     context['show_subscription_modal'] = True  # Show the modal if they reached limit
                     return context
 
