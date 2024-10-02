@@ -12,13 +12,13 @@ from U_auth.permissions import *
 
 
 class AdminHomeView(CheckSuperUserNotAuthendicated, TemplateView):
-    template_name = "admin_home.html"
+    template_name = "matrimony_admin/admin_home.html"
 
 def usr_mng(request):
     return render(request,"user_manage.html")
 
 class AdminLoginView(CheckSuperUserAuthendicated ,FormView):
-    template_name = 'admin_login.html'
+    template_name = 'matrimony_admin/admin_login.html'
     form_class = AdminLoginForm
     success_url = reverse_lazy('custom_admin:admin_home')
 
@@ -40,11 +40,11 @@ class AdminLogoutView(CheckSuperUserNotAuthendicated ,TemplateView):
         return redirect('custom_admin:admin_login')
 
 class FinancialManagement(TemplateView):
-    template_name = "financialmanagement.html"
+    template_name = "matrimony_admin/financialmanagement.html"
 
 
 class NotifcationManagement(TemplateView):
-    template_name = "notification_management.html"
+    template_name = "matrimony_admin/notification_management.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -58,7 +58,7 @@ class NotifcationManagement(TemplateView):
 
 
 class admin_profile(CheckSuperUserNotAuthendicated,FormView):
-    template_name = "admin_profile.html"
+    template_name = "matrimony_admin/admin_profile.html"
     form_class = AdminProfileForm
 
     def get_context_data(self, **kwargs):

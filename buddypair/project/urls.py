@@ -34,6 +34,7 @@ urlpatterns = [
     path('dating_home/', include('dating_home.urls')),  # Add a slash after 'dating_home'
     path('dating_rightmenubar/',include('dating_rightmenubar.urls')),
     path('dating_profiles/',include('dating_profiles.urls')),
+    # path('dtsubscription/', include("dating_subscription.urls")),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

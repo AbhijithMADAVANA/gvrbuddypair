@@ -221,7 +221,7 @@ from http import HTTPStatus
 #         return JsonResponse(context)
 
 class PaymentView(RedirectNotAuthenticatedUserMixin, FormView):
-    template_name = 'Addcard.html'
+    template_name = 'matrimony_subscription/Addcard.html'
     form_class = PaymentForm
     success_url = reverse_lazy('payment-success')
 
@@ -278,7 +278,7 @@ class PaymentView(RedirectNotAuthenticatedUserMixin, FormView):
 
 
 class PaymentCallbackView(RedirectNotAuthenticatedUserMixin, TemplateView):
-    template_name = 'Addcard.html'
+    template_name = 'matrimony_subscription/Addcard.html'
 
     def post(self, request, *args, **kwargs):
         client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
@@ -319,7 +319,7 @@ from weasyprint import HTML
 import tempfile
 
 class PaymentDetails(RedirectNotAuthenticatedUserMixin, TemplateView):
-    template_name = 'payment_details.html'
+    template_name = 'matrimony_subscription/payment_details.html'
 
     def get_context_data(self, **kwargs) -> dict:
         context = super().get_context_data(**kwargs) 
@@ -336,7 +336,7 @@ class PaymentDetails(RedirectNotAuthenticatedUserMixin, TemplateView):
             payment_details = get_object_or_404(Payment, id=pay_id, user=request.user)
 
             # Render the HTML template
-            html_string = render_to_string('invoice_template.html', {'payment_details': payment_details})
+            html_string = render_to_string('matrimony_subscription/invoice_template.html', {'payment_details': payment_details})
 
             # Create a temporary file to store the PDF
             with tempfile.NamedTemporaryFile(delete=True) as output_file:
@@ -370,7 +370,7 @@ class PaymentDetails(RedirectNotAuthenticatedUserMixin, TemplateView):
 #         return super().get(request, *args, **kwargs)
 
 class SubscriptionView(TemplateView):
-    template_name = 'Subscribe.html'
+    template_name = 'matrimony_subscription/Subscribe.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -397,11 +397,11 @@ class SubscriptionView(TemplateView):
 
     
 class AddPaymentView(TemplateView):
-    template_name='AddPayment.html'
+    template_name='matrimony_subscription/AddPayment.html'
 
 
 class Invoice(TemplateView):
-    template_name = 'invoice_template.html'
+    template_name = 'matrimony_subscription/invoice_template.html'
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)

@@ -51,7 +51,7 @@ from django.urls import reverse
 
 class SignupView(RedirectAuthenticatedUserMixin, FormView):
     
-    template_name = 'auth/auth.html'  # The template to render
+    template_name = 'u_auth/auth/auth.html'  # The template to render
     form_class = CreateUser
     user_email = None
 
@@ -195,7 +195,7 @@ class SignupView(RedirectAuthenticatedUserMixin, FormView):
 
 # class SignupView(RedirectAuthenticatedUserMixin, FormView):
     
-#     template_name = 'auth/auth.html'  # The template to render
+#     template_name = 'u_auth/auth/auth.html'  # The template to render
 #     form_class = CreateUser
 #     user_email = None
 
@@ -343,7 +343,7 @@ class SignupView(RedirectAuthenticatedUserMixin, FormView):
 # # code need to change remember
 # class CheckOTPView(FormView):
 #     purpose_1 : str = ''
-#     template_name = 'auth/otp_input.html'  # The template to render
+#     template_name = 'u_auth/auth/otp_input.html'  # The template to render
 #     form_class = GenerateOTP
 
 
@@ -426,7 +426,7 @@ from django.http import HttpRequest, HttpResponse
 
 class CheckOTPView(FormView):
     purpose_1: str = ''
-    template_name = 'auth/otp_input.html'
+    template_name = 'u_auth/auth/otp_input.html'
     form_class = GenerateOTP
 
     def get_url(self, purpose):
@@ -484,7 +484,7 @@ class CheckOTPView(FormView):
 
 
 # class ResendOTPView(FormView):
-#     template_name = 'auth/otp_input.html'
+#     template_name = 'u_auth/auth/otp_input.html'
 #     # success_url = reverse_lazy('check_otp')  # URL to redirect to after successful OTP generation
 
 #     # Define a dummy form class if your view requires a form but you don't need any input
@@ -534,7 +534,7 @@ from django.views import View
 from django.shortcuts import redirect
 
 class ResendOTPView(View):
-    template_name = 'auth/otp_input.html'
+    template_name = 'u_auth/auth/otp_input.html'
 
     def get_context_data(self, **kwargs):
         context = {}
@@ -576,7 +576,7 @@ class ResendOTPView(View):
 
 # class LoginView(RedirectAuthenticatedUserMixin, FormView):
 
-#     template_name = 'auth/auth.html'
+#     template_name = 'u_auth/auth/auth.html'
 #     form_class = LoginForm
 #     success_url = reverse_lazy('home')
 #     user_email = None
@@ -647,7 +647,7 @@ class ResendOTPView(View):
     
 
 class LoginView(RedirectAuthenticatedUserMixin, FormView):
-    template_name = 'auth/auth.html'
+    template_name = 'u_auth/auth/auth.html'
     form_class = LoginForm
     success_url = reverse_lazy('home')
     user_email = None
@@ -748,7 +748,7 @@ class UserLogout(LoginRequiredMixin,View):
 
     
 # class ResetPassword(RedirectAuthenticatedUserMixin, FormView):
-#     template_name = 'auth/auth.html'
+#     template_name = 'u_auth/auth/auth.html'
 #     form_class = ResetPasswordForm
 #     items = ['email', 'phone']
 
@@ -786,7 +786,7 @@ class UserLogout(LoginRequiredMixin,View):
 
 
 class ResetPassword(RedirectAuthenticatedUserMixin, FormView):
-    template_name = 'auth/auth.html'
+    template_name = 'u_auth/auth/auth.html'
     form_class = ResetPasswordForm
     items = ['email', 'phone']
 
@@ -848,7 +848,7 @@ class ResetPassword(RedirectAuthenticatedUserMixin, FormView):
 
 class ResetPassword_2(FormView):
 
-    template_name = 'auth/get_pass.html'
+    template_name = 'u_auth/auth/get_pass.html'
     form_class = ResetPasswordForm_2
     # success_url = reverse('auth_page')
 
@@ -889,7 +889,7 @@ class ResetPassword_2(FormView):
 
 
 class UserPersonalDetailsView(FormView):
-    template_name = 'auth/auth.html'
+    template_name = 'u_auth/auth/auth.html'
     form_class = UserPersonalDetailsForm
 
     def get_context_data(self, **kwargs: dict) -> dict[str, Any]:
@@ -940,7 +940,7 @@ class UserPersonalDetailsView(FormView):
     
 
 # class JobDetailsView(FormView):
-#     template_name = 'auth/auth.html'
+#     template_name = 'u_auth/auth/auth.html'
 #     form_class = JobDetailsForm    
 
 #     def get_form_kwargs(self):
@@ -976,7 +976,7 @@ from django.shortcuts import get_object_or_404
 from django.db import IntegrityError
 
 class JobDetailsView(FormView):
-    template_name = 'auth/auth.html'
+    template_name = 'u_auth/auth/auth.html'
     form_class = JobDetailsForm    
 
     def get_form_kwargs(self):
@@ -1015,7 +1015,7 @@ from .forms import RelationShipGoalForm
 from django.contrib import messages
 
 class RelationShipGoalView(FormView):
-    template_name = 'auth/auth.html'
+    template_name = 'u_auth/auth/auth.html'
     form_class = RelationShipGoalForm
 
     def get_form_kwargs(self):
@@ -1094,7 +1094,7 @@ def UserType(request):
 
 
 class AdditionalDetailsView(FormView):
-    template_name = 'auth/auth.html'
+    template_name = 'u_auth/auth/auth.html'
     form_class = AdditionalDetailsForm
 
     def get_context_data(self, **kwargs: dict) -> dict:
@@ -1145,7 +1145,7 @@ class AdditionalDetailsView(FormView):
 
 
 # class AdditionalDetailsView(FormView):
-#     template_name = 'auth/auth.html'
+#     template_name = 'u_auth/auth/auth.html'
 #     form_class = AdditionalDetailsForm
 
 #     def get_context_data(self, **kwargs: dict) -> dict:
@@ -1192,7 +1192,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 class UserInterestView(LoginRequiredMixin, UpdateView):
     model = UserInterest
     form_class = UserInterestForm
-    template_name = 'auth/interest_entry.html'
+    template_name = 'u_auth/auth/interest_entry.html'
 
     def get_object(self):
         # Get or create a UserInterest object for the current user
@@ -1211,7 +1211,7 @@ class UserInterestView(LoginRequiredMixin, UpdateView):
 
 
 # class AdditionalDetailsView(FormView):
-#     template_name = 'auth/auth.html'
+#     template_name = 'u_auth/auth/auth.html'
 #     form_class = AdditionalDetailsForm
 
 #     def get_context_data(self, **kwargs: dict) -> dict[str, Any]:
@@ -1257,7 +1257,7 @@ from .models import UserPersonalDetails, Pictures  # Import your models
 
 
 class UserProfile(RedirectNotAuthenticatedUserMixin, TemplateView):
-    template_name = 'User_profile_templates/profile_view.html'
+    template_name = 'u_auth/User_profile_templates/profile_view.html'
 
     def get(self, request: HttpRequest, *args: str, **kwargs: dict) -> HttpResponse:
         # Fetch user details and extra photos
@@ -1273,7 +1273,7 @@ class UserProfile(RedirectNotAuthenticatedUserMixin, TemplateView):
 
     
 class ProfileEdit(RedirectNotAuthenticatedUserMixin, TemplateView):
-    template_name = 'User_profile_templates/profile_edit.html'
+    template_name = 'u_auth/User_profile_templates/profile_edit.html'
 
     def get(self, request: HttpRequest, *args: str, **kwargs: dict) -> HttpResponse:
         # Fetch user details and extra photos
@@ -1381,7 +1381,7 @@ class RemoveFiles(RedirectNotAuthenticatedUserMixin, View):
         return redirect('u_auth:profile_edit')
 
 class ForgotPassword(RedirectNotAuthenticatedUserMixin, FormView):
-    template_name = 'User_profile_templates/change_password.html'
+    template_name = 'u_auth/User_profile_templates/change_password.html'
     form_class = ForgotPasswordForm
 
     def form_valid(self, form):
@@ -1408,7 +1408,7 @@ class ForgotPassword(RedirectNotAuthenticatedUserMixin, FormView):
 
 
 class UserSetting(RedirectNotAuthenticatedUserMixin, TemplateView):
-    template_name = 'User_profile_templates/user_setting.html'
+    template_name = 'u_auth/User_profile_templates/user_setting.html'
 
     def get_context_data(self, **kwargs: dict) -> dict[str, Any]:
         context =  super().get_context_data(**kwargs)
@@ -1418,7 +1418,7 @@ class UserSetting(RedirectNotAuthenticatedUserMixin, TemplateView):
 
 class UserPrivacySetting(RedirectNotAuthenticatedUserMixin, TemplateView):
 
-    template_name = 'User_profile_templates/privacy_setting.html'
+    template_name = 'u_auth/User_profile_templates/privacy_setting.html'
 
 
     def get_context_data(self, **kwargs: dict) -> dict[str, Any]:
@@ -1470,7 +1470,7 @@ class UserPrivacySetting(RedirectNotAuthenticatedUserMixin, TemplateView):
                 session.delete()
 
 class UserPartnerPreferenceView_2(RedirectNotAuthenticatedUserMixin, FormView):
-    template_name = 'User_profile_templates/privacy_setting_2.html'
+    template_name = 'u_auth/User_profile_templates/privacy_setting_2.html'
     form_class = UserPartnerPreferenceForm
 
     def get_context_data(self, **kwargs: dict) -> dict[str, Any]:
@@ -1522,7 +1522,7 @@ class UserPartnerPreferenceView_2(RedirectNotAuthenticatedUserMixin, FormView):
 
 
 class DatingUserProfile(RedirectNotAuthenticatedUserMixin,TemplateView):
-    template_name = 'User_profile_templates/dating_profile_view.html'
+    template_name = 'u_auth/User_profile_templates/dating_profile_view.html'
 
     
     def get(self, request: HttpRequest, *args: str, **kwargs: dict) -> HttpResponse:
@@ -1538,7 +1538,7 @@ class DatingUserProfile(RedirectNotAuthenticatedUserMixin,TemplateView):
 
     
 class DatingProfileEdit(RedirectNotAuthenticatedUserMixin, TemplateView):
-    template_name = 'User_profile_templates/dating_profile_edit.html'
+    template_name = 'u_auth/User_profile_templates/dating_profile_edit.html'
 
     def get(self, request: HttpRequest, *args: str, **kwargs: dict) -> HttpResponse:
         # Fetch user details and extra photos
@@ -1646,7 +1646,7 @@ class DatingRemoveFiles(RedirectNotAuthenticatedUserMixin, View):
         return redirect('u_auth:profile_edit')
 
 class DatingForgotPassword(RedirectNotAuthenticatedUserMixin, FormView):
-    template_name = 'User_profile_templates/dating_change_password.html'
+    template_name = 'u_auth/User_profile_templates/dating_change_password.html'
     form_class = ForgotPasswordForm
 
     def form_valid(self, form):
@@ -1673,7 +1673,7 @@ class DatingForgotPassword(RedirectNotAuthenticatedUserMixin, FormView):
 
 
 class DatingUserSetting(RedirectNotAuthenticatedUserMixin, TemplateView):
-    template_name = 'User_profile_templates/dating_user_setting.html'
+    template_name = 'u_auth/User_profile_templates/dating_user_setting.html'
 
     def get_context_data(self, **kwargs: dict) -> dict[str, Any]:
         context =  super().get_context_data(**kwargs)
@@ -1683,7 +1683,7 @@ class DatingUserSetting(RedirectNotAuthenticatedUserMixin, TemplateView):
 
 class DatingUserPrivacySetting(RedirectNotAuthenticatedUserMixin, TemplateView):
 
-    template_name = 'User_profile_templates/dating_privacy_setting.html'
+    template_name = 'u_auth/User_profile_templates/dating_privacy_setting.html'
 
 
     def get_context_data(self, **kwargs: dict) -> dict[str, Any]:
@@ -1735,7 +1735,7 @@ class DatingUserPrivacySetting(RedirectNotAuthenticatedUserMixin, TemplateView):
                 session.delete()
 
 class DatingUserPartnerPreferenceView_2(RedirectNotAuthenticatedUserMixin, FormView):
-    template_name = 'User_profile_templates/dating_privacy_setting_2.html'
+    template_name = 'u_auth/User_profile_templates/dating_privacy_setting_2.html'
     form_class = UserPartnerPreferenceForm
 
     def get_context_data(self, **kwargs: dict) -> dict[str, Any]:

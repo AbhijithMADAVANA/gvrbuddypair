@@ -23,7 +23,7 @@ from django.urls import reverse, reverse_lazy
 # Create your views here.
 
 class UserProfileView(TemplateView):
-    template_name = 'users_pr_view.html'
+    template_name = 'matrimony_profiles/users_pr_view.html'
 
     def get_context_data(self, **kwargs) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
@@ -101,7 +101,7 @@ class SendRequestView(LoginRequiredMixin, View):
         
 class SentedRequestView(RedirectNotAuthenticatedUserMixin,ListView):
     model = InterestRequest
-    template_name = 'send.html'
+    template_name = 'matrimony_profiles/send.html'
     context_object_name = 'sent_requests'
     ordering = ["-created_at"]
 
@@ -118,7 +118,7 @@ class SentedRequestView(RedirectNotAuthenticatedUserMixin,ListView):
     
 class ReceivedRequestView(RedirectNotAuthenticatedUserMixin,ListView):
     model = InterestRequest
-    template_name = 'received.html'
+    template_name = 'matrimony_profiles/received.html'
     context_object_name = 'received_requests'
     
     def get_queryset(self):
@@ -178,7 +178,7 @@ class HandleRequestView(LoginRequiredMixin, View):
 
 class AcceptedRequestView(RedirectNotAuthenticatedUserMixin, ListView):
     model = InterestRequest
-    template_name = 'accept.html'
+    template_name = 'matrimony_profiles/accept.html'
     context_object_name = 'accepted_requests'
     ordering = ["-created_at"]
 
@@ -202,7 +202,7 @@ class AcceptedRequestView(RedirectNotAuthenticatedUserMixin, ListView):
 
 class RejectedRequestView(RedirectNotAuthenticatedUserMixin, ListView):
     model = InterestRequest
-    template_name = 'reject.html'
+    template_name = 'matrimony_profiles/reject.html'
     context_object_name = 'rejected_requests'
     ordering = ["-created_at"]
 
@@ -236,7 +236,7 @@ class DeleteRequestView(RedirectNotAuthenticatedUserMixin,View):
 
 class ShortlistView(LoginRequiredMixin, ListView):
     model = Shortlist
-    template_name = 'shortlist.html'
+    template_name = 'matrimony_profiles/shortlist.html'
     context_object_name = 'shortlist'
     ordering = ["-created at"]
 
@@ -280,7 +280,7 @@ class RemoveFromShortlistView(LoginRequiredMixin, View):
 
 class ShortlistByView(LoginRequiredMixin, ListView):
     model = Shortlist
-    template_name = 'shortlisted_by.html'
+    template_name = 'matrimony_profiles/shortlisted_by.html'
     context_object_name = 'shortlist_by'
     ordering = ["-created at"]
 

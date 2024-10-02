@@ -23,7 +23,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import DatingProfileView
 
 # class UserProfileView(LoginRequiredMixin, TemplateView):
-#     template_name = 'dt/users_pr_view.html'
+#     template_name = 'dating_profiles/users_pr_view.html'
 
 #     def get_context_data(self, **kwargs):
 #         context = super().get_context_data(**kwargs)
@@ -50,7 +50,7 @@ from datetime import timedelta
 from .models import ProfileViewCounter
 
 # class UserProfileView(LoginRequiredMixin, TemplateView):
-#     template_name = 'dt/users_pr_view.html'
+#     template_name = 'dating_profiles/users_pr_view.html'
 
 #     def get_context_data(self, **kwargs):
 #         context = super().get_context_data(**kwargs)
@@ -91,7 +91,7 @@ from .models import ProfileViewCounter
 from matrimony_subscription.models import Payment  # Adjust the import path based on your project structure
 
 class UserProfileView(LoginRequiredMixin, TemplateView):
-    template_name = 'dt/users_pr_view.html'
+    template_name = 'dating_profiles/users_pr_view.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -132,7 +132,7 @@ from django.views.generic import ListView
 
 class ProfileViewersListView(LoginRequiredMixin, ListView):
     model = DatingProfileView
-    template_name = 'dt/profile_viewer.html'
+    template_name = 'dating_profiles/profile_viewer.html'
     context_object_name = 'viewers'
 
     def get_queryset(self):
@@ -188,7 +188,7 @@ class SendRequestView(RedirectNotAuthenticatedUserMixin, View):
 
 class SentedRequestView(RedirectNotAuthenticatedUserMixin,ListView):
     model = Dating_InterestRequest
-    template_name = 'dt/send.html'
+    template_name = 'dating_profiles/send.html'
     context_object_name = 'sent_requests'
     ordering = ["-created_at"]
 
@@ -205,7 +205,7 @@ class SentedRequestView(RedirectNotAuthenticatedUserMixin,ListView):
     
 class ReceivedRequestView(RedirectNotAuthenticatedUserMixin,ListView):
     model = Dating_InterestRequest
-    template_name = 'dt/received.html'
+    template_name = 'dating_profiles/received.html'
     context_object_name = 'received_requests'
     
     def get_queryset(self):
@@ -243,7 +243,7 @@ class HandleRequestView(RedirectNotAuthenticatedUserMixin, View):
 
 class AcceptedRequestView(RedirectNotAuthenticatedUserMixin, ListView):
     model = Dating_InterestRequest
-    template_name = 'dt/accept.html'  # Ensure dating-specific template
+    template_name = 'dating_profiles/accept.html'  # Ensure dating-specific template
     context_object_name = 'accepted_requests'
     ordering = ["-created_at"]
 
@@ -267,7 +267,7 @@ class AcceptedRequestView(RedirectNotAuthenticatedUserMixin, ListView):
 
 class RejectedRequestView(RedirectNotAuthenticatedUserMixin, ListView):
     model = Dating_InterestRequest
-    template_name = 'dt/reject.html'  # Ensure dating-specific template
+    template_name = 'dating_profiles/reject.html'  # Ensure dating-specific template
     context_object_name = 'rejected_requests'
     ordering = ["-created_at"]
 
@@ -302,7 +302,7 @@ class DeleteRequestView(RedirectNotAuthenticatedUserMixin, View):
 
 class ShortlistView(LoginRequiredMixin, ListView):
     model = Dating_Shortlist
-    template_name = 'dt/shortlist.html'  # Ensure dating-specific template
+    template_name = 'dating_profiles/shortlist.html'  # Ensure dating-specific template
     context_object_name = 'shortlist'
     ordering = ["-created_at"]
 
@@ -339,7 +339,7 @@ class RemoveFromShortlistView(LoginRequiredMixin, View):
 
 class ShortlistByView(LoginRequiredMixin, ListView):
     model = Dating_Shortlist
-    template_name = 'dt/shortlisted_by.html'  # Ensure dating-specific template
+    template_name = 'dating_profiles/shortlisted_by.html'  # Ensure dating-specific template
     context_object_name = 'shortlist_by'
     ordering = ["-created_at"]
 

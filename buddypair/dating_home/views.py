@@ -96,7 +96,7 @@ from django.shortcuts import get_object_or_404
 
 class VideoPlaybackView(LoginRequiredMixin, DetailView):
     model = UserPersonalDetails
-    template_name = 'video_playback.html'  # Create this template
+    template_name = 'dating_home/video_playback.html'  # Create this template
     context_object_name = 'user_details'
 
     def get_context_data(self, **kwargs):
@@ -115,7 +115,7 @@ from django.db.models import Q
 
 class HomeView(RedirectNotAuthenticatedUserMixin, SuccessMessageMixin, ListView):
     model = UserPersonalDetails
-    template_name = 'home.html'
+    template_name = 'dating_home/home.html'
     context_object_name = 'users'
     success_message = "This is a success message."
 
@@ -258,7 +258,7 @@ class UserDashboardView(TemplateView):
     
 class EntryView(TemplateView):
     # template_name="shared/sidebars.html"
-    template_name = "entry.html"
+    template_name = "dating_home/entry.html"
     success_url = reverse_lazy('userhome:home1')
     def post(self, request, *args, **kwargs):
         print(request.POST)

@@ -15,7 +15,7 @@ from .find_distance import find_distance,sort_users_by_distance
 
 # class Home(RedirectNotAuthenticatedUserMixin,SuccessMessageMixin, ListView):
 #     model = UserPersonalDetails
-#     template_name = 'Home/home.html'
+#     template_name = 'matrimony_home/home.html'
 #     context_object_name = 'users'
 #     success_message = "This is a success message."
 
@@ -59,7 +59,7 @@ from .find_distance import find_distance,sort_users_by_distance
 
 class Home(RedirectNotAuthenticatedUserMixin, SuccessMessageMixin, ListView):
     model = UserPersonalDetails
-    template_name = 'Home/home.html'
+    template_name = 'matrimony_home/home.html'
     context_object_name = 'users'
     success_message = "This is a success message."
 
@@ -113,7 +113,7 @@ class Home(RedirectNotAuthenticatedUserMixin, SuccessMessageMixin, ListView):
 
 # class Home(RedirectNotAuthenticatedUserMixin, SuccessMessageMixin, ListView):
 #     model = UserPersonalDetails
-#     template_name = 'Home/home.html'
+#     template_name = 'matrimony_home/home.html'
 #     context_object_name = 'users'
 #     success_message = "This is a success message."
 
@@ -164,7 +164,7 @@ class Home(RedirectNotAuthenticatedUserMixin, SuccessMessageMixin, ListView):
 
 # class Home(RedirectNotAuthenticatedUserMixin, SuccessMessageMixin, ListView):
 #     model = UserPersonalDetails
-#     template_name = 'Home/home.html'
+#     template_name = 'matrimony_home/home.html'
 #     context_object_name = 'users'
 #     success_message = "This is a success message."
 
@@ -214,7 +214,7 @@ class Home(RedirectNotAuthenticatedUserMixin, SuccessMessageMixin, ListView):
 
 
 class Matches(LoginRequiredMixin, TemplateView):
-    template_name = 'Home/matches.html'
+    template_name = 'matrimony_home/matches.html'
     
     def dispatch(self, request, *args, **kwargs):
         user = self.request.user
@@ -406,20 +406,20 @@ class Matches(LoginRequiredMixin, TemplateView):
 
 #ignore
 class Qualification(TemplateView):
-    template_name='Home/qualification.html'
+    template_name='matrimony_home/qualification.html'
 
 class Loaction(TemplateView):
-    template_name='Home/loaction.html'
+    template_name='matrimony_home/loaction.html'
 
 
 class Designation(TemplateView):
-    template_name='Home/designation.html'
+    template_name='matrimony_home/designation.html'
 
 
 class FilterPrifles(TemplateView):
-    template_name='Home/filter.html'
+    template_name='matrimony_home/filter.html'
 
 # class error404(TemplateView):
-#     template_name='Home/error.html'    
+#     template_name='matrimony_home/error.html'    
 
     

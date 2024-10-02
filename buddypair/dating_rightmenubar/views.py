@@ -14,7 +14,7 @@ from django.contrib import messages
 
 # sent request.
 class SentRequestView(LoginRequiredMixin, View):
-    template_name = 'right_menu/sent_request.html'
+    template_name = 'dating_rightmenu/sent_request.html'
 
     def get(self, request, *args, **kwargs):
         # Get the list of costume_users to whom the logged-in costume_user has sent connection requests
@@ -33,7 +33,7 @@ class SentRequestView(LoginRequiredMixin, View):
 
 # accept request.
 class AcceptRequestView(LoginRequiredMixin, View):
-    template_name = 'right_menu/accept_request.html'  # Update with your correct template path
+    template_name = 'dating_rightmenu/accept_request.html'  # Update with your correct template path
 
     def get(self, request, *args, **kwargs):
         # Filter the connection requests where the logged-in costume_user is the sender and the receiver has accepted
@@ -52,7 +52,7 @@ class AcceptRequestView(LoginRequiredMixin, View):
 
 # reject request.
 class RejectRequestView(View):
-    template_name = 'right_menu/reject_request.html'  # Correct path to your template
+    template_name = 'dating_rightmenu/reject_request.html'  # Correct path to your template
 
     def get(self, request, *args, **kwargs):
         declined_requests = ConnectionRequest.objects.filter(
@@ -69,7 +69,7 @@ class RejectRequestView(View):
 
 # recived request.
 class ReceivedRequestView(View):
-    template_name = 'right_menu/recived_request.html'  # Path to your template
+    template_name = 'dating_rightmenu/recived_request.html'  # Path to your template
 
     def get(self, request, *args, **kwargs):
         # Filter connection requests where the logged-in costume_user is the receiver
@@ -87,12 +87,12 @@ class ReceivedRequestView(View):
 
 # contacted.
 class ContactedView(TemplateView):
-    template_name = 'right_menu/contacted.html'
+    template_name = 'dating_rightmenu/contacted.html'
 
 
 # viewed my profile.
 class ViewedProfileView(TemplateView):
-    template_name = 'right_menu/viewed_profile.html'
+    template_name = 'dating_rightmenu/viewed_profile.html'
 
 
 
@@ -144,7 +144,7 @@ class DeclineConnectionRequestView(View):
 # shortlisted page.
 class ShortListedView(LoginRequiredMixin, ListView):
     model = costume_user
-    template_name = 'right_menu/shortlist.html'
+    template_name = 'dating_rightmenu/shortlist.html'
     context_object_name = 'shortlisted_costume_users'
 
     def get_queryset(self):
@@ -171,7 +171,7 @@ class RemoveShortlistedcostume_userView(LoginRequiredMixin, View):
 
 # shortlisted by costume_users page.
 class ShortListedByView(LoginRequiredMixin, View):
-    template_name = 'right_menu/shortlisted_by.html'  # Make sure the template matches your template file name
+    template_name = 'dating_rightmenu/shortlisted_by.html'  # Make sure the template matches your template file name
 
     def get(self, request, *args, **kwargs):
         # Get all costume_users who have shortlisted the currently logged-in costume_user

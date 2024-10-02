@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'dating_home',
     'dating_profiles',
     'dating_rightmenubar',
+    # 'dating_subscription',
     'job',
 
     'allauth',
