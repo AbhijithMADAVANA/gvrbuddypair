@@ -1,0 +1,139 @@
+{% extends "base_files/base.html" %}
+
+{% load static %}
+
+{% block meta %}{% endblock meta %}
+
+{% block title %}Add Card{% endblock title %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/Addcard.css' %}">
+{% endblock style %}
+
+{% block content %}
+<div class="container-fluid" id="mp">
+  <div class="row">
+    <div class="col-md-6">
+      <nav class="navbar-custom">
+          <div class="nav-left">
+            <a href="{% url 'dating_subscription:subscribe' %}">
+              <i class='fas fa-angle-left' style='margin-top: 0%; margin-bottom: 10%; font-size: 20px; color: black;'></i>
+            </a>
+          </div>
+      </nav>
+    </div>      
+  </div>
+  
+  <h2 id="head">Add Amount</h2>
+  
+  <form id="payment-form" method="POST">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="planType" class="form-label">Plan</label>
+      <input type="text" class="form-control" id="planType" name='plan_type' readonly value='{{ plan }}' />
+  </div>
+  
+  <div class="mb-3">
+      <label for="amount" class="form-label">Amount</label>
+      <input type="number" name="amount" class="form-control" id="amount" readonly value='{{ amount }}' />
+  </div>
+  
+    <button type="submit" class="btn w-100 mt-5" id="bt">
+      Pay
+    </button>
+  </form>
+
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static" style="backdrop-filter: blur(10px);">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Payment Status</h5>
+        </div>
+        <div class="modal-body">
+          {% if exception %}
+            {{exception}}
+          {% else %}
+            {{status}}<br>
+            You can view your payment details by clicking "Go to payment page" or return to the previous page.
+          {% endif %}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Go to Home</button>
+          <a href="{% url 'dating_subscription:payment-details' %}" class="btn btn-primary">Go to Payment Page</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script>
+    function show_popup(){
+      var myModal = new bootstrap.Modal(document.getElementById('exampleModal'));
+      myModal.show();
+    }
+
+    document.querySelector("#payment-form").onsubmit = function (e) {
+  e.preventDefault();
+  
+  fetch("{% url 'dating_subscription:payment' %}", {
+    method: "POST",
+    body: new FormData(this),
+  })
+  .then((res) => {
+    console.log("Raw response:", res);
+    if (!res.ok) {
+      throw new Error('Error initiating payment. Please try again.');
+    }
+    return res.json(); 
+  })
+  .then((data) => {
+    console.log(data, "payment data");
+
+    // Check if the necessary data is available
+    if (!data.razorpay_key_id || !data.razorpay_order_id) {
+      throw new Error('Invalid Razorpay order data.');
+    }
+
+    var options = {
+      key: data.razorpay_key_id,
+      amount: data.amount,
+      currency: "INR",
+      order_id: data.razorpay_order_id,
+      handler: function (response) {
+        console.log(response, "Razorpay response");
+
+        fetch("{% url 'dating_subscription:payment-callback' %}", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            "X-CSRFToken": "{{ csrf_token }}",
+          },
+          body: new URLSearchParams({
+            razorpay_payment_id: response.razorpay_payment_id,
+            razorpay_order_id: response.razorpay_order_id,
+            razorpay_signature: response.razorpay_signature,
+          }),
+        }).then((response) => {
+          show_popup();
+        }).catch((err) => {
+          console.error('Error in payment callback:', err);
+          alert('Payment verification failed.');
+        });
+      },
+      theme: {
+        color: "#3f0047"
+      }
+    };
+    
+    var rzp1 = new Razorpay(options);
+    rzp1.open();
+  })
+  .catch((err) => {
+    console.error('Error during payment:', err);
+    alert('Error initiating payment. Please try again.');
+  });
+};
+
+  </script>
+{% endblock content %}

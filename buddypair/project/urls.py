@@ -27,14 +27,14 @@ urlpatterns = [
     path('job/', include('job.urls')),  # This includes job.urls
     path('home/', include("matrimony_Home.urls")),
     path('profiles/', include("matrimony_profiles.urls")),
-    path('subscription/', include("matrimony_subscription.urls")),
+    path('subscription/', include("dating_subscription.urls")),
     path('U_messages/', include("matrimony_U_messages.urls")),
     path('admin/', include("matrimony_admin.urls")),
     path('accounts/', include('allauth.urls')),
     path('dating_home/', include('dating_home.urls')),  # Add a slash after 'dating_home'
     path('dating_rightmenubar/',include('dating_rightmenubar.urls')),
     path('dating_profiles/',include('dating_profiles.urls')),
-    # path('dtsubscription/', include("dating_subscription.urls")),
+    path('mtsubscription/', include("matrimony_subscriptions.urls")),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

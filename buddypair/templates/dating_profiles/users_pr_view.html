@@ -433,41 +433,80 @@
     </div>
     <!-- dt/users_pr_view.html -->
 
-{% if show_subscription_modal %}
-<!-- Subscription Modal -->
-<div class="modal" id="subscribeModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Subscription Required</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>You have reached your daily limit of 5 profile views. Please subscribe to view more profiles.</p>
-            </div>
-            <div class="modal-footer">
-                <a href="{% url 'matrimony_subscription:subscribe' %}" class="btn btn-primary">Go to Subscription Page</a>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+    <style>
+        /* Center the modal on the screen */
+        .modal {
+            display: flex;
+            align-items: center; /* Center vertically */
+            justify-content: center; /* Center horizontally */
+            min-height: 100vh; /* Full height of viewport */
+            backdrop-filter: blur(5px); /* Optional: Add a blur effect to the background */
+        }
+        
+        /* Modal body */
+        .modal-body {
+            text-align: center; /* Center text in modal body */
+        }
+        
+        /* Button styling */
+        .btn-violet {
+            background-color: violet; /* Set button background to violet */
+            color: white; /* Change text color to white for better contrast */
+            width: 40%; /* Make buttons full width for better usability */
+            margin: 5px 0; /* Space between buttons */
+        }
+        
+        /* Modal footer */
+        .modal-footer {
+            display: flex;
+            flex-direction: column; /* Stack buttons vertically */
+            align-items: center; /* Center buttons horizontally */
+        }
+        
+        /* Custom modal width */
+        .modal-dialog {
+            max-width: 400px; /* Set your desired width here */
+            width: 100%; /* Ensure it takes full width of its container */
+            margin: auto;
+        }
+        
+        /* Hide body content when modal is open */
+        body.modal-open {
+            overflow: hidden; /* Prevent scrolling */
+        }
+        
+        </style>
+        
+        {% if show_subscription_modal %}
+        <!-- Subscription Modal -->
+        <div class="modal" id="subscribeModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-body text-center">
+                        <h4>Upgrade to view profiles.</h4>
+                    </div>
+                    <div class="modal-footer d-flex flex-column align-items-center">
+                        <a href="{% url 'dating_subscription:subscribe' %}" class="btn btn-violet">Upgrade</a>
+                        <a href="{% url 'dating_home:home1' %}" class="btn btn-violet">Back to home</a>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
+        
+        <script>
+            // Show the modal if 'show_subscription_modal' is True
+            $(document).ready(function() {
+                $('#subscribeModal').modal('show');
+                $('body').addClass('modal-open'); // Add class to hide background content
+            });
+        
+            // Optional: Remove the class when the modal is hidden
+            $('#subscribeModal').on('hidden.bs.modal', function () {
+                $('body').removeClass('modal-open'); // Remove class to show background content again
+            });
+        </script>
+        {% endif %}
 
-<script>
-    // Show the modal if 'show_subscription_modal' is True
-    $(document).ready(function() {
-        $('#subscribeModal').modal('show');
-    });
-</script>
-{% endif %}
-
-<!-- Your existing profile view template -->
-
-
-
-    
 {% endblock %}
 
 

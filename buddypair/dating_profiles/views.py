@@ -88,7 +88,7 @@ from .models import ProfileViewCounter
 #             context['show_subscription_modal'] = False  # Don't show the modal
 #         return context
 
-from matrimony_subscription.models import Payment  # Adjust the import path based on your project structure
+from dating_subscription.models import Payment  # Adjust the import path based on your project structure
 
 class UserProfileView(LoginRequiredMixin, TemplateView):
     template_name = 'dating_profiles/users_pr_view.html'

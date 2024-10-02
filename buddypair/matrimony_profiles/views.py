@@ -20,25 +20,68 @@ from django.contrib import messages
 from django.urls import reverse, reverse_lazy
 
 
-# Create your views here.
 
-class UserProfileView(TemplateView):
+# class UserProfileView(TemplateView):
+#     template_name = 'matrimony_profiles/users_pr_view.html'
+
+#     def get_context_data(self, **kwargs) -> dict[str, Any]:
+#         context = super().get_context_data(**kwargs)
+#         user_id = self.kwargs.get('user_id', None)
+#         if user_id:
+#             user = costume_user.objects.get(id=user_id)
+#             user_details = UserPersonalDetails.objects.get(user=user) 
+#             additional_details = AdditionalDetails.objects.get(user=user)
+#             pictures = Pictures.objects.filter(user=user_details)
+#             context['user'] = user
+#             context['user_details'] = user_details
+#             context['additional_details'] = additional_details
+#             context['pictures'] = pictures
+#             context['user'] = user
+#             return context
+
+from .models import MatrimonyProfileViewCounter
+from matrimony_subscriptions.models import MatrimonyPayment
+from django.views.generic import TemplateView
+from django.shortcuts import get_object_or_404
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+class UserProfileView(LoginRequiredMixin, TemplateView):
     template_name = 'matrimony_profiles/users_pr_view.html'
 
-    def get_context_data(self, **kwargs) -> dict[str, Any]:
+    def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user_id = self.kwargs.get('user_id', None)
+        
         if user_id:
-            user = costume_user.objects.get(id=user_id)
-            user_details = UserPersonalDetails.objects.get(user=user) 
-            additional_details = AdditionalDetails.objects.get(user=user)
+            user = get_object_or_404(costume_user, id=user_id)
+            user_details = get_object_or_404(UserPersonalDetails, user=user)
+            additional_details = get_object_or_404(AdditionalDetails, user=user)
             pictures = Pictures.objects.filter(user=user_details)
+
+            # Check if the logged-in user has a successful payment
+            successful_payment = MatrimonyPayment.objects.filter(user=self.request.user, status='success').exists()
+
+            if not successful_payment:
+                # Check if they have viewed more than 5 profiles in total
+                total_views = MatrimonyProfileViewCounter.objects.filter(viewer=self.request.user).count()
+
+                if total_views >= 5 and self.request.user != user:
+                    context['show_subscription_modal'] = True  # Show the modal if they reached limit
+                    return context
+
+            # Log the profile view if the viewer is not viewing their own profile
+            if self.request.user != user:
+                # Create a new profile view record
+                MatrimonyProfileViewCounter.objects.create(viewer=self.request.user, viewed_user=user)
+
+            # Add user details to the context
             context['user'] = user
             context['user_details'] = user_details
             context['additional_details'] = additional_details
             context['pictures'] = pictures
-            context['user'] = user
-            return context
+            context['show_subscription_modal'] = False  # Don't show the modal if the user is viewing own profile
+            
+        return context
 
 
 # #Interest request View

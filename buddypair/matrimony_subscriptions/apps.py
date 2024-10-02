@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class SubscriptionConfig(AppConfig):
+class MatrimonySubscriptionsConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'matrimony_subscription'
+    name = 'matrimony_subscriptions'

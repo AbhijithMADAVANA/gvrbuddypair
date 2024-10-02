@@ -1,0 +1,249 @@
+{% extends "base_files/base.html" %}
+{% load static %}
+{% load custom_tags %}
+
+{% block meta %}{% endblock meta %}
+
+{% block title %}Subscription{% endblock title %}
+
+{% block style %}
+<style>
+  .nav-right {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .navbar-custom i {
+    color: white;
+    padding-right: 8px;
+  }
+
+  .menu-icon {
+    position: sticky;
+    top: 0;
+    background-color: #343a40;
+    z-index: 10;
+    padding: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .menu-icon h3 {
+    margin: 0;
+    color: white;
+  }
+
+  .chat_userview {
+    height: calc(100vh - 80px);
+    overflow-y: auto;
+    padding: 10px;
+  }
+
+  .view_user {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    border-top: inset;
+    border-color: darkgray;
+  }
+
+  .view_user_img img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+  }
+
+  .msg {
+    margin-left: 10px;
+    color: white;
+  }
+
+  .chat-section {
+    background-color: black;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .cross_icon {
+    margin-left: 620px;
+  }
+
+  .inner {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding-left: 59px;
+    width: 50%;
+    align-items: center;
+    margin-left: 155px;
+  }
+
+  #sub {
+    color: white;
+    font-size: x-large;
+  }
+
+  #btn1 {
+    background-color: rgb(61, 61, 61);
+    color: white;
+    border-radius: 10px;
+  }
+
+  @media (max-width: 576px) {
+    .profile-cards-container {
+      flex-direction: row;
+    }
+
+    .menu-icon {
+      flex-direction: row;
+      align-items: baseline;
+      background-color: black;
+    }
+
+    .chat_userview {
+      height: calc(100vh - 80px);
+      overflow-y: auto;
+      background-color: black;
+      padding: 15px;
+      border-top-right-radius: 45px;
+      border-top-left-radius: 45px;
+      margin-top: 30px;
+    }
+
+    .view_user_img img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+    }
+
+    .msg {
+      margin-left: 10px;
+      color: white;
+    }
+
+    .cross_icon {
+      margin-left: 70px;
+      color: white;
+    }
+
+    .inner {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      padding-left: 0;
+      width: 100%;
+      align-items: center;
+      margin-left: 0;
+    }
+  }
+</style>
+{% endblock style %}
+
+{% block header %}
+<div class="container-fluid">
+  <div class="row" style="height:90px;background-color:rgb(80, 1, 80);">
+    <div class="col-md-12">
+      <nav class="navbar-custom">
+        <div class="nav-left">
+          <a href="">
+            <i class="fas fa-angle-left" style="font-size:18px"></i>
+          </a>
+        </div>
+        <div class="nav-right">
+          <div id="sub">Subscribe</div>
+        </div>
+      </nav>
+    </div>
+  </div>
+</div>
+{% endblock header %}
+
+{% block content %}
+<div class="container-fluid" style="background-color:rgb(80, 1, 80)">
+  <div class="row chat-section" style="padding-top:10px;border-radius:20px;">
+    <div class="col-md-6 chat_userview">
+      <div class="inner">
+        <h1 style="font-weight: bold; color: rgb(248, 247, 247)">
+          Choose Your Plan
+        </h1>
+        {% for details in subscription_details %}
+        <div class="col-md-12" style="margin-top: 3%">
+          <input type="radio" name="plan_type" id="radio_{{ forloop.counter }}" value="{{ details.plan_type }}">
+          <span style="color: white; font-size: smaller">
+            <i class="fa-solid fa-circle-check" style="color: white"></i>
+            {{ details.plan_type }}
+          </span>
+          <p style="color: white; padding-left: 10%; font-size: small; margin-top: 1%; margin-right: 9%; margin-left: 40px; padding-top: 2%;">
+            {{ details.info }}
+          </p>
+          <hr style="color: aliceblue" />
+        </div>
+        {% endfor %}
+        
+        <div class="col-md-12" style="display: flex; justify-content: center; margin-top: 0%">
+          <a href="#" class="btn text-center" id="btn1">Subscribe</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+{% block scripts %}
+<script>
+  // Get the button element by its ID
+  const button = document.getElementById("btn1");
+
+  // Add the click event listener to the button
+  button.addEventListener("click", function(event) {
+      // Prevent the default behavior
+      event.preventDefault();
+
+      // Get selected plan
+      const selectedPlan = document.querySelector('input[name="plan_type"]:checked');
+      
+      if (!selectedPlan) {
+        Swal.fire("Please select a plan!", { icon: "warning" });
+      } else {
+        // Confirm the subscription choice
+        Swal.fire({
+          title: "Are you sure?",
+          text: "Confirm your subscription!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "Yes, subscribe!",
+          cancelButtonText: "No, cancel",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            // Send the selected plan to the server
+            $.ajax({
+              url: "{% url 'dating_subscription:subscribe' %}",
+              type: 'POST',
+              data: {
+                'plan_type': selectedPlan.value,
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+              },
+              success: function(response) {
+                // Redirect to the payment page if successful
+                window.location.href = "{% url 'dating_subscription:payment' %}?plan_type=" + selectedPlan.value;
+              },
+              error: function(xhr, status, error) {
+                Swal.fire("Error!", "Something went wrong!", "error");
+              }
+            });
+          }
+        });
+      }
+  });
+
+  {% if messages %}
+    {% for message in messages %}
+      Swal.fire("Alert!", "{{ message }}", "{{ message.tags }}");
+    {% endfor %}
+  {% endif %}
+</script>
+{% endblock scripts %}

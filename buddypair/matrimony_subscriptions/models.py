@@ -44,16 +44,16 @@ class MatrimonySubscription(models.Model):
         super().save(*args, **kwargs)
 
 
-class Payment(models.Model):
+class MatrimonyPayment(models.Model):
     PAYMENT_TYPE = [
         ('upi', 'upi'),
         ('PayPal', 'PayPal'),
         ('card', 'card'),
         ('razorpay', 'razorpay')
     ]
-    user = models.ForeignKey(costume_user, on_delete=models.CASCADE, related_name="userpayment_details")
+    user = models.ForeignKey(costume_user, on_delete=models.CASCADE, related_name="mtuserpayment_details")
     slug_name = models.SlugField(unique=True, blank=True, null=True)  # New slug field
-    subscription_plan = models.ForeignKey(MatrimonySubscription, related_name="sub_plan", on_delete=models.CASCADE)
+    subscription_plan = models.ForeignKey(MatrimonySubscription, related_name="mtsub_plan", on_delete=models.CASCADE)
     payment_type = models.CharField(choices=PAYMENT_TYPE, max_length=50)
     razorpay_order_id = models.CharField(max_length=100,null=True)
     razorpay_payment_id = models.CharField(max_length=100,null=True)
@@ -72,25 +72,4 @@ class Payment(models.Model):
             self.slug_name = slugify(self.subscription_plan.plan_type)
 
         super().save(*args, **kwargs)
-
-
-# class RazorpayDetails(models.Model):
-#     payment = models.ForeignKey(Payment, on_delete=models.CASCADE, related_name="payment_details")
-#     razorpay_order_id = models.CharField(max_length=100,null=True)
-#     razorpay_payment_id = models.CharField(max_length=100,null=True)
-#     razorpay_signature = models.CharField(max_length=255,null=True)
-#     created_at = models.DateTimeField(auto_now_add=True)
-
-# class CardDetails(models.Model):
-#     payment = models.ForeignKey(Payment, on_delete=models.CASCADE, related_name="payment_details")
-#     card_number = models.CharField(max_length=50)
-#     expiry_date = models.CharField(max_length=50)
-#     cvv = models.CharField(max_length=50)
-#     created_at = models.DateTimeField(auto_now_add=True)
-
-# class UPIDetails(models.Model):
-#     payment = models.ForeignKey(Payment, on_delete=models.CASCADE, related_name="payment_details")
-#     upi_id = models.CharField(max_length=50)
-#     upi_name = models.CharField(max_length=50)
-#     created_at = models.DateTimeField(auto_now_add=True)
 
