@@ -119,67 +119,16 @@ AUTH_USER_MODEL = "U_auth.costume_user"
 #     }
 # }
 
-# # Database Configuration
-# DATABASES = {
-#     'default': {
-#         'ENGINE': env('DB_ENGINE'),
-#         'NAME': env('DB_NAME'),
-#         'USER': env('DB_USER'),
-#         'PASSWORD': env('DB_PASSWORD'),
-#         'HOST': env('DB_HOST'),
-#         'PORT': env('DB_PORT'),
-#     }
-# }
-
-# # AWS S3 Configuration
-# AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
-# AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
-# AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME')
-# AWS_S3_SIGNATURE_NAME = env('AWS_S3_SIGNATURE_NAME')
-# AWS_S3_REGION_NAME = env('AWS_S3_REGION_NAME')
-# AWS_S3_FILE_OVERWRITE = env.bool('AWS_S3_FILE_OVERWRITE')
-# AWS_DEFAULT_ACL = env('AWS_DEFAULT_ACL')
-# AWS_S3_VERITY = env.bool('AWS_S3_VERITY')
-# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-
-# # Razorpay Configuration
-# RAZORPAY_KEY_ID = env('RAZORPAY_KEY_ID')
-# RAZORPAY_KEY_SECRET = env('RAZORPAY_KEY_SECRET')
-
-# # Email Configuration
-# EMAIL_BACKEND = env('EMAIL_BACKEND')
-# EMAIL_HOST = env('EMAIL_HOST')
-# EMAIL_PORT = env.int('EMAIL_PORT')
-# EMAIL_HOST_USER = env('EMAIL_HOST_USER')
-# EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
-# EMAIL_USE_TLS = env.bool('EMAIL_USE_TLS')
-# EMAIL_USE_SSL = env.bool('EMAIL_USE_SSL')
-
-# import pymysql
-# pymysql.install_as_MySQLdb()
-
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql', 
-        # 'ENGINE': 'mysql.connector.django', 
-        'NAME': 'buddypairdata',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'buddypairrds',                      
         'USER': 'buddypair',
-        'PASSWORD': 'Buddypair1234',
-        'HOST': 'buddypairdata.c5cua2m4ci88.ap-south-1.rds.amazonaws.com',   # Or an IP Address that your DB is hosted on
-        'PORT': '3306',
+        'PASSWORD': 'Amal1234',
+        'HOST': 'buddypairrds.c5cua2m4ci88.ap-south-1.rds.amazonaws.com',
+        'PORT': '5432',
     }
 }
-
-AWS_ACCESS_KEY_ID ='AKIA4WJPWNLSPPZ4KBV7'
-AWS_SECRET_ACCESS_KEY='72HcJZGMzuCrOYMMrxP17Mh9rqZOQhur6nLnjHF'
-AWS_STORAGE_BUCKET_NAME='buddypairs3bucket'
-AWS_S3_SIGNATURE_NAME='s3v4'
-AWS_S3_REGION_NAME='ap-south-1'
-AWS_S3_FILE_OVERWRITE=False
-AWS_DEFAULT_ACL=None
-AWS_S3_VERITY=True
-DEFAULT_FILE_STORAGE='storages.backends.s3boto3.S3Boto3Storage'
 
 
 # Password validation
@@ -258,9 +207,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'),]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
 MEDIA_URL = '/media/'
