@@ -6,3 +6,7 @@ class UserPreference(models.Model):
     PREFFERED_GENDER_CHOICES=(('F','Female'),('M','Male'),('B','Both'))
     user=models.OneToOneField(costume_user,on_delete=models.SET_NULL,null=True,related_name="user_preferred_gender")
     preferred_gender = models.CharField(choices=PREFFERED_GENDER_CHOICES,max_length=1)
+
+
+class dummys3(models.Model):
+    image = models.ImageField(upload_to="dumms3")

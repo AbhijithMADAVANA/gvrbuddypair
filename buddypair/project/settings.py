@@ -90,6 +90,22 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'project.urls'
 
+# TEMPLATES = [
+#     {
+#         'BACKEND': 'django.template.backends.django.DjangoTemplates',
+#         'DIRS': [os.path.join(BASE_DIR, 'templates')],
+#         'APP_DIRS': True,
+#         'OPTIONS': {
+#             'context_processors': [
+#                 'django.template.context_processors.debug',
+#                 'django.template.context_processors.request',
+#                 'django.contrib.auth.context_processors.auth',
+#                 'django.contrib.messages.context_processors.messages',
+#             ],
+#         },
+#     },
+# ]
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -105,6 +121,7 @@ TEMPLATES = [
         },
     },
 ]
+
 
 WSGI_APPLICATION = 'project.wsgi.application'
 AUTH_USER_MODEL = "U_auth.costume_user"
@@ -233,3 +250,14 @@ EMAIL_HOST_USER = 'shabeebmohammedpes@gmail.com'
 EMAIL_HOST_PASSWORD = 'etjv byky zrkb ctct'
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False 
+
+
+AWS_ACCESS_KEY_ID = 'AKIA4WJPWNLSGUWDRD75'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'buddypairs3'
+AWS_S3_SIGNATURE_NAME = 's3v4'
+AWS_S3_REGION_NAME = 'ap-south-1'
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL = None
+AWS_S3_VERIFY = True
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
