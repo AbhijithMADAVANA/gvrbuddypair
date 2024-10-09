@@ -26,12 +26,9 @@ SECRET_KEY = 'django-insecure-_(^bsy+(wz&@h8fg@v5czdm&wsk4daj&0z84lob@ax32gp+x)4
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*','13.233.224.110']
+ALLOWED_HOSTS = ['*']
 
-import environ
 
-env = environ.Env()
-environ.Env.read_env()  # Reads the .env file
 
 
 # Application definition
@@ -90,6 +87,21 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'project.urls'
 
+# TEMPLATES = [
+#     {
+#         'BACKEND': 'django.template.backends.django.DjangoTemplates',
+#         'DIRS': [os.path.join(BASE_DIR, 'templates')],
+#         'APP_DIRS': True,
+#         'OPTIONS': {
+#             'context_processors': [
+#                 'django.template.context_processors.debug',
+#                 'django.template.context_processors.request',
+#                 'django.contrib.auth.context_processors.auth',
+#                 'django.contrib.messages.context_processors.messages',
+#             ],
+#         },
+#     },
+# ]
 
 TEMPLATES = [
     {
@@ -114,23 +126,6 @@ AUTH_USER_MODEL = "U_auth.costume_user"
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite31',
-#     }
-# }
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'buddypairrds',                      
-        'USER': 'buddypair',
-        'PASSWORD': 'Amal1234',
-        'HOST': 'buddypairrds.c5cua2m4ci88.ap-south-1.rds.amazonaws.com',
-        'PORT': '5432',
-    }
-}
 
 
 # Password validation
@@ -208,9 +203,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
+# STATIC_URL = 'static/'
+# STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'),]
+# STATIC_ROOT = BASE_DIR / "staticfiles"
+
 STATIC_URL = 'static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'),]
-STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_DIRS = [os.path.join(BASE_DIR,'static')]
+STATIC_ROOT = os.path.join(BASE_DIR,'assets')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -237,8 +236,27 @@ EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False 
 
 
-AWS_ACCESS_KEY_ID = 'AKIA4WJPWNLSGUWDRD75'
-AWS_SECRET_ACCESS_KEY = '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'
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite31',
+#     }
+# }
+
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'mydatabase',                      
+        'USER': 'mysuperuser',
+        'PASSWORD': 'Amal1234',
+        'HOST': 'mydatabase.c5cua2m4ci88.ap-south-1.rds.amazonaws.com',
+        'PORT': '5432',
+    }
+}
+
+AWS_ACCESS_KEY_ID = 'AKIA4WJPWNLSBYUYJ2BR'
+AWS_SECRET_ACCESS_KEY = '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'
 AWS_STORAGE_BUCKET_NAME = 'buddypairs3'
 AWS_S3_SIGNATURE_NAME = 's3v4'
 AWS_S3_REGION_NAME = 'ap-south-1'
