@@ -241,31 +241,31 @@ EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False 
 
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite31',
-    }
-}
-
-
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'mydatabase',                      
-#         'USER': 'mysuperuser',
-#         'PASSWORD': 'Amal1234',
-#         'HOST': 'mydatabase.c5cua2m4ci88.ap-south-1.rds.amazonaws.com',
-#         'PORT': '5432',
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite31',
 #     }
 # }
 
-# AWS_ACCESS_KEY_ID = 'AKIA4WJPWNLSBYUYJ2BR'
-# AWS_SECRET_ACCESS_KEY = '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'
-# AWS_STORAGE_BUCKET_NAME = 'buddypairs3'
-# AWS_S3_SIGNATURE_NAME = 's3v4'
-# AWS_S3_REGION_NAME = 'ap-south-1'
-# AWS_S3_FILE_OVERWRITE = False
-# AWS_DEFAULT_ACL = None
-# AWS_S3_VERIFY = True
-# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'mydatabase',                      
+        'USER': 'mysuperuser',
+        'PASSWORD': 'Amal1234',
+        'HOST': 'mydatabase.c5cua2m4ci88.ap-south-1.rds.amazonaws.com',
+        'PORT': '5432',
+    }
+}
+
+AWS_ACCESS_KEY_ID = 'AKIA4WJPWNLSBYUYJ2BR'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'buddypairs3'
+AWS_S3_SIGNATURE_NAME = 's3v4'
+AWS_S3_REGION_NAME = 'ap-south-1'
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL = None
+AWS_S3_VERIFY = True
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
